@@ -17,3 +17,4 @@ alias stack='(cd /apps/chef/scripts/; vagrant ssh -c "service nginx restart";)'
 alias wsgrep='grep --color --exclude-dir=".git" --exclude-dir="templates_c" "$@"'
 
 alias gitgrep='git grep "$@" $(git rev-list --all)'
+alias gitdiff='git stash show -p stash@{0}'
