@@ -1,4 +1,1 @@
-shellShortcuts
-==============
-
-Shell scripts, bash profiles, aliases
+Config files
