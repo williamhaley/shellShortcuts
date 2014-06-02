@@ -6,6 +6,7 @@
 
 PATH=$PATH:/build/node/bin:~/bin/mongo
 
+alias ls="ls --color"
 alias toupper="tr '[:lower:]' '[:upper:]'"
 alias tolower="tr '[:upper:]' '[:lower:']"
 alias alphahash='hash=$(cat /dev/urandom | LC_CTYPE=C tr -dc A-Za-z0-9 | head -c 64) && echo $hash'
