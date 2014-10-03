@@ -19,3 +19,6 @@ alias wsgrep='grep --color --exclude-dir=".git" --exclude-dir="templates_c" "$@"
 
 alias gitgrep='git grep "$@" $(git rev-list --all)'
 alias gitdiff='git stash show -p stash@{0}'
+
+git-pull-for-sha() { git log --merges --ancestry-path --oneline $1..master | grep 'pull request' | tail -n1 | awk '{print $5}' | cut -c2-; } # http://joey.aghion.com/find-the-github-pull-request-for-a-commit/
+git-restore-file() { git checkout $(git rev-list -n 1 HEAD -- "$@")^ -- "$@"; }
