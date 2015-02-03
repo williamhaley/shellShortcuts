@@ -1,9 +1,18 @@
-# .bashrc
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+PS1='[\u@\h \W]\$ '
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
 PATH=$PATH:$HOME/bin:~/.rvm/bin:~/'Android Studio.app'/sdk/platform-tools
 
+alias ls='ls --color=auto'
+alias linux-time='sudo /usr/sbin/ntpdate pool.ntp.org && sudo hwclock --systohc'
 alias stack='currentDir=$(pwd) && cd /apps/chef/scripts && vagrant ssh -c "sudo sh /apps/chef/scripts/restart.sh" && cd "$currentDir"'
 alias logcat-color='adb logcat | grep -i `adb shell ps | grep -i 'com.homefinder' | cut -c10-15` | logcat-color'
 alias clj='java -cp ~/.m2/repository/org/clojure/clojure/1.5.1/clojure-1.5.1.jar clojure.main'
