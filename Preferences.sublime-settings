@@ -1,13 +1,24 @@
 {
-	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+	"color_scheme": "Packages/Color Scheme - Default/LAZY.tmTheme",
 	"draw_white_space": "all",
-	"font_size": 14.0,
+	"enable_count_chars": true,
+	"folder_exclude_patterns":
+	[
+		"vendor",
+		".git",
+		"build",
+		"node_modules"
+	],
+	"font_size": 19.0,
 	"rulers":
 	[
 		80,
 		120
 	],
 	"show_full_path": true,
-	"tab_size": 4,
-	"translate_tabs_to_spaces": false
+	"tab_size": 2,
+	"translate_tabs_to_spaces": true,
+	"trim_automatic_white_space": true,
+	"trim_trailing_white_space_on_save": true,
+	"word_wrap": false
 }
