@@ -2,5 +2,10 @@
 	email = will@willhaley.com
 	name = will
 [color]
-	ui = true
-[credential]
+        ui = auto
+        diff = auto
+        interactive = auto
+        status = auto
+        branch = auto
+[core]
+        editor = vim
