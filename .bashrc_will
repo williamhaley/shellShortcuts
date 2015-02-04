@@ -1,5 +1,7 @@
 #
-# ~/.bashrc
+# ~/.bashrc_will
+#
+# Load by adding this wherever is appropriate: [[ -s "$HOME/.bashrc_will" ]] && . "$HOME/.bashrc_will"
 #
 
 # If not running interactively, don't do anything
