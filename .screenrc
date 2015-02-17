@@ -1,0 +1,9 @@
+shell -${SHELL}
+
+#caption always "%n(%t) : %C"
+caption always "[%n(%t) : %C]  %{= kc}%H (system load: %l)%-21=%{= .m}%D %d.%m.$
+
+defscrollback 1024
+startup_message off
+hardstatus on
+hardstatus alwayslastline
