@@ -12,7 +12,7 @@ pi: all
         grep -q -F '$(PI_RC)' $(RC) || echo '$(PI_RC)' >> $(RC_FILE)
 
 mac: all
-        cp ".Preferences.sublime-settings" "$$HOME/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings"
+        cp "Preferences.sublime-settings" "$$HOME/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings"
 
 configs:
         cp .bashrc_will $$HOME/
