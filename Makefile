@@ -1,6 +1,6 @@
 # Use this file to install/setup my configs
 
-RC_FILE
+RC_FILE=$$HOME/.bashrc
 
 PI_RC=[[ -s "$$HOME/.bashrc_pi" ]] && . "$$HOME/.bashrc_pi"
 WH_RC=[[ -s "$$HOME/.bashrc_will" ]] && . "$$HOME/.bashrc_will"
