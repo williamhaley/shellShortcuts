@@ -20,3 +20,11 @@ configs:
 	cp .gitconfig $$HOME/
 	cp .screenrc $$HOME/
 	cp .vimrc $$HOME/
+
+workssh:
+	ln -sf ~/.ssh/id_rsa.orig ~/.ssh/id_rsa
+	ln -sf ~/.ssh/id_rsa.orig.pub ~/.ssh/id_rsa.pub
+
+personalssh:
+	ln -sf ~/.ssh/id_rsa.williamhaley ~/.ssh/id_rsa
+	ln -sf ~/.ssh/id_rsa.williamhaley.pub ~/.ssh/id_rsa.pub
