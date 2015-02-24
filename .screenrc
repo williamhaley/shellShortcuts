@@ -29,23 +29,21 @@ shell -${SHELL}
 # Window list
 # caption always "%w"
 
-# Window list and time right with set width so time is never pushed off screen for large window lists
-# caption always "%w %-21=[%Y-%m-%d %c:%s]"
-
 # List of windows before current, info on current tab in brackets, lists of window after current
 # caption always "%-Lw [%f%n %t] %+Lw"
 
-# "Scrollable" window list in the center, hostname left, clock right
-# Issue with this, it pushes host name off to the left
-# caption always "[%H] %-Lw%{= KW}[%50>%n%f* %t]%{= Kw}%+Lw %-21=[%Y-%m-%d %c:%s]"
+# Working example with left aligned scrolling window list and right aligned static positioned info
+# http://serverfault.com/questions/15704/right-aligning-text-in-gnu-screen-caption-or-hardstatusline
+# caption always "%{= Kw} %-Lw%{= KW}[%50>%n%f* %t]%{= Kw}%+Lw%-30=| %l | %H"
 
-# This scrolls and seems to work, but why?
-caption always "%-Lw%{= Yk}%50>%n%f*%t%{-}%+Lw%<%-12= %?%F%?%{b}%c %m/%d%?"
+# My end result. Auto-expanding not cut off vimrc window list and static info on the right
+# 22 is an exact measurement of the space needed for the info statically positioned to the right
+caption always "%{= KG} %-Lw%{= KW}[%50>%n%f* %t]%{= KG}%+Lw %-22=| %Y-%m-%d %c:%s "
 
 defscrollback 1024
 startup_message off
-hardstatus on
-hardstatus alwayslastline
+hardstatus off
+# hardstatus alwayslastline
 
 shelltitle "$ |bash"
 
