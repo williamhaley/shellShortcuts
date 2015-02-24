@@ -8,6 +8,7 @@ all: configs
 
 pi: all
 	grep -q -F '$(PI_RC)' $(RC_FILE) || echo '$(PI_RC)' >> $(RC_FILE)
+	cp .bashrc_pi $$HOME/
 
 mac: all
 	cp "Preferences.sublime-settings" "$$HOME/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings"
