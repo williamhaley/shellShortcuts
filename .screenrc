@@ -42,11 +42,9 @@ caption always "%{= KG} %-Lw%{= KW}[%50>%n%f* %t]%{= KG}%+Lw %-22=| %Y-%m-%d %c:
 
 defscrollback 1024
 startup_message off
+
 hardstatus off
-# hardstatus alwayslastline
 
 shelltitle "$ |bash"
-
-#hardstatus string '%{= mK}%-Lw%{= KW}%50>%n%f* %t%{= mK}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
 
 idle 900 lockscreen
