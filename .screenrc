@@ -1,9 +1,54 @@
 shell -${SHELL}
 
-#caption always "%n(%t) : %C"
-caption always "[%n(%t) : %C]  %{= kc}%H (system load: %l)%-21=%{= .m}%D %d.%m.%Y %0c"
+### Example Code To Help When Tweaks Are Needed ###
+
+# Time
+# caption always "%Y-%m-%d %c:%s"
+
+# Time, aligned right
+# caption always "%=%Y-%m-%d %c:%s"
+
+# Time, aligned right, surrounded by brackets
+# caption always "%=[%Y-%m-%d %c:%s]"
+
+# Time, aligned right, surrounded by brackets, in green text with no bg, reset the formatting at the end
+# caption always "%{= kG}%=[%Y-%m-%d %c:%s]%{-}"
+
+# Current tab number and current tab title
+# caption always "%n (%t)"
+
+# System load
+# caption always "%l"
+
+# Hostname in brackets with green text
+# caption always "%{= kG}[ %{G}%H %{g}]"
+
+# Hostname aligned left, time aligned right
+# caption always "%{= kG}[ %{G}%H %{g}] %{= kG} %= [%Y-%m-%d %c:%s]%{-}"
+
+# Window list
+# caption always "%w"
+
+# Window list and time right with set width so time is never pushed off screen for large window lists
+# caption always "%w %-21=[%Y-%m-%d %c:%s]"
+
+# List of windows before current, info on current tab in brackets, lists of window after current
+# caption always "%-Lw [%f%n %t] %+Lw"
+
+# "Scrollable" window list in the center, hostname left, clock right
+# Issue with this, it pushes host name off to the left
+# caption always "[%H] %-Lw%{= KW}[%50>%n%f* %t]%{= Kw}%+Lw %-21=[%Y-%m-%d %c:%s]"
+
+# This scrolls and seems to work, but why?
+caption always "%-Lw%{= Yk}%50>%n%f*%t%{-}%+Lw%<%-12= %?%F%?%{b}%c %m/%d%?"
 
 defscrollback 1024
 startup_message off
 hardstatus on
 hardstatus alwayslastline
+
+shelltitle "$ |bash"
+
+#hardstatus string '%{= mK}%-Lw%{= KW}%50>%n%f* %t%{= mK}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
+
+idle 900 lockscreen
