@@ -1,0 +1,11 @@
+[extensions]
+color =
+hgext.extdiff =
+
+[ui]
+username = williamhaley
+editor = vim
+
+[web]
+cacerts = /etc/ssl/certs/ca-certificates.crt
+

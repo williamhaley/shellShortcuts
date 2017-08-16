@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+ORIGINAL="$1"
+REPLACE="$2"
+DIRECTORY="$3"
+
+MATCHES=$(wsgrep -Irn --no-messages "${ORIGINAL}" "${DIRECTORY}")
+NUM_MATCHED_LINES=$(echo ${MATCHES} | sed '/^\s*$/d' | wc -l | awk {'print $1'})
+
+if [ ${NUM_MATCHED_LINES} -eq 0 ];
+then
+	echo "No matches"
+	exit 1
+fi
+
+IFS=$'\n'
+for MATCH in $MATCHES;
+do
+	echo "$MATCH" | wsgrep "${ORIGINAL}"
+done
+
+echo ""
+echo "Replace? [y/n]"
+
+read CONFIRMATION
+
+if [ "${CONFIRMATION}" != "y" ];
+then
+	exit 1
+fi
+
+MATCHES=$(wsgrep -Irl --no-messages "${ORIGINAL}" "${DIRECTORY}")
+for MATCH in $MATCHES;
+do
+	sed -i '' "s/${ORIGINAL}/${REPLACE}/g" "${MATCH}"
+done
+
+echo ""
+echo "Replaced occurences in ${NUM_MATCHED_LINES} line(s)"
+

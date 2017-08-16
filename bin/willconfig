@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+echo "Setting up configs."
+
+mkdir -p $HOME/.ssh
+touch $HOME/.ssh/authorized_keys
+chmod 600 $HOME/.ssh/authorized_keys
+ln -sf $CONFIGS_DIR/sshconfig $HOME/.ssh/config
+
+ln -sf $CONFIGS_DIR/gitconfig $HOME/.gitconfig
+ln -sf $CONFIGS_DIR/gitconfig.personal $HOME/.gitconfig.personal
+
+mkdir -p $HOME/.atom
+ln -sf $CONFIGS_DIR/atom/config.cson $HOME/.atom/config.cson
+ln -sf $CONFIGS_DIR/atom/styles.less $HOME/.atom/styles.less
+
+mkdir -p $HOME/.aws
+ln -sf $CONFIGS_DIR/aws/config $HOME/.aws/config
+
+mkdir -p $HOME/.vim
+ln -sf $CONFIGS_DIR/vimrc $HOME/.vimrc
+cp -R $CONFIGS_DIR/vim/* $HOME/.vim/
+
+ln -sf $CONFIGS_DIR/tmux.conf $HOME/.tmux.conf
+
+echo "Done."

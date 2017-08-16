@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# Jails are not impervious. People can break out of chroot.
+# `root` should own as many files in chroot as possible, but
+# users should chroot with non-root accounts.
+# Be wary of symlinks and root access.
+
+[[ -z "$1" ]] && echo "Provide a path to the jail (e.g. /var/jail)" && exit 1
+
+JAIL=$1
+
+mkdir -p $JAIL/{dev,etc,lib,lib64,mnt,usr,tmp}
+mkdir -p $JAIL/usr/bin
+chown root.root $JAIL
+
+mknod -m 666 $JAIL/dev/null c 1 3
+
+JAIL_ETC=$JAIL/etc/
+
+cp /etc/ld.so.cache $JAIL_ETC
+cp /etc/ld.so.conf $JAIL_ETC
+cp /etc/nsswitch.conf $JAIL_ETC
+cp /etc/hosts $JAIL_ETC
+
+ln -sf ../usr/bin $JAIL/bin
+
+copy_binary()
+{
+	FILENAME=$1
+
+	# Binary with path.
+	BINARY=$(which $FILENAME)
+
+	cp $BINARY $JAIL/$BINARY
+
+	copy_dependencies $BINARY
+}
+
+# http://www.cyberciti.biz/files/lighttpd/l2chroot.txt
+copy_dependencies()
+{
+	FILES="$(ldd $1 | awk '{ print $3 }' |egrep -v ^'\(')"
+
+	echo "Copying shared files/libs to $JAIL..."
+
+	for i in $FILES
+	do
+		d="$(dirname $i)"
+
+		[ ! -d $JAIL$d ] && mkdir -p $JAIL$d || :
+
+		/bin/cp $i $JAIL$d
+	done
+
+	sldl="$(ldd $1 | grep 'ld-linux' | awk '{ print $1}')"
+
+	# now get sub-dir
+	sldlsubdir="$(dirname $sldl)"
+
+	if [ ! -f $JAIL$sldl ];
+	then
+		echo "Copying $sldl $JAIL$sldlsubdir..."
+		/bin/cp $sldl $JAIL$sldlsubdir
+	else
+		:
+	fi
+}
+
+copy_binary ls
+copy_binary sh
+copy_binary bash

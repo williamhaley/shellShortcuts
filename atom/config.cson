@@ -1,0 +1,44 @@
+"*":
+  "autocomplete-plus":
+    scopeBlacklist: [
+      ".comment"
+    ]
+  core:
+    closeEmptyWindows: false
+    destroyEmptyPanes: false
+    disabledPackages: [
+      "whitespace"
+    ]
+    followSymlinks: true
+    ignoredNames: [
+      ".git"
+      ".hg"
+      ".svn"
+      ".DS_Store"
+      "._*"
+      "Thumbs.db"
+      "src/github.com"
+      "node_modules"
+    ]
+    telemetryConsent: "limited"
+    themes: [
+      "atom-light-ui"
+      "atom-light-syntax"
+    ]
+  editor:
+    autoIndentOnPaste: true
+    fontSize: 13
+    invisibles: {}
+    normalizeIndentOnPaste: false
+    showIndentGuide: true
+    showInvisibles: true
+    softTabs: false
+    softWrap: true
+    tabLength: 4
+    tabType: "auto"
+  "exception-reporting":
+    userId: "c30acda4-6a20-9253-aedc-72c97879f992"
+  gofmt:
+    formatTool: "gofmt"
+  welcome:
+    showOnStartup: false

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+grep \
+	--color \
+	--exclude-dir=".git" \
+	--exclude-dir="*node_modules*" \
+	"$@"
+

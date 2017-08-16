@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ -z "$BACKUP_SERVER" ];
+then
+	echo "Define a BACKUP_SERVER (ip:/backup/path) in your shell rc file."
+	return 1
+fi
+
+rsync-common "${BACKUP_SOURCE}/Photographs/" "${BACKUP_SERVER}/Photographs/"
+rsync-common "${BACKUP_SOURCE}/Music/" "${BACKUP_SERVER}/Music/"
+rsync-common "${BACKUP_SOURCE}/Documents/" "${BACKUP_SERVER}/Documents/"
+

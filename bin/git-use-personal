@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ ! -d "./.git" ];
+then
+	echo "Run this command in a git repo directory"
+	exit 1
+fi
+
+NAME=$(git config --file $CONFIGS_DIR/gitconfig.personal user.name)
+EMAIL=$(git config --file $CONFIGS_DIR/gitconfig.personal user.email)
+
+git config --local user.name $NAME
+git config --local user.email $EMAIL
+

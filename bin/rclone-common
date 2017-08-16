@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+rclone sync \
+	--verbose \
+	--exclude-from "$CONFIGS_DIR/rsync/excludes.conf" \
+	--delete-excluded \
+	--delete-after \
+	$1 $2
+

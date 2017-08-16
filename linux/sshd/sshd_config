@@ -1,0 +1,20 @@
+PermitRootLogin                 no
+
+UsePAM                          yes
+PrintMotd                       no
+
+ClientAliveInterval             0
+ClientAliveCountMax             0
+
+AuthorizedKeysFile              /home/%u/.ssh/authorized_keys
+
+ChallengeResponseAuthentication no
+PasswordAuthentication          no
+PermitEmptyPasswords            no
+
+UsePrivilegeSeparation          sandbox
+StrictModes                     yes
+
+Subsystem                       sftp    internal-sftp
+
+AllowGroups                     sshusers

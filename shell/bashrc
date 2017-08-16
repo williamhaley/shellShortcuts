@@ -1,0 +1,29 @@
+if [ -z "$IS_SERVER" ];
+then
+	. $CONFIGS_DIR/shell/prompt.bash
+else
+	. $CONFIGS_DIR/shell/server.prompt.bash
+fi
+
+# . $CONFIGS_DIR/shell/raspberry_pi.bash
+
+# git autocompletion
+if [ -f $CONFIGS_DIR/shell/git-completion.bash ]; then
+	. $CONFIGS_DIR/shell/git-completion.bash
+fi
+
+. $CONFIGS_DIR/shell/docker.bash
+. $CONFIGS_DIR/shell/common.bash
+
+# nvmrc
+load-nvmrc() {
+	command -v nvm >/dev/null 2>&1 || return 1
+	if [[ -f .nvmrc && -r .nvmrc ]]; then
+		nvm use
+	elif [[ $(nvm version) != $(nvm version default)  ]]; then
+		echo "Reverting to nvm default version"
+		nvm use default
+	fi
+}
+
+cd() { builtin cd "$@"; load-nvmrc; }
