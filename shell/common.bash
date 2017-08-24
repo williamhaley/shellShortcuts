@@ -11,12 +11,14 @@ else
 	. $CONFIGS_DIR/shell/mac.bash
 fi
 
-# Aliases
-
-alias wsgrep='grep --color --exclude-dir=".git" --exclude-dir="*node_modules*" --exclude-dir="*public/assets/d*" --exclude-dir="*public/assets/p*" --exclude-dir="templates_c" "$@"'
-alias dockerclean='CONTAINERS=$(docker ps -a --format "{{.ID}}"); for C in "$CONTAINERS"; do docker rm $C; done; IMAGES=$(docker images --format "{{.ID}}"); for I in "$IMAGES"; do docker rmi $I; done;'
-
 # Functions
+
+# Recommended by direnv author to properly cd with direnv in shell scripts.
+# https://github.com/direnv/direnv/issues/262
+function direnv_cd() {
+	cd "$1"
+	eval "$(direnv export bash)"
+}
 
 function printfgreen()
 {
@@ -55,3 +57,4 @@ function projectUpdate()
 		echo ""
 	done
 }
+
