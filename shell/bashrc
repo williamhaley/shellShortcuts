@@ -12,7 +12,6 @@ if [ -f $CONFIGS_DIR/shell/git-completion.bash ]; then
 	. $CONFIGS_DIR/shell/git-completion.bash
 fi
 
-. $CONFIGS_DIR/shell/docker.bash
 . $CONFIGS_DIR/shell/common.bash
 
 # nvmrc
