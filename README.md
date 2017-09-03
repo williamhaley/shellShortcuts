@@ -39,53 +39,13 @@ In iTerm go to Preferences and use the "Load preferences from a custom folder or
 
 ```
 apm install \
-	joefitzgerald/gofmt joefitzgerald/go-get joefitzgerald/go-config \
+	joefitzgerald/gofmt \
+	joefitzgerald/go-get \
+	joefitzgerald/go-config \
 	editorconfig
 ```
 
 Disable the `whitespace` package so that it does not conflict with `editorconfig`.
-
-## Sublime
-
-Install [package control](https://packagecontrol.io/installation).
-
-Install these packages with package control.
-
-```
-"A File Icon"
-"EditorConfig"
-"GoSublime"
-"Handlebars"
-"Sass"
-```
-
-#### Mac
-
-Remove old and link new config file.
-
-```
-rm ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
-ln -s \
-	$CONFIGS_DIR/sublime/Preferences.sublime-settings \
-	~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/
-```
-
-#### Linux
-
-Remove old and link new config file.
-
-```
-rm ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
-ln -s \
-	$CONFIGS_DIR/sublime/Preferences.sublime-settings \
-	~/.config/sublime-text-3/Packages/User/
-```
-
-Install `monaco` font.
-
-```
-yaourt -S ttf-monaco
-```
 
 ## vim
 
