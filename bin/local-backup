@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -eo pipefail
+
+source "$CONFIGS_DIR/ENV"
 
 if [ -z "$BACKUP_SERVER" ];
 then
-	echo "Define a BACKUP_SERVER (ip:/backup/path) in your shell rc file."
-	return 1
+	echo "Define a BACKUP_SERVER in ENV."
+	exit 1
 fi
 
 rsync-common "${BACKUP_SOURCE}/Photographs/" "${BACKUP_SERVER}/Photographs/"
