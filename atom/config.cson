@@ -22,8 +22,8 @@
     ]
     telemetryConsent: "limited"
     themes: [
-      "atom-light-ui"
-      "atom-light-syntax"
+      "atom-dark-ui"
+      "atom-dark-syntax"
     ]
   editor:
     autoIndentOnPaste: true
