@@ -35,25 +35,6 @@ usermod -a -G docker $USERNAME
 systemctl enable docker
 systemctl start docker
 
-pacman -S --noconfirm --needed base-devel wget
-
-mkdir -p /tmp/aur
-chown $USERNAME /tmp/aur
-
-# package-query
-cd /tmp/aur
-sudo -u $USERNAME wget https://aur.archlinux.org/cgit/aur.git/snapshot/package-query.tar.gz
-sudo -u $USERNAME tar zxvf package-query.tar.gz
-cd package-query
-sudo -u $USERNAME makepkg -si --noconfirm
-
-# yaourt
-cd /tmp/aur
-sudo -u $USERNAME wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.tar.gz
-sudo -u $USERNAME tar zxvf yaourt.tar.gz
-cd yaourt
-sudo -u $USERNAME makepkg -si --noconfirm
-
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	dropbox \
 	google-chrome \

@@ -32,3 +32,22 @@ chmod 700 /home/$USERNAME/.ssh
 touch /home/$USERNAME/.ssh/authorized_keys
 chown $USERNAME:$USERNAME /home/$USERNAME/.ssh/authorized_keys
 chmod 600 /home/$USERNAME/.ssh/authorized_keys
+
+# yaourt pre-reqs
+pacman -S --noconfirm --needed base-devel wget
+mkdir -p /tmp/aur
+chown $USERNAME /tmp/aur
+
+# package-query
+cd /tmp/aur
+sudo -u $USERNAME wget https://aur.archlinux.org/cgit/aur.git/snapshot/package-query.tar.gz
+sudo -u $USERNAME tar zxvf package-query.tar.gz
+cd package-query
+sudo -u $USERNAME makepkg -si --noconfirm
+
+# yaourt
+cd /tmp/aur
+sudo -u $USERNAME wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.tar.gz
+sudo -u $USERNAME tar zxvf yaourt.tar.gz
+cd yaourt
+sudo -u $USERNAME makepkg -si --noconfirm
