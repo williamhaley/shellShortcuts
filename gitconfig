@@ -26,6 +26,7 @@
 	}; f"
 	currentbranch = rev-parse --abbrev-ref HEAD
 	tagdiff       = "!f() { git log $1..$2 --oneline; }; f"
+	wsdiff        = diff --ignore-space-at-eol -b -w --ignore-blank-lines
 
 [color]
 	ui = auto

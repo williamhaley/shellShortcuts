@@ -1,6 +1,13 @@
+# Set up Workspace
+
+mkdir -p $HOME/Workspace
+
 # Variables
 
 PATH=$CONFIGS_DIR/bin:$HOME/bin:$PATH:$HOME/.local/bin:/sbin
+
+export GOPATH=$HOME/Workspace/go
+export PATH=$PATH:$(go env GOPATH)/bin
 
 # Mac vs Linux
 
