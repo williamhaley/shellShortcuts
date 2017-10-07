@@ -11,7 +11,6 @@ brew cask install gimp
 brew cask install iterm2
 brew cask install google-chrome
 brew cask install atom
-brew cask install flux
 brew install Caskroom/cask/virtualbox
 brew install Caskroom/cask/vagrant
 brew cask install google-drive
