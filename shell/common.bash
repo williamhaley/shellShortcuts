@@ -7,7 +7,10 @@ mkdir -p $HOME/Workspace
 PATH=$CONFIGS_DIR/bin:$HOME/bin:$PATH:$HOME/.local/bin:/sbin
 
 export GOPATH=$HOME/Workspace/go
-export PATH=$PATH:$(go env GOPATH)/bin
+if [ go version &> /dev/null ];
+then
+	export PATH=$PATH:$(go env GOPATH)/bin
+fi
 
 # Mac vs Linux
 
