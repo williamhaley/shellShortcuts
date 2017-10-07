@@ -56,15 +56,18 @@ function projectUpdate()
 	for APP in `ls $1`;
 		do (
 			cd "$1/$APP"
-			printf "${APP}: "
-			printfgreen "[$(git currentbranch)] "
-			git isdirty && printfred "dirty"
-			git hasstash && printfyellow "stash"
-			printf "\nbranches: $(git branch | wc -l | sed 's/^ *//;s/ *$//')\n"
-			git submodule update --init --recursive
-			git pull
+			if [ -d ".git" ];
+			then
+				printf "${APP}: "
+				printfgreen "[$(git currentbranch)] "
+				git isdirty && printfred "dirty"
+				git hasstash && printfyellow "stash"
+				printf "\nbranches: $(git branch | wc -l | sed 's/^ *//;s/ *$//')\n"
+				git submodule update --init --recursive
+				git pull
+				echo ""
+			fi
 		)
-		echo ""
 	done
 }
 

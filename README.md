@@ -42,7 +42,8 @@ apm install \
 	joefitzgerald/gofmt \
 	joefitzgerald/go-get \
 	joefitzgerald/go-config \
-	editorconfig
+	editorconfig \
+	project-manager
 ```
 
 Disable the `whitespace` package so that it does not conflict with `editorconfig`.
