@@ -7,7 +7,7 @@ mkdir -p $HOME/Workspace
 PATH=$CONFIGS_DIR/bin:$HOME/bin:$PATH:$HOME/.local/bin:/sbin
 
 export GOPATH=$HOME/Workspace/go
-if [ go version &> /dev/null ];
+if ! go -v >/dev/null 2>&1;
 then
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
