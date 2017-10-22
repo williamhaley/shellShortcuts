@@ -48,13 +48,13 @@ Install XCode, then...
 ```
 
 # Configure
-  
+
 * Select the correct audio output device.
 * Show on-screen-display for volume changes.
 * Play sound effect for volume changes.
-* Load iTerm2 preferences from `configs`. 
-* Login to the App Store
-* Login to iTunes
+* Load iTerm2 preferences from `configs`.
+* Log in to the App Store.
+* Log in to iTunes.
 * Setup whatever configs are needed using this repo.
 * Enable the firewall under security.
 * Change duration for password requirement on lock/screensaver to "immediately" under security.
