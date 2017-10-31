@@ -12,7 +12,7 @@ fi
 pacman -S --noconfirm --needed \
 	atom \
 	sane \
-	hfsprogs exfat-utils \
+	exfat-utils \
 	base-devel \
 	keepassx2 \
 	go jdk8-openjdk \
@@ -37,6 +37,7 @@ systemctl start docker
 
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	dropbox \
+	hfsprogs \
 	google-chrome \
 	vokoscreen kino
 
