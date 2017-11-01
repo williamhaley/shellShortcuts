@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# No checksums done here. Those are only done when we verify backups.
+
+rsync-common()
+{
+	rsync \
+		--archive \
+		--recursive \
+		--verbose \
+		--progress \
+		--exclude-from "${CONFIGS_DIR}/rsync/excludes.conf" \
+		--delete-excluded \
+		--delete-after \
+		$1 $2
+}
+
+rsync-common \
+	"${HOME}/Photographs/" \
+	"/mnt/backup-internal/willhaley-backup/Photographs/"
+
+rsync-common \
+	"${HOME}/Music/" \
+	"/mnt/backup-internal/willhaley-backup/Music/"
+
+rsync-common \
+	"${HOME}/Documents/" \
+	"/mnt/backup-internal/willhaley-backup/Documents/"

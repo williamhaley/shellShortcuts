@@ -76,5 +76,4 @@ Remember that `Backup` is the name of the unencrypted remote.
 
 Put `Backup:encrypted-bucket` for the remote definition entry. Choose `standard` encryption for the naming.
 
-Define variables for backups in `$CONFIGS_DIR/ENV`.
-
+Update directories in the `cloud-backup`, `backup-local`, `backup-data`, `verify-data-backup`, and `verify-local-backup` scripts.

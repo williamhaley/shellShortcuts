@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Note the --checksum and --dry-run flags.
+
+verify-backup()
+{
+	rsync \
+		--archive \
+		--recursive \
+		--verbose \
+		--progress \
+		--exclude-from "${CONFIGS_DIR}/rsync/excludes.conf" \
+		--delete-excluded \
+		--delete-after \
+		--checksum \
+		--itemize-changes \
+		--dry-run \
+		$1 $2
+}
+
+verify-backup \
+	"${HOME}/Photographs/" \
+	"/mnt/backup-internal/willhaley-backup/Photographs/"
+
+verify-backup \
+	"${HOME}/Music/" \
+	"/mnt/backup-internal/willhaley-backup/Music/"
+
+verify-backup \
+	"${HOME}/Documents/" \
+	"/mnt/backup-internal/willhaley-backup/Documents/"

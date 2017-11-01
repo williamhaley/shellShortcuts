@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+IFS=$'\n'
+
+# Verify checksums (recursively) in the current directory.
+
+for sum_file in `find . -regex ".*.sha512" | sort`;
+do
+	(
+		cd `dirname "$sum_file"`
+
+		# Only report failures
+		sha512sum --check --quiet "`basename $sum_file`"
+	)
+done

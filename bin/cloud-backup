@@ -1,28 +1,29 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+source "${CONFIGS_DIR}/ENV"
 
-source "$CONFIGS_DIR/ENV"
-
-if [ -z "$CLOUD_BACKUP_DESTINATION" ];
+if [ -z "${CLOUD_BACKUP_DEST}" ];
 then
-	echo "Define a CLOUD_BACKUP_DESTINATION in ENV."
+	echo "Define CLOUD_BACKUP_DEST in ENV."
 	exit 1
 fi
 
-rclone-common \
-	"${BACKUP_SOURCE}/Photographs/" \
-	"${CLOUD_BACKUP_DESTINATION}/Photographs/"
+# Unencrypted
 
 rclone-common \
-	"${BACKUP_SOURCE}/Music/" \
-	"${CLOUD_BACKUP_DESTINATION}/Music/"
+	"${LOCAL_BACKUP_DEST}/Photographs/" \
+	"${CLOUD_BACKUP_DEST}/Photographs/"
 
 rclone-common \
-	"${BACKUP_SOURCE}/Documents/" \
-	"${CLOUD_BACKUP_DESTINATION_CRYPT}/Documents/"
+	"${LOCAL_BACKUP_DEST}/Music/" \
+	"${CLOUD_BACKUP_DEST}/Music/"
 
 rclone-common \
-	"${BACKUP_SOURCE}/Software/" \
-	"${CLOUD_BACKUP_DESTINATION}/Software/"
+	"${LOCAL_BACKUP_DEST}/Software/" \
+	"${CLOUD_BACKUP_DEST}/Software/"
 
+# Encrypted
+
+rclone-common \
+	"${LOCAL_BACKUP_DEST}/Documents/" \
+	"${CLOUD_BACKUP_DEST_CRYPT}/Documents/"

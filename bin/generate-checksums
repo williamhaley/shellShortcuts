@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+IFS=$'\n'
+
+# Generate checksums (recursively) in the current directory for all files
+# matching the extensions listed here.
+
+extensions="iso\|img\|jpg\|bmp\|png\|tar.gz\|mp4\|mkv\|mov\|gif\|m4p\|m4a\|mp3\|ogg"
+
+for file in `find . -iregex ".*.\(${extensions}\)" | sort`;
+do
+	(
+		cd `dirname "$file"`
+		
+		name=`basename "$file"`
+
+		if [ ! -f "${name}.sha512" ];
+		then
+			echo "Generate sha512sum for ${name}"
+			sha512sum "${name}" > "${name}.sha512"
+		fi
+	)
+done
