@@ -7,4 +7,3 @@ grep \
 	--exclude-dir=".git" \
 	--exclude-dir="*node_modules*" \
 	"$@"
-

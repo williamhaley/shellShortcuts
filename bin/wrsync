@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+rsync \
+	--archive \
+	--recursive \
+	--itemize-changes \
+	--verbose \
+	--progress \
+	--stats \
+	--exclude-from "${CONFIGS_DIR}/rsync/excludes.conf" \
+	--delete-excluded \
+	--delete-after \
+	"$@"
