@@ -2,6 +2,6 @@
 
 local dest="/mnt/backup-internal/willhaley-backup"
 
-wrsync "${HOME}/Photographs/" "${dest}/Photographs/"
-wrsync "${HOME}/Music/"       "${dest}/Music/"
-wrsync "${HOME}/Documents/"   "${dest}/Documents/"
+wrsync --delete-excluded --delete-after "${HOME}/Photographs/" "${dest}/Photographs/"
+wrsync --delete-excluded --delete-after "${HOME}/Music/"       "${dest}/Music/"
+wrsync --delete-excluded --delete-after "${HOME}/Documents/"   "${dest}/Documents/"

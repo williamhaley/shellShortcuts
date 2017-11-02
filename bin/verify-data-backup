@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-wrsync --checksum --dry-run "/mnt/data/Videos/"   "/mnt/backup-internal/Videos/"
-wrsync --checksum --dry-run "/mnt/data/Software/" "/mnt/backup-internal/Software/"
+wrsync --delete-excluded --delete-after --checksum --dry-run "/mnt/data/Videos/"   "/mnt/backup-internal/Videos/"
+wrsync --delete-excluded --delete-after --checksum --dry-run "/mnt/data/Software/" "/mnt/backup-internal/Software/"

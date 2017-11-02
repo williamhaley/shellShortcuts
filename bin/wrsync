@@ -8,6 +8,4 @@ rsync \
 	--progress \
 	--stats \
 	--exclude-from "${CONFIGS_DIR}/rsync/excludes.conf" \
-	--delete-excluded \
-	--delete-after \
 	"$@"

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-wrsync "/mnt/data/Videos/"   "/mnt/backup-internal/Videos/"
-wrsync "/mnt/data/Software/" "/mnt/backup-internal/Software/"
+wrsync --delete-excluded --delete-after "/mnt/data/Videos/"   "/mnt/backup-internal/Videos/"
+wrsync --delete-excluded --delete-after "/mnt/data/Software/" "/mnt/backup-internal/Software/"

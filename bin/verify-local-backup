@@ -2,6 +2,6 @@
 
 local dest="/mnt/backup-internal/willhaley-backup"
 
-wrsync --checksum --dry-run "${HOME}/Photographs/" "${dest}/Photographs/"
-wrsync --checksum --dry-run "${HOME}/Music/"       "${dest}/Music/"
-wrsync --checksum --dry-run "${HOME}/Documents/"   "${dest}/Documents/"
+wrsync --delete-excluded --delete-after --checksum --dry-run "${HOME}/Photographs/" "${dest}/Photographs/"
+wrsync --delete-excluded --delete-after --checksum --dry-run "${HOME}/Music/"       "${dest}/Music/"
+wrsync --delete-excluded --delete-after --checksum --dry-run "${HOME}/Documents/"   "${dest}/Documents/"
