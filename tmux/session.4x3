@@ -1,0 +1,29 @@
+# Load this with `source-file ~/.tmux/session.4x3`
+
+# Start a new window named "4x3"
+neww -n 4x3
+
+# Split window into 4x3 (width x height, columns x rows).
+# Split vertically then horizontally for better numbering.
+# 0  1  2   3
+# 4  5  6   7
+# 8  9  10  11
+
+# Split pane 0 vertically into three even rows.
+split -v -p 33 -t 0
+split -v -p 50 -t 0
+
+# Split pane 0 into four even cols.
+split -h -p 25 -t 0
+split -h -p 33 -t 0
+split -h -p 50 -t 0
+
+# Split pane 4 into four even cols.
+split -h -p 25 -t 4
+split -h -p 33 -t 4
+split -h -p 50 -t 4
+
+# Split pane 8 into four even cols.
+split -h -p 25 -t 8
+split -h -p 33 -t 8
+split -h -p 50 -t 8

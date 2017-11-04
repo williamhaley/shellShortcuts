@@ -21,6 +21,8 @@ mkdir -p $HOME/.vim
 ln -sf $CONFIGS_DIR/vimrc $HOME/.vimrc
 cp -R $CONFIGS_DIR/vim/* $HOME/.vim/
 
-ln -sf $CONFIGS_DIR/tmux.conf $HOME/.tmux.conf
+mkdir -p $HOME/.tmux
+ln -sf $CONFIGS_DIR/tmux/tmux.conf $HOME/.tmux.conf
+ln -sf $CONFIGS_DIR/tmux/session.4x3 $HOME/.tmux/session.4x3
 
 echo "Done."

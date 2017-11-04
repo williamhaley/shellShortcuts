@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+printf '\033]2;%s\033\\' "$1"
+

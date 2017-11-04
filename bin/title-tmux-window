@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+tmux rename-window "$1"
+
