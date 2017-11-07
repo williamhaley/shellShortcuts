@@ -7,19 +7,26 @@ IFS=$'\n'
 for sum_file in `find . -regex ".*\.sha512" -type f | sort`;
 do
 	(
-		sleep .001
+		sleep .01
 
 		cd `dirname "$sum_file"`
 
 		# Only report failures
-		sha512sum --check --quiet "`basename $sum_file`" || (
-			source_file=`echo "${sum_file%.sha512}"`
+		sha512sum --check --quiet "$(basename ${sum_file})" || (
+			source_file=$(basename "${sum_file%.sha512}")
 			echo "Source file: ${source_file}"
+
+			ls | grep -i "${source_file}"
+
+			sleep 5
+			stat "${source_file}"
+			sleep 5
+
 			echo "Error: $sum_file"
 			echo "Expected:"
 			cat "`basename $sum_file`"
 			echo "Actual:"
-			sha512sum `"${source_file}"`
+			sha512sum "${source_file}"
 		)
 	)
 done
