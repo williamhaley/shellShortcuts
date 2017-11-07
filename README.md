@@ -33,7 +33,12 @@ willconfig
 
 ## iTerm
 
-In iTerm go to Preferences and use the "Load preferences from a custom folder or URL:" to specify the `iTermSettings` folder where settings are stored. Do *not* copy local settings when prompted. Instead, we'll override them with what's in the `iTermSettings` folder.
+[Run these](http://stratus3d.com/blog/2015/02/28/sync-iterm2-profile-with-dotfiles-repository/) then close and reopen iTerm.
+
+```
+defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/configs/iTermSettings"
+defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+```
 
 ## Atom
 
