@@ -7,7 +7,7 @@ IFS=$'\n'
 
 extensions="iso\|img\|jpg\|bmp\|png\|tar.gz\|mp4\|mkv\|mov\|gif\|m4p\|m4a\|mp3\|ogg\|pdf"
 
-for file in `find . -iregex ".*.\(${extensions}\)" | sort`;
+for file in `find . -iregex ".*\.\(${extensions}\)" -type f | sort`;
 do
 	(
 		cd `dirname "$file"`

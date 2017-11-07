@@ -4,12 +4,22 @@ IFS=$'\n'
 
 # Verify checksums (recursively) in the current directory.
 
-for sum_file in `find . -regex ".*.sha512" | sort`;
+for sum_file in `find . -regex ".*\.sha512" -type f | sort`;
 do
 	(
+		sleep .001
+
 		cd `dirname "$sum_file"`
 
 		# Only report failures
-		sha512sum --check --quiet "`basename $sum_file`"
+		sha512sum --check --quiet "`basename $sum_file`" || (
+			source_file=`echo "${sum_file%.sha512}"`
+			echo "Source file: ${source_file}"
+			echo "Error: $sum_file"
+			echo "Expected:"
+			cat "`basename $sum_file`"
+			echo "Actual:"
+			sha512sum `"${source_file}"`
+		)
 	)
 done
