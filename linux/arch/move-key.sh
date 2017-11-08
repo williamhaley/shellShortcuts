@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-IFS=$'\n\t'
-
-function finish
+finish()
 {
 	umount /tmp/mnt1 || true
 	umount /tmp/mnt2 || true

@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-IFS=$'\n\t'
-
 if [[ $EUID -ne 0 ]];
 then
 	echo "This script must be run as root" 1>&2
@@ -36,10 +33,9 @@ systemctl enable docker
 systemctl start docker
 
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
-	dropbox \
 	hfsprogs \
 	google-chrome \
-	vokoscreen kino
+	vokoscreen
 
 # Fix issue with Dropbox.
 echo "fs.inotify.max_user_watches = 100000" > /etc/sysctl.d/99-sysctl.conf

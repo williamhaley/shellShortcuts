@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 if [[ $EUID -ne 0 ]];
 then
 	echo "This script must be run as root" 1>&2
@@ -20,4 +18,3 @@ sudo ufw allow 32412/udp
 sudo ufw allow 32413/udp
 sudo ufw allow 32414/udp
 sudo ufw allow 32469/tcp
-

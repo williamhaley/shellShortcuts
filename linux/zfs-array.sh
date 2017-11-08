@@ -1,9 +1,5 @@
 #!/bin/bash
 
-source "$(dirname "${BASH_SOURCE[0]}")/functions.sh"
-
-ensure_root_access
-
 while [[ $# > 1 ]]
 do
 key="$1"
