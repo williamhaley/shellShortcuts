@@ -12,7 +12,7 @@ BLUE_COLOR='\[\e[1;34m\]'
 # to properly add enough escape characters after the command in the PS1.
 # PS1+="\[\$(color-for-profile)\]"
 # http://stackoverflow.com/questions/6592077/bash-prompt-and-echoing-colors-inside-a-function
-function variable-color()
+variable-color()
 {
 	if [[ true ]]; then
 		printf "\033[1;31m"
@@ -29,7 +29,7 @@ GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_STATESEPARATOR=" "
 
-function system-emoji()
+system-emoji()
 {
 	EMOJIS=(🐶 ⚽️ 🏀 🏈 🎾 ⛵ 🐷 🐧 🍀 🌴 🌊)
 	HOSTNAME_HASH=$(hostname | xxd -pu)
@@ -55,6 +55,22 @@ PS1+=" ${YELLOW_COLOR}"
 
 # Git.
 PS1+='$(__git_ps1 "[%s]")'
+
+# Detect SSH
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	session_type=remote/ssh
+# many other tests omitted
+else
+	case $(ps -o comm= -p $PPID) in
+		sshd|*/sshd) session_type=remote/ssh;;
+	esac
+fi
+
+if [ "${session_type}" = "remote/ssh" ];
+then
+	PS1+=" ~~ SSH ~~"
+fi
 
 # New line.
 PS1+="\n"

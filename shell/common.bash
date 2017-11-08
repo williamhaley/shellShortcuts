@@ -25,33 +25,33 @@ fi
 
 # Recommended by direnv author to properly cd with direnv in shell scripts.
 # https://github.com/direnv/direnv/issues/262
-function direnv_cd() {
+direnv_cd() {
 	cd "$1"
 	eval "$(direnv export bash)"
 }
 
-function printfgreen()
+printfgreen()
 {
 	tput setaf 2
 	printf "$@"
 	tput sgr0
 }
 
-function printfred()
+printfred()
 {
 	tput setaf 1
 	printf "$@"
 	tput sgr0
 }
 
-function printfyellow()
+printfyellow()
 {
 	tput setaf 3
 	printf "$@"
 	tput sgr0
 }
 
-function projectUpdate()
+projectUpdate()
 {
 	for APP in `ls $1`;
 		do (
