@@ -1,12 +1,12 @@
-# Set up Workspace
+# Set up workspace
 
-mkdir -p $HOME/Workspace
+mkdir -p $HOME/dev
 
 # Variables
 
 PATH=$CONFIGS_DIR/bin:$HOME/bin:$PATH:$HOME/.local/bin:/sbin
 
-export GOPATH=$HOME/Workspace/go
+export GOPATH=$HOME/dev/go
 if ! go -v >/dev/null 2>&1;
 then
 	export PATH=$PATH:$(go env GOPATH)/bin

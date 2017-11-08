@@ -40,5 +40,7 @@
     userId: "c30acda4-6a20-9253-aedc-72c97879f992"
   gofmt:
     formatTool: "gofmt"
+  "tree-view":
+    hideVcsIgnoredFiles: true
   welcome:
     showOnStartup: false
