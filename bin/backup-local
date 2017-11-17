@@ -1,7 +1,32 @@
 #!/usr/bin/env bash
 
-local dest="/mnt/backup-internal/willhaley-backup"
+interrupt()
+{
+	echo "Script interrupted."
+	exit 1
+}
+
+trap interrupt INT
+
+dest="/mnt/backup-internal/willhaley-backup"
+
+{
 
 wrsync --delete-excluded --delete-after "${HOME}/Photographs/" "${dest}/Photographs/"
 wrsync --delete-excluded --delete-after "${HOME}/Music/"       "${dest}/Music/"
 wrsync --delete-excluded --delete-after "${HOME}/Documents/"   "${dest}/Documents/"
+wrsync --delete-excluded --delete-after "${HOME}/.ssh/"        "${dest}/ssh/"
+wrsync --delete-excluded --delete-after "${HOME}/.aws/"        "${dest}/aws/"
+wrsync --delete-excluded --delete-after "${HOME}/Desktop/"     "${dest}/Desktop/"
+wrsync --delete-excluded --delete-after "${HOME}/Downloads/"   "${dest}/Downloads/"
+wrsync --delete-excluded --delete-after "${HOME}/dev/"         "${dest}/dev/"
+wrsync --delete-excluded --delete-after "${HOME}/.electrum/"   "${dest}/electrum/"
+wrsync --delete-excluded --delete-after "${HOME}/.bitcoin/"    "${dest}/bitcoin/"
+
+dest="/mnt/backup-internal/system-backup"
+
+sudo cp "/etc/crypttab"          "${dest}/crypttab"
+sudo cp "/etc/fstab"             "${dest}/fstab"
+sudo cp "/etc/default/cryptdisk" "${dest}/cryptdisk"
+
+} &>> /tmp/backup.log

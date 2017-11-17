@@ -1,28 +1,34 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 IFS=$'\n\t'
 
-LOCALE_GEN='en_US.UTF-8 UTF-8'
-LOCALE_CONF='LANG=en_US.UTF-8'
-TIMEZONE='/usr/share/zoneinfo/US/Central'
-APPLICATIONS='bash-completion git iw openssh'
-MIRROR='http://mirror.us.leaseweb.net/archlinux/$repo/os/$arch'
-ARCH_HOSTNAME='archlinux'
-ENCRYPTION_KEYFILE='/mnt/boot/key.keyfile'
+locale_gen="en_US.UTF-8 UTF-8"
+locale_conf="LANG=en_US.UTF-8"
+timezone="/usr/share/zoneinfo/US/Central"
+applications="bash-completion git iw openssh"
+mirror='http://mirror.us.leaseweb.net/archlinux/$repo/os/$arch'
+arch_hostname="archlinux"
+use_existing_key=false
+key_path="/key_mnt/root.crypt.key"
+key_format="vfat"
+root_format="ext4"
+hooks="base udev autodetect modconf block encrypt filesystems keyboard fsck"
+# Load vfat or ext4 regardless of what the key uses. Simpler to support either.
+modules="nls_cp437 vfat ext4"
 
 # Traps for signals.
 
-function finish
+finish()
 {
 	echo "Finished. Clean up..."
 	umount /mnt/boot || true
-	umount /key || true
+	umount "${key_dir}" || true
 	umount /mnt || true
 	cryptsetup luksClose cryptroot || true
 }
 
-function interrupt
+interrupt()
 {
 	echo "Script interrupted."
 	exit 1
@@ -33,19 +39,27 @@ trap finish EXIT
 
 # Helpers.
 
-function print_help
+print_help()
 {
-	echo "Usage: /bin/bash bootstrap.sh --disk=disk --name=name"
+	echo "Usage: /bin/bash bootstrap.sh --disk=disk --name=name --key=/path/to/key.keyfile"
 	echo
 	echo "     --disk       Required. The disk on which to install Arch."
 	echo "                  e.g. --disk=/dev/sda"
 	echo
 	echo "     --name       Required. The name of the initial user."
 	echo "                  e.g. --name=will"
+	echo
+	echo "     --key        Optional. Path to an existing key file. This should"
+	echo "                  be a path to a mounted, persistent, file. The script"
+	echo "                  can then infer the partition id and other info."
+	echo "                  e.g. --key=/some/mnt/some.keyfile"
+	echo
 	exit 1
 }
 
-# Check user input.
+############
+# 0. Input #
+############
 
 if [ $# -lt 1 ];
 then
@@ -56,13 +70,17 @@ fi
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--disk=*)
-			DISK="${1#*=}"
-			BOOT_PART=${DISK}1
-			KEY_PART=${DISK}2
-			ROOT_PART=${DISK}3
+			disk="${1#*=}"
+			boot_part=${disk}1
+			key_part=${disk}2
+			root_part=${disk}3
 			;;
 		--name=*)
-			USERNAME="${1#*=}"
+			username="${1#*=}"
+			;;
+		--key=*)
+			use_existing_key=true
+			key_path="${1#*=}"
 			;;
 		*)
 			print_help
@@ -71,76 +89,122 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-# Set our mirror.
-echo "Server = $MIRROR" > /etc/pacman.d/mirrorlist
+key_dir=`dirname ${key_path}`
+mkdir -p "${key_dir}"
+
+if [ -z "${username}" ];
+then
+	echo "Must pass --name"
+	echo
+	print_help
+	echo
+	exit 1
+fi
+
+if [ -z "${disk}" ];
+then
+	echo "Must pass --disk"
+	echo
+	print_help
+	echo
+	exit 1
+fi
+
+############
+# 1. Disks #
+############
 
 # Crude method for wiping out partition tables.
-dd if=/dev/zero of=$DISK bs=1M count=100
-parted --script $DISK mklabel msdos
+dd if=/dev/zero of=${disk} bs=1M count=100
+parted --script ${disk} mklabel msdos
 
 # Create boot partition 1GB large.
-echo -e "o\nn\np\n1\n\n+1000M\nw" | fdisk $DISK
+echo -e "o\nn\np\n1\n\n+1000M\nw" | fdisk ${disk}
 sleep 3
 
-# Create key partition 10MB large.
-echo -e "n\np\n2\n\n+10M\nw" | fdisk $DISK
+# Create key partition 10MB large (we may not use this, but it is tiny).
+echo -e "n\np\n2\n\n+10M\nw" | fdisk ${disk}
 sleep 3
 
 # Create root partition using remaining space.
-echo -e "n\np\n3\n\n\nw" | fdisk $DISK
+echo -e "n\np\n3\n\n\nw" | fdisk ${disk}
 sleep 3
 
 # Make boot partition bootable.
-echo -e "a\n1\nw" | fdisk $DISK
+echo -e "a\n1\nw" | fdisk ${disk}
 sleep 3
 
 # Format boot partition.
-mkfs.ext4 -F $BOOT_PART
+mkfs.${root_format} -F ${boot_part}
+# Create a tiny partition for the key file (we may not use this, but it is tiny).
+mkfs.${key_format} ${key_part}
 
-# Format key partition.
-mkfs.vfat $KEY_PART
-# Mount key partition.
-mkdir -p /key
-mount $KEY_PART /key
+############################################
+# 2. Create key, or validate existing key  #
+############################################
+
+# The user specified a path to an existing key.
+if [ "${use_existing_key}" = true ];
+then
+	# Does the specified key exist?
+	if [ ! -f "${key_path}" ];
+	then
+		echo "Existing key file not found"
+		exit 1
+	fi
+else
+	# The user did not specify a key, so we will make one.
+	mount ${key_part} "${key_dir}"
+	# Generate random key.
+	dd if=/dev/urandom bs=512 count=24 | tr -dc _A-Z-a-z-0-9 | head -c 4096 | dd of="${key_path}"
+fi
+
+###################
+# 3. Encrypt root #
+###################
 
 # Encrypt and format root partition.
-dd if=/dev/urandom bs=512 count=24 | tr -dc _A-Z-a-z-0-9 | head -c 4096 | dd of=/key/key.keyfile
-cryptsetup --batch-mode -y -v luksFormat $ROOT_PART /key/key.keyfile
-cryptsetup open $ROOT_PART cryptroot --key-file="/key/key.keyfile"
-mkfs.ext4 -F /dev/mapper/cryptroot
+cryptsetup --batch-mode -y -v luksFormat ${root_part} "${key_path}"
+cryptsetup open ${root_part} cryptroot --key-file="${key_path}"
+mkfs.${root_format} -F /dev/mapper/cryptroot
 mount /dev/mapper/cryptroot /mnt
 
 mkdir /mnt/boot
-mount $BOOT_PART /mnt/boot
+mount ${boot_part} /mnt/boot
 
-## System configuration.
+######################################
+# 4. Base system install and config  #
+######################################
 
+# Set our mirror.
+echo "Server = ${mirror}" > /etc/pacman.d/mirrorlist
+
+# Install system.
 pacstrap /mnt base
 
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
 # Hook for encryption.
-sed -i -e "s|HOOKS=\(.*\)filesystems\(.*\)|HOOKS=\1encrypt filesystems\2|" /mnt/etc/mkinitcpio.conf
-
-# Allow loading keyfile from vfat or ext4 USB.
-sed -i -e "s|MODULES=\"\(.*\)\"|MODULES=\"\1nls_cp437 vfat ext4\"|" /mnt/etc/mkinitcpio.conf
+sed -i -e "s|^HOOKS=.*|HOOKS=\(${hooks}\)|" /mnt/etc/mkinitcpio.conf
+# Need to load specific modules to support our key disk at boot.
+sed -i -e "s|^MODULES=.*|MODULES=\(${modules}\)|" /mnt/etc/mkinitcpio.conf
 
 # Hostname.
-arch-chroot /mnt /bin/bash -c "echo '$ARCH_HOSTNAME' > /etc/hostname"
+arch-chroot /mnt /bin/bash -c "echo '$arch_hostname' > /etc/hostname"
 
 # Enable DHCP.
 arch-chroot /mnt systemctl enable dhcpcd
 
-# Timezone.
-arch-chroot /mnt ln -sf $TIMEZONE /etc/localtime
+# timezone.
+arch-chroot /mnt ln -sf ${timezone} /etc/localtime
 
 # Apps to install.
-arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm $APPLICATIONS"
+arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm ${applications}"
 
 # Locale.
-echo "$LOCALE_GEN" > /mnt/etc/locale.gen
+echo "${locale_gen}" > /mnt/etc/locale.gen
 arch-chroot /mnt locale-gen
-echo "$LOCALE_CONF" > /mnt/etc/locale.conf
+echo "${locale_conf}" > /mnt/etc/locale.conf
 arch-chroot /mnt locale-gen
 
 # Sudoers config.
@@ -151,7 +215,7 @@ arch-chroot /mnt groupadd sudo
 arch-chroot /mnt chmod 440 /etc/sudoers
 
 # Add initial user.
-arch-chroot /mnt useradd -m -s /bin/bash -G sudo $USERNAME
+arch-chroot /mnt useradd -m -s /bin/bash -G sudo ${username}
 
 # Blank out the root password. Sudo will be the only way to get root access!!!
 arch-chroot /mnt passwd -l root
@@ -166,29 +230,45 @@ mkdir -p /mnt/etc/ufw
 echo "ENABLED=yes" > /mnt/etc/ufw/ufw.conf
 echo "LOGLEVEL=low" >> /mnt/etc/ufw/ufw.conf
 
-# Grub.
+############
+# 5. Grub  #
+############
+
 arch-chroot /mnt mkinitcpio -p linux
 arch-chroot /mnt pacman -S --noconfirm grub
 
-ROOT_PART_UUID="$(blkid -s UUID -o value $ROOT_PART)"
-KEY_MOUNT=$(stat -c %m -- "/key/key.keyfile")
-KEY_RELATIVE_PATH=$(echo /key/key.keyfile|sed "s|^$KEY_MOUNT||")
-KEY_PART_DEV=$(df -P "$KEY_MOUNT" | tail -1 | cut -d' ' -f 1)
-KEY_PART_UUID=$(blkid -s UUID -o value $KEY_PART_DEV)
+root_part_uuid="$(blkid -s UUID -o value ${root_part})"
+key_mount=$(stat -c %m -- "${key_path}")
+key_relative_path=$(echo ${key_path}|sed "s|^${key_mount}||")
+key_part_dev=$(df -P "${key_mount}" | tail -1 | cut -d' ' -f 1)
+key_part_uuid=$(blkid -s UUID -o value ${key_part_dev})
 
-sed -i -e "s|GRUB_CMDLINE_LINUX=\"\(.*\)\"|GRUB_CMDLINE_LINUX=\"\1cryptdevice=UUID=$ROOT_PART_UUID:cryptroot root=/dev/mapper/cryptroot cryptkey=UUID=$KEY_PART_UUID:vfat:$KEY_RELATIVE_PATH\"|" /mnt/etc/default/grub
+grub_cmdline_linux="cryptdevice=UUID=${root_part_uuid}:cryptroot"
+grub_cmdline_linux+=" root=/dev/mapper/cryptroot"
+grub_cmdline_linux+=" cryptkey=UUID=${key_part_uuid}:${key_format}:${key_relative_path}"
+sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${grub_cmdline_linux}\"|" /mnt/etc/default/grub
 
-arch-chroot /mnt grub-install --target=i386-pc --recheck --debug $DISK
+arch-chroot /mnt grub-install --target=i386-pc --recheck --debug ${disk}
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 clear
 
+########################
+# 5. Set user password #
+########################
+
 echo
 echo "************************************************"
-echo "You *must* set a password for user: $USERNAME"
+echo "You *must* set a password for user: ${username}"
 echo "This is the only user who will have access."
+echo
+echo "If this fails, run manually."
+echo "arch-chroot /mnt passwd ${username}"
+echo
 echo "************************************************"
 echo
-arch-chroot /mnt passwd $USERNAME
+
+arch-chroot /mnt passwd ${username}
+
 echo
 echo "Done. Please reboot."

@@ -3,12 +3,11 @@
 IFS=$'\n'
 
 # Verify checksums (recursively) in the current directory.
+{
 
 for sum_file in `find . -regex ".*\.sha512" -type f | sort`;
 do
 	(
-		sleep .01
-
 		cd `dirname "$sum_file"`
 
 		# Only report failures
@@ -18,9 +17,7 @@ do
 
 			ls | grep -i "${source_file}"
 
-			sleep 5
 			stat "${source_file}"
-			sleep 5
 
 			echo "Error: $sum_file"
 			echo "Expected:"
@@ -30,3 +27,5 @@ do
 		)
 	)
 done
+
+} &>> /tmp/verify.log
