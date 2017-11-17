@@ -7,20 +7,17 @@ then
 fi
 
 pacman -S --noconfirm --needed \
-	atom \
+	firefox \
 	sane \
 	exfat-utils \
-	base-devel \
+	base-devel linux-headers go jdk8-openjdk atom \
 	keepassx2 \
-	go jdk8-openjdk \
-	aws-cli python-pip \
+	aws-cli \
 	net-tools \
 	gimp \
-	redshift python-gobject python-xdg \
 	vagrant \
 	virtualbox virtualbox-guest-utils virtualbox-guest-modules-arch \
 	docker \
-	linux-headers \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
 	vlc lollypop mplayer kid3 sound-juicer \
@@ -36,7 +33,3 @@ sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
 	google-chrome \
 	vokoscreen
-
-# Fix issue with Dropbox.
-echo "fs.inotify.max_user_watches = 100000" > /etc/sysctl.d/99-sysctl.conf
-sysctl --system
