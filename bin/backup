@@ -8,7 +8,7 @@ fi
 
 if ! `findmnt -M "/mnt/backup-internal" >/dev/null`;
 then
-	echo "Disk not mounted"
+	echo "/mnt/backup-internal not mounted"
 	exit 1
 fi
 
@@ -32,19 +32,53 @@ do_cp()
 	cp "$1" "$2"
 }
 
-dest="/mnt/backup-internal/willhaley-backup"
-do_rsync "/home/will/Photographs/" "${dest}/Photographs/"
-do_rsync "/home/will/Music/"       "${dest}/Music/"
-do_rsync "/home/will/Documents/"   "${dest}/Documents/"
-do_rsync "/home/will/.ssh/"        "${dest}/ssh/"
-do_rsync "/home/will/.aws/"        "${dest}/aws/"
-do_rsync "/home/will/Desktop/"     "${dest}/Desktop/"
-do_rsync "/home/will/Downloads/"   "${dest}/Downloads/"
-do_rsync "/home/will/dev/"         "${dest}/dev/"
-do_rsync "/home/will/.electrum/"   "${dest}/electrum/"
-do_rsync "/home/will/.bitcoin/"    "${dest}/bitcoin/"
+do_rsync "/home/will/Photographs/" "/mnt/backup-internal/willhaley-backup/Photographs/"
+do_rsync "/home/will/Music/"       "/mnt/backup-internal/willhaley-backup/Music/"
+do_rsync "/home/will/Documents/"   "/mnt/backup-internal/willhaley-backup/Documents/"
+do_rsync "/home/will/.ssh/"        "/mnt/backup-internal/willhaley-backup/ssh/"
+do_rsync "/home/will/.aws/"        "/mnt/backup-internal/willhaley-backup/aws/"
+do_rsync "/home/will/Desktop/"     "/mnt/backup-internal/willhaley-backup/Desktop/"
+do_rsync "/home/will/Downloads/"   "/mnt/backup-internal/willhaley-backup/Downloads/"
+do_rsync "/home/will/dev/"         "/mnt/backup-internal/willhaley-backup/dev/"
+do_rsync "/home/will/.electrum/"   "/mnt/backup-internal/willhaley-backup/electrum/"
+do_rsync "/home/will/.bitcoin/"    "/mnt/backup-internal/willhaley-backup/bitcoin/"
+
+if `findmnt -M "/mnt/data" >/dev/null`;
+then
+	do_rsync /mnt/data/Software/ "/mnt/backup-internal/Software/"
+	do_rsync /mnt/data/Videos/   "/mnt/backup-internal/Videos/"
+else
+	echo
+	echo "/mnt/data not mounted"
+	echo
+fi
+
+if `findmnt -M "/mnt/escape-pod" >/dev/null`;
+then
+	do_rsync /home/will/Documents/   "/mnt/escape-pod/Documents/"
+	do_rsync /home/will/Photographs/ "/mnt/escape-pod/Photographs/"
+	do_rsync /home/will/Music/       "/mnt/escape-pod/Music/"
+	do_rsync /home/will/.electrum/   "/mnt/escape-pod/electrum/"
+	do_rsync /home/will/.bitcoin/    "/mnt/escape-pod/bitcoin/"
+else
+	echo
+	echo "/mnt/escape-pod not mounted"
+	echo
+fi
+
+if `findmnt -M "/mnt/go-bag" >/dev/null`;
+then
+	do_rsync /home/will/Documents/   "/mnt/go-bag/Documents/"
+	do_rsync /home/will/Photographs/ "/mnt/go-bag/Photographs/"
+	do_rsync /home/will/.electrum/   "/mnt/go-bag/electrum/"
+	do_rsync /home/will/.bitcoin/    "/mnt/go-bag/bitcoin/"
+else
+	echo
+	echo "/mnt/go-bag not mounted"
+	echo
+fi
 
 dest="/mnt/backup-internal/system-backup"
-do_cp "/etc/crypttab"          "${dest}/crypttab"
-do_cp "/etc/fstab"             "${dest}/fstab"
-do_cp "/etc/default/cryptdisk" "${dest}/cryptdisk"
+do_cp "/etc/crypttab"          "/mnt/backup-internal/system-backup/crypttab"
+do_cp "/etc/fstab"             "/mnt/backup-internal/system-backup/fstab"
+do_cp "/etc/default/cryptdisk" "/mnt/backup-internal/system-backup/cryptdisk"

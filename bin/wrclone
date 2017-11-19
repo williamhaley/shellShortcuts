@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+rclone sync \
+	--verbose \
+	--exclude ".localized" --exclude ".DS_Store" \
+	"$@"
