@@ -22,7 +22,7 @@ trap interrupt INT
 
 do_rsync()
 {
-	rsync_opts="--delete-excluded --delete-after --dry-run"
+	rsync_opts="--delete-excluded --delete-after"
 
 	wrsync ${rsync_opts} "$1" "$2"
 }
