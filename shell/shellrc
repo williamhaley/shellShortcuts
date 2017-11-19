@@ -1,10 +1,5 @@
 # https://stackoverflow.com/questions/9910966/how-to-tell-if-its-using-zsh-or-bash
 
-if [ -f "${CONFIGS_DIR}/ENV" ]
-then
-	source "${CONFIGS_DIR}/ENV"
-fi
-
 if [ -n "$ZSH_VERSION" ]; then
 	source $CONFIGS_DIR/shell/zshrc
 elif [ -n "$BASH_VERSION" ]; then
@@ -13,3 +8,17 @@ else
 	echo "Shell does not seem to be bash or zsh..."
 fi
 
+if [ -n "$GEM_HOME" ] || [ -n "$GEM_PATH" ];
+then
+	export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+	[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+fi
+
+export NVM_DIR="/home/will/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

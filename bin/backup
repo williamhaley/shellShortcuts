@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ $EUID -ne 0 ]];
+then
+	echo "This script must be run as root"
+	exit 1
+fi
+
 interrupt()
 {
 	echo "Script interrupted."
@@ -8,25 +14,31 @@ interrupt()
 
 trap interrupt INT
 
-dest="/mnt/backup-internal/willhaley-backup"
-
+do_rsync()
 {
+	rsync_opts="--delete-excluded --delete-after --dry-run"
 
-wrsync --delete-excluded --delete-after "${HOME}/Photographs/" "${dest}/Photographs/"
-wrsync --delete-excluded --delete-after "${HOME}/Music/"       "${dest}/Music/"
-wrsync --delete-excluded --delete-after "${HOME}/Documents/"   "${dest}/Documents/"
-wrsync --delete-excluded --delete-after "${HOME}/.ssh/"        "${dest}/ssh/"
-wrsync --delete-excluded --delete-after "${HOME}/.aws/"        "${dest}/aws/"
-wrsync --delete-excluded --delete-after "${HOME}/Desktop/"     "${dest}/Desktop/"
-wrsync --delete-excluded --delete-after "${HOME}/Downloads/"   "${dest}/Downloads/"
-wrsync --delete-excluded --delete-after "${HOME}/dev/"         "${dest}/dev/"
-wrsync --delete-excluded --delete-after "${HOME}/.electrum/"   "${dest}/electrum/"
-wrsync --delete-excluded --delete-after "${HOME}/.bitcoin/"    "${dest}/bitcoin/"
+	wrsync ${rsync_opts} "$1" "$2"
+}
+
+do_cp()
+{
+	cp "$1" "$2"
+}
+
+dest="/mnt/backup-internal/willhaley-backup"
+do_rsync "/home/will/Photographs/" "${dest}/Photographs/"
+do_rsync "/home/will/Music/"       "${dest}/Music/"
+do_rsync "/home/will/Documents/"   "${dest}/Documents/"
+do_rsync "/home/will/.ssh/"        "${dest}/ssh/"
+do_rsync "/home/will/.aws/"        "${dest}/aws/"
+do_rsync "/home/will/Desktop/"     "${dest}/Desktop/"
+do_rsync "/home/will/Downloads/"   "${dest}/Downloads/"
+do_rsync "/home/will/dev/"         "${dest}/dev/"
+do_rsync "/home/will/.electrum/"   "${dest}/electrum/"
+do_rsync "/home/will/.bitcoin/"    "${dest}/bitcoin/"
 
 dest="/mnt/backup-internal/system-backup"
-
-sudo cp "/etc/crypttab"          "${dest}/crypttab"
-sudo cp "/etc/fstab"             "${dest}/fstab"
-sudo cp "/etc/default/cryptdisk" "${dest}/cryptdisk"
-
-} &>> /tmp/backup.log
+do_cp "/etc/crypttab"          "${dest}/crypttab"
+do_cp "/etc/fstab"             "${dest}/fstab"
+do_cp "/etc/default/cryptdisk" "${dest}/cryptdisk"

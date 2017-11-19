@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+wrsync --delete-excluded --delete-after /mnt/backup-internal/ /mnt/backup-external/

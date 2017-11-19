@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Everything in the exclude list will be excluded, but may also be deleted if you are
+# using `--delete-excluded`! I found that inline excludes make it easier to run
+# wrsync via sudo. Having a config dir gets complicated. Keep it all in this file.
+
 rsync \
 	--archive \
 	--recursive \
@@ -7,5 +11,5 @@ rsync \
 	--verbose \
 	--progress \
 	--stats \
-	--exclude-from "${CONFIGS_DIR}/rsync/excludes.conf" \
+	--exclude ".localized" --exclude ".DS_Store" \
 	"$@"
