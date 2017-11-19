@@ -32,16 +32,17 @@ do_cp()
 	cp "$1" "$2"
 }
 
-do_rsync "/home/will/Photographs/" "/mnt/backup-internal/willhaley-backup/Photographs/"
-do_rsync "/home/will/Music/"       "/mnt/backup-internal/willhaley-backup/Music/"
-do_rsync "/home/will/Documents/"   "/mnt/backup-internal/willhaley-backup/Documents/"
-do_rsync "/home/will/.ssh/"        "/mnt/backup-internal/willhaley-backup/ssh/"
-do_rsync "/home/will/.aws/"        "/mnt/backup-internal/willhaley-backup/aws/"
-do_rsync "/home/will/Desktop/"     "/mnt/backup-internal/willhaley-backup/Desktop/"
-do_rsync "/home/will/Downloads/"   "/mnt/backup-internal/willhaley-backup/Downloads/"
-do_rsync "/home/will/dev/"         "/mnt/backup-internal/willhaley-backup/dev/"
-do_rsync "/home/will/.electrum/"   "/mnt/backup-internal/willhaley-backup/electrum/"
-do_rsync "/home/will/.bitcoin/"    "/mnt/backup-internal/willhaley-backup/bitcoin/"
+do_rsync "/home/will/Photographs/"    "/mnt/backup-internal/willhaley-backup/Photographs/"
+do_rsync "/home/will/Music/"          "/mnt/backup-internal/willhaley-backup/Music/"
+do_rsync "/home/will/Documents/"      "/mnt/backup-internal/willhaley-backup/Documents/"
+do_rsync "/home/will/.ssh/"           "/mnt/backup-internal/willhaley-backup/ssh/"
+do_rsync "/home/will/.aws/"           "/mnt/backup-internal/willhaley-backup/aws/"
+do_rsync "/home/will/Desktop/"        "/mnt/backup-internal/willhaley-backup/Desktop/"
+do_rsync "/home/will/Downloads/"      "/mnt/backup-internal/willhaley-backup/Downloads/"
+do_rsync "/home/will/dev/"            "/mnt/backup-internal/willhaley-backup/dev/"
+do_rsync "/home/will/.electrum/"      "/mnt/backup-internal/willhaley-backup/electrum/"
+do_rsync "/home/will/.bitcoin/"       "/mnt/backup-internal/willhaley-backup/bitcoin/"
+do_rsync "/home/will/.config/rclone/" "/mnt/backup-internal/willhaley-backup/rclone/"
 
 if `findmnt -M "/mnt/data" >/dev/null`;
 then

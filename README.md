@@ -63,22 +63,12 @@ vim
 ## Backups
 
 ```
-rclone config
+sudo backup
+sudo archive
 ```
 
-Create a new `b2` remote named `Backup`. The keys are in the B2 Web UI.
+Use with caution!
 
 ```
-# Backup files to cloud
-cloud-backup
+restore
 ```
-
-Create a new `b2` remote named `Crypt`. It is an encrypted remote off of `Backup`.
-
-I recommend using a separate `b2` bucket in this case. So I would create a bucket like `backup-crypt`. In the `rclone config` menu I would choose `5` to encrypt another remote
-
-Remember that `Backup` is the name of the unencrypted remote.
-
-Put `Backup:encrypted-bucket` for the remote definition entry. Choose `standard` encryption for the naming.
-
-Update directories in the `cloud-backup`, `backup-local`, `backup-data`, `verify-data-backup`, and `verify-local-backup` scripts.
