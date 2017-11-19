@@ -1,3 +1,41 @@
 #!/usr/bin/env bash
 
-wrsync --delete-excluded --delete-after /mnt/backup-internal/ /mnt/backup-external/
+interrupt()
+{
+	echo "Script interrupted."
+	exit 1
+}
+
+trap interrupt INT
+
+rsync_opts="--delete-excluded --delete-after"
+
+if ! `findmnt -M "/mnt/backup-internal" >/dev/null`;
+then
+	echo "Disk not mounted"
+	exit 1
+fi
+
+if `findmnt -M "/mnt/backup-external" >/dev/null`;
+then
+	wrsync ${rsync_opts} /mnt/backup-internal/ /mnt/backup-external/
+else
+	echo
+	echo "/mnt/backup-external not found"
+	echo
+	exit 1
+fi
+
+if `findmnt -M "/mnt/escape-pod" >/dev/null`;
+then
+	wrsync ${rsync_opts} /home/will/Documents/   /mnt/escape-pod/Documents/
+	wrsync ${rsync_opts} /home/will/Photographs/ /mnt/escape-pod/Photographs/
+	wrsync ${rsync_opts} /home/will/Music/       /mnt/escape-pod/Music/
+	wrsync ${rsync_opts} /home/will/.electrum/   /mnt/escape-pod/electrum/
+	wrsync ${rsync_opts} /home/will/.bitcoin/    /mnt/escape-pod/bitcoin/
+else
+	echo
+	echo "/mnt/escape-pod not found"
+	echo
+	exit 1
+fi
