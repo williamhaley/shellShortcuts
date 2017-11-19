@@ -9,7 +9,7 @@ fi
 pacman -S --noconfirm --needed \
 	xorg xorg-server \
 	lightdm lightdm-gtk-greeter \
-	networkmanager network-manager-applet \
+	networkmanager network-manager-applet gnome-keyring \
 	noto-fonts ttf-dejavu
 
 pacman -S --noconfirm \
