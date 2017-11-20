@@ -16,7 +16,7 @@ pacman -S --noconfirm --needed \
 	net-tools \
 	gimp \
 	vagrant \
-	virtualbox virtualbox-guest-utils virtualbox-guest-modules-arch \
+	virtualbox \
 	docker \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
