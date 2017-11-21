@@ -18,6 +18,7 @@ pacman -S --noconfirm --needed \
 	vagrant \
 	virtualbox \
 	docker \
+	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
 	vlc lollypop mplayer kid3 sound-juicer \
