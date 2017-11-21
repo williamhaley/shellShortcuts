@@ -31,11 +31,6 @@ do_rsync()
 	wrsync ${rsync_opts} "$1" "$2"
 }
 
-do_cp()
-{
-	cp "$1" "$2"
-}
-
 do_rsync "/home/will/Photographs/"    "/mnt/backup-internal/willhaley-backup/Photographs/"
 do_rsync "/home/will/Music/"          "/mnt/backup-internal/willhaley-backup/Music/"
 do_rsync "/home/will/Documents/"      "/mnt/backup-internal/willhaley-backup/Documents/"
@@ -84,6 +79,6 @@ else
 fi
 
 dest="/mnt/backup-internal/system-backup"
-do_cp "/etc/crypttab"          "/mnt/backup-internal/system-backup/crypttab"
-do_cp "/etc/fstab"             "/mnt/backup-internal/system-backup/fstab"
-do_cp "/etc/default/cryptdisk" "/mnt/backup-internal/system-backup/cryptdisk"
+do_rsync "/etc/crypttab"          "/mnt/backup-internal/system-backup/crypttab"
+do_rsync "/etc/fstab"             "/mnt/backup-internal/system-backup/fstab"
+do_rsync "/etc/default/cryptdisk" "/mnt/backup-internal/system-backup/cryptdisk"
