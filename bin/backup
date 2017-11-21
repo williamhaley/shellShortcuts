@@ -24,6 +24,10 @@ do_rsync()
 {
 	rsync_opts="--delete-excluded --delete-after"
 
+	echo
+	echo "rsync: $1 ==> $2"
+	echo
+
 	wrsync ${rsync_opts} "$1" "$2"
 }
 
