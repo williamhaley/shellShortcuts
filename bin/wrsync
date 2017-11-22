@@ -10,5 +10,5 @@ rsync \
 	--itemize-changes \
 	--verbose \
 	--progress \
-	--exclude ".localized" --exclude ".DS_Store" \
+	--exclude ".localized" --exclude ".DS_Store" --exclude "lost+found" \
 	"$@"
