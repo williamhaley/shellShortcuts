@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Can use hex values or plain text.
+tmux select-pane -P 'bg=#b5d3e7'

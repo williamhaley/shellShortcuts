@@ -28,6 +28,7 @@
     ]
   editor:
     autoIndentOnPaste: true
+    fontSize: 16
     invisibles: {}
     normalizeIndentOnPaste: false
     showIndentGuide: true
