@@ -1,0 +1,10 @@
+{
+    "editor.fontSize": 14,
+    "editor.renderWhitespace": "all",
+    "window.zoomLevel": 0,
+    "workbench.colorTheme": "Monokai Dimmed",
+    "window.zoomLevel": -0.5,
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.rulers": [80, 120],
+}

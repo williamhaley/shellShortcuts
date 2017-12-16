@@ -13,3 +13,6 @@ alias ripcd='abcde -o mp3 -q high'
 alias rm='rm --interactive=once'
 
 complete -cf sudo
+
+export IS_LINUX=true
+
