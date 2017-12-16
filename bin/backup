@@ -6,12 +6,6 @@ then
 	exit 1
 fi
 
-if ! `findmnt -M "/mnt/backup-internal" >/dev/null`;
-then
-	echo "/mnt/backup-internal not mounted"
-	exit 1
-fi
-
 interrupt()
 {
 	echo "Script interrupted."
