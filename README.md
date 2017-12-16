@@ -47,6 +47,8 @@ code --install-extension \
 	EditorConfig.editorconfig
 code --install-extension \
 	felixrieseberg.vsc-ember-cli EditorConfig.editorconfig
+code --install-extension \
+	PeterJausovec.vscode-docker
 ```
 
 Disable the `whitespace` package so that it does not conflict with `editorconfig`.
