@@ -33,4 +33,5 @@ systemctl start docker
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
 	google-chrome \
-	vokoscreen
+	vokoscreen \
+	visual-studio-code

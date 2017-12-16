@@ -40,15 +40,13 @@ defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/conf
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 ```
 
-## Atom
+## VSCode
 
 ```
-apm install \
-	joefitzgerald/gofmt \
-	joefitzgerald/go-get \
-	joefitzgerald/go-config \
-	editorconfig \
-	project-manager
+code --install-extension \
+	EditorConfig.editorconfig
+code --install-extension \
+	felixrieseberg.vsc-ember-cli EditorConfig.editorconfig
 ```
 
 Disable the `whitespace` package so that it does not conflict with `editorconfig`.
