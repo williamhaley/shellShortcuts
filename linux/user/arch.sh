@@ -12,6 +12,7 @@ pacman -S --noconfirm --needed \
 	exfat-utils \
 	base-devel linux-headers go jdk8-openjdk atom \
 	keepassx2 \
+	transmission-gtk \
 	aws-cli \
 	net-tools \
 	gimp \
