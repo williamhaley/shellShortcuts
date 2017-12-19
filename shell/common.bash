@@ -64,7 +64,7 @@ projectUpdate()
 				git hasstash && printfyellow "stash"
 				printf "\nbranches: $(git branch | wc -l | sed 's/^ *//;s/ *$//')\n"
 				git submodule update --init --recursive
-				git pull
+				git pull --rebase
 				echo ""
 			fi
 		)
