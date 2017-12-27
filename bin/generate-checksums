@@ -5,7 +5,7 @@ IFS=$'\n'
 # Generate checksums (recursively) in the current directory for all files
 # matching the extensions listed here.
 
-extensions="iso\|img\|jpg\|bmp\|png\|tar.gz\|mp4\|mkv\|mov\|gif\|m4p\|m4a\|mp3\|ogg\|pdf"
+extensions="iso\|img\|jpg\|bmp\|png\|tar.gz\|mp4\|mkv\|mov\|gif\|m4p\|m4a\|mp3\|ogg\|pdf\|webm"
 
 for file in `find . -iregex ".*\.\(${extensions}\)" -type f | sort`;
 do
