@@ -82,8 +82,9 @@ large-backup()
 	
 	if `findmnt -M "/mnt/data" >/dev/null`;
 	then
-		do_rsync /mnt/data/Software/ "/mnt/$1/Software/"
-		do_rsync /mnt/data/Videos/   "/mnt/$1/Videos/"
+		do_rsync /mnt/data/Software/     "/mnt/$1/Software/"
+		do_rsync /mnt/data/Videos/       "/mnt/$1/Videos/"
+		do_rsync /mnt/data/FamilyPhotos/ "/mnt/$1/FamilyPhotos/"
 	else
 		echo
 		echo "/mnt/data not mounted"
@@ -95,3 +96,4 @@ small-backup "horcrux1"
 small-backup "horcrux2"
 medium-backup "escape-pod"
 large-backup "backup-internal"
+
