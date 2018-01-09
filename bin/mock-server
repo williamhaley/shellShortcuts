@@ -1,71 +1,40 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env python
 
-require 'socket'
-require 'json'
-require 'uri'
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import SocketServer
 
-users = {}
+class S(BaseHTTPRequestHandler):
+    def _set_headers(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
 
-server = TCPServer.new('localhost', 2345)
+    def do_GET(self):
+        print "GET:", self.path
+        self._set_headers()
+        self.wfile.write("<html><body><h1>hi!</h1></body></html>")
 
-puts "Serving locally at port 2345."
+    def do_HEAD(self):
+        self._set_headers()
+        
+    def do_POST(self):
+        content_len = int(self.headers.getheader('content-length'))
+        post_body = self.rfile.read(content_len)
+        print "POST:", post_body
+        self._set_headers()
+        self.wfile.write("<html><body><h1>POST!</h1></body></html>")
+        
+def run(server_class=HTTPServer, handler_class=S, port=80):
+    server_address = ('', port)
+    httpd = server_class(server_address, handler_class)
+    print 'Starting httpd...'
+    httpd.serve_forever()
 
-loop do
-  socket = server.accept
+if __name__ == "__main__":
+    from sys import argv
 
-  request = socket.gets
-
-  next unless request
-
-  STDERR.puts request
-
-  method, path = request.split
-
-  headers = {}
-  while line = socket.gets.split(' ', 2)
-    break if line[0] == ""
-
-    headers[line[0].chop] = line[1].strip
-  end
-
-  body = socket.read(headers["Content-Length"].to_i)
-
-  puts body if body.length > 0
-
-  response = { :error => 'Not found' }
-
-  if method == 'GET' && path == '/users'
-    response = users.values
-  elsif method == 'GET' && /\/users\/+[0-9]/.match(path)
-    id = /\/users\/+[0-9]/.match(path).to_s.split('/').last
-
-    response = users[id.to_i]
-  elsif method == 'POST' && path == '/users'
-    user = JSON.parse(body.delete(' '))
-
-    id = users.length + 1
-
-    user[:id] = id
-
-    users[id] = user
-
-    response = users.values
-  end
-
-  json = { :data => response }.to_json
-
-  socket.print "HTTP/1.1 200 OK\r\n" +
-               "Access-Control-Allow-Origin: *\r\n" +
-               "Content-Type: application/json\r\n" +
-               "Content-Length: #{json.to_s.bytesize}\r\n" +
-               "Connection: close\r\n"
-
-  socket.print "\r\n"
-
-  socket.print json.to_s
-  
-  socket.close
-
-  puts "OK: #{response}"
-end
+    if len(argv) == 2:
+        run(port=int(argv[1]))
+    else:
+        run()
 
