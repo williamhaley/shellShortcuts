@@ -11,6 +11,7 @@ pacman -S --noconfirm --needed \
 	sane \
 	exfat-utils \
 	base-devel linux-headers go jdk8-openjdk atom \
+	cups \
 	keepassx2 \
 	transmission-gtk \
 	aws-cli \
@@ -19,6 +20,7 @@ pacman -S --noconfirm --needed \
 	jq \
 	vagrant \
 	virtualbox \
+	intel-ucode \
 	docker \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
@@ -31,6 +33,9 @@ usermod -a -G docker $USERNAME
 
 systemctl enable docker
 systemctl start docker
+
+systemctl enable org.cups.cupsd.service
+systemctl start org.cups.cupsd.service
 
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
