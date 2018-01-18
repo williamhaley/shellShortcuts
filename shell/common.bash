@@ -4,7 +4,7 @@ mkdir -p $HOME/dev
 
 # Variables
 
-PATH=$CONFIGS_DIR/bin:$HOME/bin:$PATH:$HOME/.local/bin:/sbin
+PATH=$CONFIGS_DIR/bin:$HOME/bin:/opt/local/bin:/opt/bin:$PATH:$HOME/.local/bin:/sbin
 
 export GOPATH=$HOME/dev/go
 if ! go -v >/dev/null 2>&1;
