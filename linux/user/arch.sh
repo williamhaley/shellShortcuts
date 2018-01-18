@@ -41,6 +41,6 @@ sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
 	google-chrome \
 	vokoscreen \
-	visual-studio-code \
+	visual-studio-code-bin \
 	slack-desktop
 

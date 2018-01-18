@@ -6,7 +6,8 @@ docker system prune -a -f
 
 if [ -f "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2" ];
 then
-	echo "!!! Deleting qcow image. Restart docker!"
 	rm "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2"
+
+	killall Docker ; open /Applications/Docker.app
 fi
 
