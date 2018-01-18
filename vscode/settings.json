@@ -1,4 +1,11 @@
 {
+    // Try to only set global settings here.
+    // Use workspaces for specific settings.
+    // For example, a workspace can override
+    // `go.gopath` as needed. Though, for that
+    // case, we use the direnv plugin to auto-load
+    // the path anyway.
+
     "editor.fontSize": 14,
     "editor.renderWhitespace": "all",
     "workbench.colorTheme": "Monokai Dimmed",
@@ -9,4 +16,6 @@
         120
     ],
     "files.autoSave": "afterDelay",
+    "go.formatTool": "gofmt",
+    "go.lintOnSave": "package"
 }

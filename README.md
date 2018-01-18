@@ -51,9 +51,17 @@ code --install-extension \
 	PeterJausovec.vscode-docker
 code --install-extension \
 	lukehoban.Go
+code --install-extension \
+	Rubymaniac.vscode-direnv
+
+# Dependencies for Go extension
+go get -v github.com/rogpeppe/godef
+go get -v github.com/uudashr/gopkgs/cmd/gopkgs
+go get -v github.com/nsf/gocode
+go get -v sourcegraph.com/sqs/goreturns
 ```
 
-Disable the `whitespace` package so that it does not conflict with `editorconfig`.
+The `direnv` command should pick up `GOPATH` if using `.envrc` files. Use the command palette -> `Go: Current GOPATH` to verify. Direnv assumes there's a single `.envrc` in your root workspace.
 
 ## vim
 
