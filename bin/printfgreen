@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+tput setaf 2
+printf "$@"
+tput sgr0
+

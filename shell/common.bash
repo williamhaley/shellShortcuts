@@ -23,6 +23,7 @@ fi
 
 # Functions
 
+# This *must* be a function. It cannot be in a script.
 # Recommended by direnv author to properly cd with direnv in shell scripts.
 # https://github.com/direnv/direnv/issues/262
 direnv_cd() {
@@ -30,43 +31,3 @@ direnv_cd() {
 	eval "$(direnv export bash)"
 }
 
-printfgreen()
-{
-	tput setaf 2
-	printf "$@"
-	tput sgr0
-}
-
-printfred()
-{
-	tput setaf 1
-	printf "$@"
-	tput sgr0
-}
-
-printfyellow()
-{
-	tput setaf 3
-	printf "$@"
-	tput sgr0
-}
-
-projectUpdate()
-{
-	for APP in `ls $1`;
-		do (
-			cd "$1/$APP"
-			if [ -d ".git" ];
-			then
-				printf "${APP}: "
-				printfgreen "[$(git currentbranch)] "
-				git isdirty && printfred "dirty"
-				git hasstash && printfyellow "stash"
-				printf "\nbranches: $(git branch | wc -l | sed 's/^ *//;s/ *$//')\n"
-				git submodule update --init --recursive
-				git pull --rebase
-				echo ""
-			fi
-		)
-	done
-}
