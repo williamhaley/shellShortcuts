@@ -27,7 +27,8 @@ pacman -S --noconfirm --needed \
 	ttf-symbola \
 	vlc lollypop mplayer kid3 sound-juicer \
 	rclone \
-	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly
+	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
+	redshift
 
 usermod -a -G docker $USERNAME
 
@@ -36,6 +37,15 @@ systemctl start docker
 
 systemctl enable org.cups.cupsd.service
 systemctl start org.cups.cupsd.service
+
+sudo -u $USERNAME \
+	XDG_RUNTIME_DIR="/run/user/$(id -u $USERNAME)" \
+	DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" \
+	systemctl --user enable redshift
+sudo -u $USERNAME \
+	XDG_RUNTIME_DIR="/run/user/$(id -u $USERNAME)" \
+	DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" \
+	systemctl --user start redshift
 
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
