@@ -2,9 +2,18 @@
 
 mkdir -p $HOME/dev
 
-# Variables
+PATH=$CONFIGS_DIR/bin:$PATH
+PATH=$HOME/bin:$PATH
+PATH=/opt/local/bin:$PATH
+PATH=/opt/bin:$PATH:
+PATH=$HOME/.local/bin:$PATH
+PATH=/sbin:$PATH
 
-PATH=$CONFIGS_DIR/bin:$HOME/bin:/opt/local/bin:/opt/bin:$PATH:$HOME/.local/bin:/sbin
+# PYENV - https://github.com/pyenv/pyenv
+# Still must install pyenv and switch
+# versions using `pyenv local` or configs.
+PATH=$HOME/.pyenv/shims:$PATH
+PYENV_ROOT=$HOME/.pyenv
 
 export GOPATH=$HOME/dev/go
 if ! go -v >/dev/null 2>&1;

@@ -5,7 +5,6 @@
     // `go.gopath` as needed. Though, for that
     // case, we use the direnv plugin to auto-load
     // the path anyway.
-
     "editor.fontSize": 14,
     "editor.renderWhitespace": "all",
     "workbench.colorTheme": "Monokai Dimmed",
@@ -15,7 +14,6 @@
         80,
         120
     ],
-    "files.autoSave": "afterDelay",
     "go.formatTool": "gofmt",
-    "go.lintOnSave": "package"
+    "go.lintOnSave": "package",
 }
