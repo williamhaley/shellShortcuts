@@ -27,8 +27,7 @@ ln -sf $CONFIGS_DIR/tmux/session.4x3 $HOME/.tmux/session.4x3
 
 if [ "$IS_MAC" = true ];
 then
-	mkdir -p "$HOME/Library/Application Support/Code/User"
-	ln -sf $CONFIGS_DIR/vscode/settings.json "$HOME/Library/Application Support/Code/User/settings.json"
+	mac-config
 fi
 
 if [ "$IS_LINUX" = true ];

@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+mkdir -p "$HOME/Library/Application Support/Code/User"
+ln -sf \
+	"$CONFIGS_DIR/vscode/settings.json" \
+	"$HOME/Library/Application Support/Code/User/settings.json"
+
+# Icon size of Dock items
+defaults write com.apple.dock tilesize -int 46
+
+# Lock the Dock size
+defaults write com.apple.dock size-immutable -bool true
+
+# Dock magnification
+defaults write com.apple.dock magnification -bool false
+
+# Icon size of magnified Dock items
+defaults write com.apple.dock largesize -int 64
+
+# Minimization effect: 'genie', 'scale', 'suck'
+defaults write com.apple.dock mineffect -string 'scale'
+
+defaults write com.apple.dock autohide -bool false
+
+# Make Dock icons of hidden applications translucent
+defaults write com.apple.dock showhidden -bool true
+
+# Double-click a window's title bar to:
+# None
+# Mimimize
+# Maximize (zoom)
+defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"
+
+# Show indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool true
+
+# Minimize windows into their application’s icon
+defaults write com.apple.dock minimize-to-application -bool true
+
+defaults write com.apple.dock orientation -string "right"
+
+# Configure date format in menu bar
+defaults write com.apple.menuextra.clock DateFormat -string "EEE HH:mm:ss"
+defaults write com.apple.menuextra.clock FlashDateSeparators -bool false
+defaults write com.apple.menuextra.clock IsAnalog -bool false
+
+# Show battery percentage in menu bar
+defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+
+add-to-dock()
+{
+	defaults \
+		write \
+		com.apple.dock \
+		persistent-apps \
+		-array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/${1}</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
+}
+
+# Clear all the apps first
+defaults write com.apple.dock persistent-apps -array
+
+add-to-dock "Google Chrome.app"
+add-to-dock "Utilities/Terminal.app"
+add-to-dock "Visual Studio Code.app"
+add-to-dock "Slack.app"
+
+killall Dock
+
+exit 1
+
+dockutil --no-restart --remove all
+dockutil --no-restart --add "/Applications/Google Chrome.app"
+dockutil --no-restart --add "/Applications/Utilities/Terminal.app"
+dockutil --no-restart --add "/Applications/Visual Studio Code.app"
+dockutil --no-restart --add "/Applications/Slack.app"
+
+killall Dock
+

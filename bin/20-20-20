@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+(
+  while true;
+  do
+    sleep 1800 # 20 * 60 
+
+    if [ "${IS_MAC}" = "true" ];
+    then
+      osascript -e 'display dialog "Rest your eyes"'
+    fi
+  done
+) &
+
