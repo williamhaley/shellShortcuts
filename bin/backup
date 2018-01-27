@@ -16,7 +16,7 @@ trap interrupt INT
 
 do_rsync()
 {
-	rsync_opts="--delete-excluded --delete-after"
+	rsync_opts="--delete-excluded --delete-after --exclude=node_modules"
 
 	echo
 	echo "rsync: $1 ==> $2"
@@ -25,7 +25,7 @@ do_rsync()
 	wrsync ${rsync_opts} "$1" "$2"
 }
 
-small-backup()
+horcrux-backup()
 {
 	if `findmnt -M "/mnt/$1" >/dev/null`;
 	then
@@ -40,15 +40,12 @@ small-backup()
 	fi
 }
 
-medium-backup()
+public-backup()
 {
 	if `findmnt -M "/mnt/$1" >/dev/null`;
 	then
-		do_rsync /home/will/Documents/   "/mnt/$1/Documents/"
-		do_rsync /home/will/Photographs/ "/mnt/$1/Photographs/"
-		do_rsync /home/will/.electrum/   "/mnt/$1/electrum/"
-		do_rsync /home/will/.bitcoin/    "/mnt/$1/bitcoin/"
-		do_rsync /home/will/Music/       "/mnt/$1/Music/"
+		do_rsync /home/will/Photographs/ "/mnt/$1/William's Photos/"
+		do_rsync /mnt/data/FamilyPhotos/ "/mnt/$1/Family Photos/"
 	else
 		echo
 		echo "/mnt/$1 not mounted"
@@ -56,7 +53,7 @@ medium-backup()
 	fi
 }
 
-large-backup()
+full-backup()
 {
 	if `findmnt -M "/mnt/$1" >/dev/null`;
 	then
@@ -92,8 +89,11 @@ large-backup()
 	fi
 }
 
-small-backup "horcrux1"
-small-backup "horcrux2"
-medium-backup "escape-pod"
-large-backup "backup-internal"
+horcrux-backup "horcrux1"
+horcrux-backup "horcrux2"
+horcrux-backup "horcrux3"
+
+public-backup "pensieve"
+
+full-backup "backup-internal"
 
