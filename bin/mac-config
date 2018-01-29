@@ -40,7 +40,7 @@ defaults write com.apple.dock minimize-to-application -bool true
 defaults write com.apple.dock orientation -string "right"
 
 # Configure date format in menu bar
-defaults write com.apple.menuextra.clock DateFormat -string "EEE HH:mm:ss"
+defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  H:mm:ss"
 defaults write com.apple.menuextra.clock FlashDateSeparators -bool false
 defaults write com.apple.menuextra.clock IsAnalog -bool false
 
