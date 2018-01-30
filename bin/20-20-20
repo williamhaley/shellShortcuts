@@ -3,7 +3,9 @@
 (
   while true;
   do
-    sleep 1800 # 20 * 60 
+    sleep 1200 # 1200 seconds -> 20 minutes
+
+    echo "20-20-20 - $(date) [is_mac: $IS_MAC] [is_linux: $IS_LINUX]" >> /tmp/20-20-20.log
 
     if [ "${IS_MAC}" = "true" ];
     then
