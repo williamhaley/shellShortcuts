@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [ "$1" = "--kill" ];
+then
+  kill $(pgrep -f 20-20-20)
+  exit 0
+fi
+
 (
   while true;
   do
