@@ -9,8 +9,6 @@ fi
 (
   while true;
   do
-    sleep 1200 # 1200 seconds -> 20 minutes
-
     echo "20-20-20 - $(date) [is_mac: $IS_MAC] [is_linux: $IS_LINUX]" >> /tmp/20-20-20.log
 
     if [ "${IS_MAC}" = "true" ];
@@ -22,6 +20,8 @@ fi
     then
       notify-send --expire-time=20000 "Rest your eyes"
     fi
+    
+    sleep 1200 # 1200 seconds -> 20 minutes
   done
 ) &
 
