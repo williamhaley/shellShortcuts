@@ -6,8 +6,17 @@ PATH=$CONFIGS_DIR/bin:$PATH
 PATH=$HOME/bin:$PATH
 PATH=/opt/local/bin:$PATH
 PATH=/opt/bin:$PATH:
+PATH=/opt/local/sbin:$PATH
 PATH=$HOME/.local/bin:$PATH
 PATH=/sbin:$PATH
+PATH=$HOME/.yarn/bin:$PATH
+
+# RVM
+# See alias below to load RVM in the shell.
+PATH=$PATH:$HOME/.rvm/bin
+
+# NVM
+NVM_DIR=$HOME/.nvm
 
 # PYENV - https://github.com/pyenv/pyenv
 # Still must install pyenv and switch
@@ -38,5 +47,16 @@ fi
 direnv_cd() {
 	cd "$1"
 	eval "$(direnv export bash)"
+}
+
+load-rvm()
+{
+	source $HOME/.rvm/scripts/rvm
+}
+
+load-nvm()
+{
+	\. "$NVM_DIR/nvm.sh"
+	\. "$NVM_DIR/bash_completion"
 }
 
