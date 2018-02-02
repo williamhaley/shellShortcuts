@@ -16,7 +16,7 @@ trap interrupt INT
 
 do_rsync()
 {
-	rsync_opts="--delete-excluded --delete-after --exclude=node_modules"
+	rsync_opts="--delete-excluded --delete-after --exclude=node_modules $3"
 
 	echo
 	echo "rsync: $1 ==> $2"
@@ -44,8 +44,8 @@ public-backup()
 {
 	if `findmnt -M "/mnt/$1" >/dev/null`;
 	then
-		do_rsync /home/will/Photographs/ "/mnt/$1/William's Photos/"
-		do_rsync /mnt/data/FamilyPhotos/ "/mnt/$1/Family Photos/"
+		do_rsync /home/will/Photographs/ "/mnt/$1/William's Photos/" "--no-perms --no-owner --no-group"
+		do_rsync /mnt/data/FamilyPhotos/ "/mnt/$1/Family Photos/" "--no-perms --no-owner --no-group"
 	else
 		echo
 		echo "/mnt/$1 not mounted"
