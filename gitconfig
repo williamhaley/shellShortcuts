@@ -1,6 +1,7 @@
 [include]
-    path = .gitconfig.personal
-    path = .gitconfig.work
+	# Include these in a specific order. Work overrides personal.
+	path = .gitconfig.personal
+	path = .gitconfig.work
 
 [alias]
 	undorebase    = reset --hard ORIG_HEAD
@@ -23,6 +24,7 @@
 		git reset --hard && \
 		git submodule foreach --recursive git reset --hard && \
 		git submodule update --init --recursive ; \
+		git submodule update -f --recursive ; \
 	}; f"
 	currentbranch = rev-parse --abbrev-ref HEAD
 	tagdiff       = "!f() { git log $1..$2 --oneline; }; f"

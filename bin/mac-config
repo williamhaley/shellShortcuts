@@ -60,7 +60,7 @@ add-to-dock()
 defaults write com.apple.dock persistent-apps -array
 
 add-to-dock "Google Chrome.app"
-add-to-dock "Utilities/Terminal.app"
+add-to-dock "iTerm.app"
 add-to-dock "Visual Studio Code.app"
 add-to-dock "Slack.app"
 
