@@ -65,9 +65,24 @@ The `direnv` command should pick up `GOPATH` if using `.envrc` files. Use the co
 
 ## vim
 
+Vim 8 plugins.
+
 ```
-vim
-:PlugInstall
+# Fuzzy Find
+git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/plugins/start/ctrlp
+
+# Go
+git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
+
+# Autocomplete
+git clone https://github.com/Valloric/YouCompleteMe ~/.vim/pack/plugins/start/youcompleteme
+# Make sure all build tools are installed (cmake, etc).
+# https://github.com/Valloric/YouCompleteMe#installation
+(
+	cd ~/.vim/pack/plugins/start/youcompleteme &&
+	git submodule update --init --recursive &&
+	./install.py --go-completer
+)
 ```
 
 ## Backups

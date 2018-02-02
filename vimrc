@@ -10,3 +10,7 @@ set tabstop=4
 " Change line number highlight
 hi LineNr ctermfg=DarkMagenta
 
+" Only autocomplete for .go files
+" https://github.com/Valloric/YouCompleteMe#the-gycm_filetype_whitelist-option
+let g:ycm_filetype_whitelist = { 'go': 1 }
+
