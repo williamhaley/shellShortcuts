@@ -10,7 +10,7 @@ pacman -S --noconfirm --needed \
 	firefox \
 	sane \
 	exfat-utils \
-	base-devel linux-headers go jdk8-openjdk atom \
+	base-devel linux-headers go jdk8-openjdk \
 	cups \
 	keepassx2 \
 	transmission-gtk \
@@ -25,7 +25,7 @@ pacman -S --noconfirm --needed \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
-	vlc lollypop mplayer kid3 sound-juicer \
+	vlc cmus mplayer kid3 sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
 	redshift
