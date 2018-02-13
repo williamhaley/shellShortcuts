@@ -14,7 +14,15 @@ for APP in `ls $1`;
 			printfgreen "[$(git currentbranch)] "
 			git isdirty && printfred "dirty"
 			git hasstash && printfyellow "stash"
-			printf "\nbranches: $(git branch | wc -l | sed 's/^ *//;s/ *$//')\n"
+
+			numbranches=$(git branch | wc -l | sed 's/^ *//;s/ *$//')
+			printf "\nbranches: "
+			if [ "$numbranches" -gt "1" ];
+			then
+				printfcyan "${numbranches}\n"
+			else
+				printf "${numbranches}\n"
+			fi
 			git submodule update --init --recursive
 			git pull --rebase
 			echo ""
