@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# User may need to be added to `video` group.
+
+finish()
+{
+	setterm -cursor on
+}
+
+trap finish EXIT
+
+setterm -cursor off
+
+mplayer -vo fbdev2 -fs -zoom -quiet -really-quiet "$1"
+

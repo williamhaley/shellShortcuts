@@ -2,13 +2,17 @@
 
 mkdir -p $HOME/dev
 
+# Specifically put *our* overrides before the
+# standard system paths. This ensures we can
+# (hopefully, when it makes sense) override
+# executables from the system.
 PATH=$CONFIGS_DIR/bin:$PATH
 PATH=$HOME/bin:$PATH
-PATH=/opt/local/bin:$PATH
-PATH=/opt/bin:$PATH:
-PATH=/opt/local/sbin:$PATH
+PATH=$PATH:/opt/local/bin
+PATH=$PATH:/opt/bin
+PATH=$PATH:/opt/local/sbin
 PATH=$HOME/.local/bin:$PATH
-PATH=/sbin:$PATH
+PATH=$PATH:/sbin
 PATH=$HOME/.yarn/bin:$PATH
 
 # RVM
@@ -58,5 +62,20 @@ load-nvm()
 {
 	\. "$NVM_DIR/nvm.sh"
 	\. "$NVM_DIR/bash_completion"
+}
+
+# Use a function rather than a script/executable.
+# This is easier to deal with if there's an issue and
+# we break `rm` by mistake. Having an executable call
+# the real `rm` can be tricky if we aren't sure of the
+# exact path.
+rm()
+{
+	if trash-put --version &> /dev/null;
+	then
+		trash-put $@
+	else
+		command rm $@
+	fi
 }
 

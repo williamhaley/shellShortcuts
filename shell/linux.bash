@@ -10,7 +10,6 @@ alias linux-set-time='sudo /usr/sbin/ntpdate pool.ntp.org && sudo hwclock --syst
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias ripcd='abcde -o mp3 -q high'
 # alias battery="upower -i $(upower -e | grep BAT) | grep --color=never -E percentage|xargs|cut -d' ' -f2|sed s/%//"
-alias rm='rm --interactive=once'
 
 complete -cf sudo
 

@@ -25,6 +25,9 @@ mkdir -p $HOME/.tmux
 ln -sf $CONFIGS_DIR/tmux/tmux.conf $HOME/.tmux.conf
 ln -sf $CONFIGS_DIR/tmux/session.4x3 $HOME/.tmux/session.4x3
 
+mkdir -p $HOME/.config/ranger
+ln -sf $CONFIGS_DIR/rc.conf $HOME/.config/ranger/rc.conf
+
 if [ "$IS_MAC" = true ];
 then
 	mac-config

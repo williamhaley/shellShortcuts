@@ -28,7 +28,15 @@ pacman -S --noconfirm --needed \
 	vlc cmus mplayer kid3 sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
-	redshift
+	redshift \
+	fbida ranger w3m \
+	trash-cli
+
+# Allow viewing images with framebuffer ala `fbi`
+usermod -a -G video $USERNAME
+# TODO May also need to run ranger --copy-config=scope which
+# generates a script in $HOME/.config/ranger/ that you do not
+# need to worry about, but helps with image previews.
 
 usermod -a -G docker $USERNAME
 

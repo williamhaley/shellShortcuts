@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# May need to add user to `video` group.
+
+fbi "$1"
+
