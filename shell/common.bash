@@ -88,9 +88,9 @@ rm()
 {
 	if trash-put --version &> /dev/null;
 	then
-		trash-put $@
+		trash-put "$@"
 	else
-		command rm $@
+		command rm "$@"
 	fi
 }
 

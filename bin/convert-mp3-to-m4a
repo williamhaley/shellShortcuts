@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+src=$1
+
+file="$(basename "${src}")"
+name="${file%.*}"
+path="$(dirname "${src}")"
+
+ffmpeg \
+	-y \
+	-i "$src" \
+	-c:a aac \
+	-b:a 192k \
+	-vn \
+	"${path}/${name}.m4a"
+
+if [ -f "${path}/${name}.m4a" ];
+then
+	rm "${src}"
+	rm -f "${src}.sha512"
+fi
+

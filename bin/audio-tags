@@ -4,8 +4,23 @@ import os
 import re
 import eyed3
 import mutagen
+import argparse
+from mutagen.mp4 import MP4
+from mutagen.easyid3 import EasyID3
 
-items = os.listdir()
+'''
+Compilation - Album (Year)/## Title.extension
+Soundtrack - Album (Year)/## Title.extension
+Artist - Album (Year)/## Title.extension
+'''
+
+parser = argparse.ArgumentParser(description='Sync audio tags from file structure.')
+parser.add_argument('--directory', dest='directory', type=str, help='the directory to process', required=True)
+args = parser.parse_args()
+
+top_level = args.directory
+
+items = os.listdir(top_level)
 
 for item in items:
 	if not os.path.isdir(item):
@@ -26,6 +41,9 @@ for item in items:
 	artist = pieces.pop(0)
 	if artist in ['Soundtrack', 'Compilation']:
 		artist = 'Various Artists'
+
+	if artist != 'The Pogues':
+		continue
 
 	# Album
 	if len(pieces) < 1:
@@ -63,34 +81,51 @@ for item in items:
 
 		# https://eyed3.readthedocs.io/en/latest/
 		path = os.path.abspath(os.path.join(orig, song))
-		meta = mutagen.File(path)
 
 		# http://mutagen.readthedocs.io/en/latest/api/mp4.html#mutagen.mp4.MP4Tags
 		if extension == 'm4a':
-			meta = mutagen.mp4.MP4(path)			
+			if track == '':
+				track = 0
+
+			meta = MP4(path)			
 			meta['\xa9alb'] = album
 			meta['\xa9nam'] = title
 			meta['\xa9ART'] = artist
 			meta['\xa9gen'] = ''
 			meta['\xa9day'] = year
-			meta['trkn'] = [track]
+			meta['trkn'] = [(int(track), 0)]
+
+			keys_to_remove = []
 
 			for key in meta:
-				if key not in ['\xa9alb', '\xa9nam', '\xa9ART', '\xa9gen', '\xa9day', 'covr', 'trkn']:
-					print(key)
-					print(meta[key])
+				if key not in ['\xa9alb', '\xa9nam', '\xa9ART', '\xa9gen', '\xa9day', 'trkn']:
+					keys_to_remove.append(key)
 
+			for key in keys_to_remove:
+				meta.pop(key)
+
+			meta.save()
+
+		# https://stackoverflow.com/questions/42231932/writing-id3-tags-using-easyid3
+		# https://stackoverflow.com/questions/4040605/does-anyone-have-good-examples-of-using-mutagen-to-write-files
 		if extension == 'mp3':
-			meta = mutagen.easyid3.EasyID3(path)
+			meta = EasyID3(path)
 			meta['album'] = album
 			meta['title'] = title
 			meta['artist'] = artist
 			meta['genre'] = ''
 			meta['date'] = year
+			meta['tracknumber'] = track
+
+			keys_to_remove = []
 
 			for key in meta:
-				if key not in ['album', 'title', 'artist', 'genre', 'date']:
-					meta.pop(key)
+				if key not in ['album', 'title', 'artist', 'genre', 'date', 'tracknumber']:
+					keys_to_remove.append(key)
+
+			for key in keys_to_remove:
+				meta.pop(key)
 
 			meta.save()
 
+		print(meta)
