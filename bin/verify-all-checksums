@@ -28,4 +28,4 @@ do
 	)
 done
 
-} &>> /tmp/verify.log
+} | tee /tmp/verify.log

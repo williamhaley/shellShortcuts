@@ -2,11 +2,11 @@
 
 import os
 import re
-import eyed3
-import mutagen
 import argparse
 from mutagen.mp4 import MP4
 from mutagen.easyid3 import EasyID3
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, USLT, TCOM, TCON, TDRC, TRCK
+from mutagen.mp3 import MP3
 
 '''
 Compilation - Album (Year)/## Title.extension
@@ -23,7 +23,7 @@ top_level = args.directory
 items = os.listdir(top_level)
 
 for item in items:
-	if not os.path.isdir(item):
+	if not os.path.isdir(os.path.join(top_level, item)):
 		continue
 
 	orig = item
@@ -42,16 +42,13 @@ for item in items:
 	if artist in ['Soundtrack', 'Compilation']:
 		artist = 'Various Artists'
 
-	if artist != 'The Pogues':
-		continue
-
 	# Album
 	if len(pieces) < 1:
 		album = 'Unknown album'
 	else:
 		album = ' - '.join(pieces)
 
-	songs = os.listdir(orig)
+	songs = os.listdir(os.path.join(top_level, orig))
 
 	for song in songs:
 		if song[-6:] == 'sha512':
@@ -80,7 +77,7 @@ for item in items:
 		#print(artist + " - " + album + " (" + year + ")" + "|" + fordisplay, flush=True)
 
 		# https://eyed3.readthedocs.io/en/latest/
-		path = os.path.abspath(os.path.join(orig, song))
+		path = os.path.abspath(os.path.join(top_level, orig, song))
 
 		# http://mutagen.readthedocs.io/en/latest/api/mp4.html#mutagen.mp4.MP4Tags
 		if extension == 'm4a':
@@ -109,23 +106,13 @@ for item in items:
 		# https://stackoverflow.com/questions/42231932/writing-id3-tags-using-easyid3
 		# https://stackoverflow.com/questions/4040605/does-anyone-have-good-examples-of-using-mutagen-to-write-files
 		if extension == 'mp3':
-			meta = EasyID3(path)
-			meta['album'] = album
-			meta['title'] = title
-			meta['artist'] = artist
-			meta['genre'] = ''
-			meta['date'] = year
-			meta['tracknumber'] = track
-
-			keys_to_remove = []
-
-			for key in meta:
-				if key not in ['album', 'title', 'artist', 'genre', 'date', 'tracknumber']:
-					keys_to_remove.append(key)
-
-			for key in keys_to_remove:
-				meta.pop(key)
-
+			meta = MP3(path)
+			meta.clear()
+			meta["TALB"] = TALB(encoding=3, text=album)
+			meta["TIT2"] = TIT2(encoding=3, text=title)
+			meta["TPE2"] = TPE2(encoding=3, text=artist)
+			meta["TCON"] = TCON(encoding=3, text=u'')
+			meta["TDRC"] = TDRC(encoding=3, text=year)
+			meta["TRCK"] = TRCK(encoding=3, text=track)
 			meta.save()
 
-		print(meta)
