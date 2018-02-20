@@ -16,16 +16,14 @@ PATH=$PATH:/sbin
 PATH=$HOME/.yarn/bin:$PATH
 
 # RVM
-# See alias below to load RVM in the shell.
 PATH=$PATH:$HOME/.rvm/bin
 
 # NVM
 NVM_DIR=$HOME/.nvm
 
-# PYENV - https://github.com/pyenv/pyenv
-# Still must install pyenv and switch
-# versions using `pyenv local` or configs.
+# PYENV
 PATH=$HOME/.pyenv/shims:$PATH
+PATH=$HOME/.pyenv/bin:$PATH
 PYENV_ROOT=$HOME/.pyenv
 
 export GOPATH=$HOME/dev/go
@@ -53,15 +51,32 @@ direnv_cd() {
 	eval "$(direnv export bash)"
 }
 
-load-rvm()
+load-ruby()
 {
 	source $HOME/.rvm/scripts/rvm
 }
 
-load-nvm()
+load-node()
 {
 	\. "$NVM_DIR/nvm.sh"
 	\. "$NVM_DIR/bash_completion"
+}
+
+load-python()
+{
+	if [ ! -d "${PYENV_ROOT}" ];
+	then
+		git clone https://github.com/pyenv/pyenv.git "${PYENV_ROOT}"
+	fi
+
+	pyenv install 3.6.0 --skip-existing
+
+	if command -v pyenv 1>/dev/null 2>&1;
+	then
+		eval "$(pyenv init -)"
+	fi
+
+	pyenv global 3.6.0
 }
 
 # Use a function rather than a script/executable.

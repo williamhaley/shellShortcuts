@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import eyed3
+import mutagen
+
+items = os.listdir()
+
+for item in items:
+	if not os.path.isdir(item):
+		continue
+
+	orig = item
+
+	m = re.search('\((\d{4})\)$', item)
+	if m:
+		year = m.group(1)
+		item = item[:-7]
+	else:
+		year = ''
+
+	pieces = item.split(' - ')
+
+	# Artist
+	artist = pieces.pop(0)
+	if artist in ['Soundtrack', 'Compilation']:
+		artist = 'Various Artists'
+
+	# Album
+	if len(pieces) < 1:
+		album = 'Unknown album'
+	else:
+		album = ' - '.join(pieces)
+
+	songs = os.listdir(orig)
+
+	for song in songs:
+		if song[-6:] == 'sha512':
+			continue
+
+		extension = song[-3:]
+		if extension not in ['m4a', 'mp3']:
+			continue
+
+		fordisplay = ''
+		if re.search(r'^\d{2}', song[:2]):
+			track = song[:2]
+			title = song[3:-4]
+			fordisplay = track + ' - ' + title
+		else:
+			track = ''
+			title = song[:-4]
+			fordisplay = title
+
+		'''
+		print('title:', title)
+		print('track:', track)
+		print('song:', song)
+		'''
+
+		#print(artist + " - " + album + " (" + year + ")" + "|" + fordisplay, flush=True)
+
+		# https://eyed3.readthedocs.io/en/latest/
+		path = os.path.abspath(os.path.join(orig, song))
+		meta = mutagen.File(path)
+
+		# http://mutagen.readthedocs.io/en/latest/api/mp4.html#mutagen.mp4.MP4Tags
+		if extension == 'm4a':
+			meta = mutagen.mp4.MP4(path)			
+			meta['\xa9alb'] = album
+			meta['\xa9nam'] = title
+			meta['\xa9ART'] = artist
+			meta['\xa9gen'] = ''
+			meta['\xa9day'] = year
+			meta['trkn'] = [track]
+
+			for key in meta:
+				if key not in ['\xa9alb', '\xa9nam', '\xa9ART', '\xa9gen', '\xa9day', 'covr', 'trkn']:
+					print(key)
+					print(meta[key])
+
+		if extension == 'mp3':
+			meta = mutagen.easyid3.EasyID3(path)
+			meta['album'] = album
+			meta['title'] = title
+			meta['artist'] = artist
+			meta['genre'] = ''
+			meta['date'] = year
+
+			for key in meta:
+				if key not in ['album', 'title', 'artist', 'genre', 'date']:
+					meta.pop(key)
+
+			meta.save()
+
