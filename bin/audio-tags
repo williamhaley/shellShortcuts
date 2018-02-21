@@ -4,87 +4,89 @@ import os
 import re
 import argparse
 from mutagen.mp4 import MP4
-from mutagen.easyid3 import EasyID3
 from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, USLT, TCOM, TCON, TDRC, TRCK
 from mutagen.mp3 import MP3
 
 '''
-Compilation - Album (Year)/## Title.extension
-Soundtrack - Album (Year)/## Title.extension
+Allowed formats:
+
 Artist - Album (Year)/## Title.extension
+Artist (Year)/## Title.extension
+Artist/## Title.extension
+Artist/Title.extension
+
+Use "Various Artists" as the Artist where applicable.
 '''
 
 parser = argparse.ArgumentParser(description='Sync audio tags from file structure.')
-parser.add_argument('--directory', dest='directory', type=str, help='the directory to process', required=True)
+parser.add_argument(
+	'--directory',
+	dest='directory',
+	type=str,
+	help='the directory to process',
+	required=False
+)
+parser.add_argument(
+	'--album',
+	dest='album',
+	type=str,
+	help='the album to process',
+	required=False
+)
 args = parser.parse_args()
 
-top_level = args.directory
+DEFAULT_ALBUM='Unknown Album'
+DEFAULT_YEAR=''
+DEFAULT_TRACK=0
 
-items = os.listdir(top_level)
+if args.album:
+	process_album(album)
+elif args.directory:
+	albums = os.listdir(args.directory)
+	for album in albums:
+		process_album(album)
+else:
+	print('Must pass either an album of directory')
 
-for item in items:
-	if not os.path.isdir(os.path.join(top_level, item)):
+def process_album(album):
+	if not os.path.isdir(os.path.join(args.directory, album)):
 		continue
 
-	orig = item
+	m = re.search('^(?P<artist>.*?)(?: - (?P<album>.*?))?\ *?(?:\((?P<year>\d{4})\))?$', album)
+	if not m:
+		print(album + ' did not match regex')
+		continue
 
-	m = re.search('\((\d{4})\)$', item)
-	if m:
-		year = m.group(1)
-		item = item[:-7]
-	else:
-		year = ''
+	d = m.groupdict()
 
-	pieces = item.split(' - ')
+	artist = d.get('artist')
+	album  = d.get('album') if d.get('album') else DEFAULT_ALBUM
+	year   = d.get('year')  if d.get('year')  else DEFAULT_YEAR
 
-	# Artist
-	artist = pieces.pop(0)
-	if artist in ['Soundtrack', 'Compilation']:
-		artist = 'Various Artists'
-
-	# Album
-	if len(pieces) < 1:
-		album = 'Unknown album'
-	else:
-		album = ' - '.join(pieces)
-
-	songs = os.listdir(os.path.join(top_level, orig))
+	songs = os.listdir(os.path.join(args.directory, album))
 
 	for song in songs:
-		if song[-6:] == 'sha512':
+		m2 = re.search('^(?:(?P<track>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', song)
+		if not m2:
+			print(song + ' did not match regex')
 			continue
 
-		extension = song[-3:]
+		d2 = m2.groupdict()
+
+		extension = d2.get('extension')
+		track     = d2.get('track') if d2.get('track') else DEFAULT_TRACK
+		title     = d2.get('title')
+
 		if extension not in ['m4a', 'mp3']:
 			continue
 
-		fordisplay = ''
-		if re.search(r'^\d{2}', song[:2]):
-			track = song[:2]
-			title = song[3:-4]
-			fordisplay = track + ' - ' + title
-		else:
-			track = ''
-			title = song[:-4]
-			fordisplay = title
+		path = os.path.abspath(os.path.join(args.directory, album, song))
 
-		'''
-		print('title:', title)
-		print('track:', track)
-		print('song:', song)
-		'''
+		# print(artist, album, year, track, title)
 
-		#print(artist + " - " + album + " (" + year + ")" + "|" + fordisplay, flush=True)
-
-		# https://eyed3.readthedocs.io/en/latest/
-		path = os.path.abspath(os.path.join(top_level, orig, song))
-
-		# http://mutagen.readthedocs.io/en/latest/api/mp4.html#mutagen.mp4.MP4Tags
 		if extension == 'm4a':
-			if track == '':
-				track = 0
-
 			meta = MP4(path)			
+			meta.clear()
 			meta['\xa9alb'] = album
 			meta['\xa9nam'] = title
 			meta['\xa9ART'] = artist
@@ -92,27 +94,17 @@ for item in items:
 			meta['\xa9day'] = year
 			meta['trkn'] = [(int(track), 0)]
 
-			keys_to_remove = []
-
-			for key in meta:
-				if key not in ['\xa9alb', '\xa9nam', '\xa9ART', '\xa9gen', '\xa9day', 'trkn']:
-					keys_to_remove.append(key)
-
-			for key in keys_to_remove:
-				meta.pop(key)
-
-			meta.save()
-
-		# https://stackoverflow.com/questions/42231932/writing-id3-tags-using-easyid3
-		# https://stackoverflow.com/questions/4040605/does-anyone-have-good-examples-of-using-mutagen-to-write-files
 		if extension == 'mp3':
+			track = '' if track == 0 else track
+
 			meta = MP3(path)
 			meta.clear()
 			meta["TALB"] = TALB(encoding=3, text=album)
 			meta["TIT2"] = TIT2(encoding=3, text=title)
-			meta["TPE2"] = TPE2(encoding=3, text=artist)
+			meta["TPE1"] = TPE1(encoding=3, text=artist)
 			meta["TCON"] = TCON(encoding=3, text=u'')
 			meta["TDRC"] = TDRC(encoding=3, text=year)
 			meta["TRCK"] = TRCK(encoding=3, text=track)
-			meta.save()
-
+		
+		meta.save()
+	
