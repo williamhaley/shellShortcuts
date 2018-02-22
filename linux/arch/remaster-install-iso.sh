@@ -8,11 +8,7 @@ then
 	exit 1
 fi
 
-if [ $EUID -ne 0 ];
-then
-	echo "Must run as root."
-	exit 1
-fi
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
 sudo pacman -S --noconfirm --needed rsync squashfs-tools arch-install-scripts cdrkit
 
