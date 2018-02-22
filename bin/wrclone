@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
-rclone sync \
+# Prevent sync deleting files if you specified the wrong
+# destination. Unlike rsync, rclone is happy to delete
+# source files that do not exist in the destination.
+
+mkdir -p "${HOME}/rclone-backup"
+
+# Get path to rclone
+$(which --all rclone | grep -v "${CONFIGS_DIR}" | head -1) \
 	--verbose \
-	--exclude ".localized" --exclude ".DS_Store" \
+	--exclude ".localized" \
+	--exclude ".DS_Store" \
 	"$@"
+

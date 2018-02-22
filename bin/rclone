@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
-# Prevent sync deleting files if you specified the wrong
-# destination. Unlike rsync, rclone is happy to delete
-# source files that do not exist in the destination.
+# Wrapper around rclone. Add backup-dir by default.
+# If you want the potentially destructive version
+# of rclone, call wrclone directly.
 
-mkdir -p "${HOME}/rclone-backup"
-
-/sbin/rclone \
+wrclone \
 	--backup-dir "${HOME}/rclone-backup/$(date +%s)" \
 	"$@"
 
