@@ -2,13 +2,13 @@
 
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
-pacman -S --noconfirm --needed \
+pacman -Syy --noconfirm --needed \
 	xorg xorg-server \
 	lightdm lightdm-gtk-greeter \
 	networkmanager network-manager-applet gnome-keyring \
-	noto-fonts ttf-dejavu
+	noto-fonts noto-fonts-emoji ttf-dejavu
 
-pacman -S --noconfirm \
+pacman -Syy --noconfirm \
 	mate mate-extra
 
 systemctl enable lightdm

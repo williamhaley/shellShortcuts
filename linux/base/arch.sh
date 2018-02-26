@@ -4,8 +4,8 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-pacman -S --noconfirm --needed \
-	base-devel wget rsync vim tmux git curl unzip sudo openssh
+pacman -Syy --noconfirm --needed \
+	base-devel wget rsync vim tmux git curl unzip sudo openssh wpa_supplicant
 
 # sudo
 usermod -a -G sudo $USERNAME || true
@@ -28,7 +28,7 @@ chown $USERNAME:$USERNAME /home/$USERNAME/.ssh/authorized_keys
 chmod 600 /home/$USERNAME/.ssh/authorized_keys
 
 # yaourt pre-reqs
-pacman -S --noconfirm --needed base-devel wget
+pacman -Syy --noconfirm --needed base-devel wget
 mkdir -p /tmp/aur
 chown $USERNAME /tmp/aur
 

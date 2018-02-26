@@ -2,7 +2,7 @@
 
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
-pacman -S --noconfirm --needed \
+pacman -Syy --noconfirm --needed \
 	firefox \
 	sane \
 	exfat-utils \
@@ -11,17 +11,18 @@ pacman -S --noconfirm --needed \
 	keepassx2 \
 	transmission-gtk \
 	aws-cli \
-	net-tools \
+	net-tools bluez bluez-utils blueman \
 	gimp \
 	jq \
 	vagrant \
-	virtualbox \
+	virtualbox qemu \
 	intel-ucode \
 	docker \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
-	vlc cmus mplayer kid3 sound-juicer \
+	pavucontrol vlc cmus mplayer kid3 sound-juicer \
+	gparted \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
 	redshift \
@@ -38,6 +39,9 @@ usermod -a -G docker $USERNAME
 
 systemctl enable docker
 systemctl start docker
+
+systemctl start bluetooth
+systemctl enable bluetooth
 
 systemctl enable org.cups.cupsd.service
 systemctl start org.cups.cupsd.service
