@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ $EUID -ne 0 ]];
-then
-	echo "This script must be run as root"
-	exit 1
-fi
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
 if ! `findmnt -M "/mnt/backup-internal" >/dev/null`;
 then
-	echo "Disk not mounted"
+	echo "/mnt/backup-internal is not mounted"
 	exit 1
 fi
 
@@ -26,9 +22,7 @@ if `findmnt -M "/mnt/backup-external" >/dev/null`;
 then
 	wrsync ${rsync_opts} /mnt/backup-internal/ /mnt/backup-external/
 else
-	echo
-	echo "/mnt/backup-external not found"
-	echo
+	echo "/mnt/backup-external is not mounted"
 	exit 1
 fi
 

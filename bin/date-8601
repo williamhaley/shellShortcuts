@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+date +%Y-%m-%dT%H:%M:%S:%-3N
+

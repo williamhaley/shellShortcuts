@@ -1,10 +1,36 @@
 #!/usr/bin/env bash
 
-if [[ $EUID -ne 0 ]];
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
+
+if [ -n "${1}" ];
 then
-	echo "This script must be run as root"
-	exit 1
+	if [ "${1}" = "--log" ];
+	then
+		if [ -n "${2}" ];
+		then
+			last=$(ls "$(real-home)/Logs/backup/" | tail -${2} | head -1)
+		else
+			last=$(ls "$(real-home)/Logs/backup/" | tail -1)
+		fi
+
+		echo "log file: ${last}"
+		echo
+
+		cat "$(real-home)/Logs/backup/${last}"
+		exit 0
+	else
+		echo "--log is the only valid parameter"
+		exit 1
+	fi
 fi
+
+name="$(date-8601)"
+log="$(real-home)/Logs/backup/${name}.log"
+
+echo "log file: ${log}"
+echo
+
+mkdir -p "$(real-home)/Logs/backup"
 
 interrupt()
 {
@@ -18,83 +44,61 @@ do_rsync()
 {
 	rsync_opts="--delete-excluded --delete-after --exclude=node_modules $3"
 
-	echo
-	echo "rsync: $1 ==> $2"
-	echo
+	echo "rsync: $1 ==> $2" | tee -a "${log}"
+	echo "" >> "${log}"
 
-	wrsync ${rsync_opts} "$1" "$2"
+	wrsync ${rsync_opts} "$1" "$2" >> "${log}" 2>&1
+
+	echo "" >> "${log}"
 }
 
-horcrux-backup()
+do_rclone()
 {
-	if `findmnt -M "/mnt/$1" >/dev/null`;
-	then
-		do_rsync /home/will/Documents/   "/mnt/$1/Documents/"
-		do_rsync /home/will/Photographs/ "/mnt/$1/Photographs/"
-		do_rsync /home/will/.electrum/   "/mnt/$1/electrum/"
-		do_rsync /home/will/.bitcoin/    "/mnt/$1/bitcoin/"
-	else
-		echo
-		echo "/mnt/$1 not mounted"
-		echo
-	fi
+	rsync_opts="--delete-excluded --delete-after"
+
+	echo "rclone: $1 ==> $2" | tee -a "${log}"
+	echo "" >> "${log}"
+
+	sudo -u ${SUDO_USER:-$USER} wrclone sync ${rsync_opts} "$1" "$2" >> "${log}" 2>&1
+
+	echo "" >> "${log}"
 }
 
-public-backup()
-{
-	if `findmnt -M "/mnt/$1" >/dev/null`;
-	then
-		do_rsync /home/will/Photographs/ "/mnt/$1/William's Photos/" "--no-perms --no-owner --no-group"
-		do_rsync /mnt/data/FamilyPhotos/ "/mnt/$1/Family Photos/" "--no-perms --no-owner --no-group"
-	else
-		echo
-		echo "/mnt/$1 not mounted"
-		echo
-	fi
-}
+if ! `findmnt -M "/mnt/backup-internal" >/dev/null`;
+then
+	echo "/mnt/backup-internal is not mounted"
+	exit 1
+fi
 
-full-backup()
-{
-	if `findmnt -M "/mnt/$1" >/dev/null`;
-	then
-		do_rsync "/home/will/Photographs/"    "/mnt/$1/willhaley-backup/Photographs/"
-		do_rsync "/home/will/Music/"          "/mnt/$1/willhaley-backup/Music/"
-		do_rsync "/home/will/Documents/"      "/mnt/$1/willhaley-backup/Documents/"
-		do_rsync "/home/will/.ssh/"           "/mnt/$1/willhaley-backup/ssh/"
-		do_rsync "/home/will/.aws/"           "/mnt/$1/willhaley-backup/aws/"
-		do_rsync "/home/will/Desktop/"        "/mnt/$1/willhaley-backup/Desktop/"
-		do_rsync "/home/will/Downloads/"      "/mnt/$1/willhaley-backup/Downloads/"
-		do_rsync "/home/will/dev/"            "/mnt/$1/willhaley-backup/dev/"
-		do_rsync "/home/will/.electrum/"      "/mnt/$1/willhaley-backup/electrum/"
-		do_rsync "/home/will/.bitcoin/"       "/mnt/$1/willhaley-backup/bitcoin/"
-		do_rsync "/home/will/.config/rclone/" "/mnt/$1/willhaley-backup/rclone/"
-		do_rsync "/etc/crypttab"              "/mnt/$1/system-backup/crypttab"
-		do_rsync "/etc/fstab"                 "/mnt/$1/system-backup/fstab"
-		do_rsync "/etc/default/cryptdisk"     "/mnt/$1/system-backup/cryptdisk"
-		do_rsync "/etc/default/grub"          "/mnt/$1/system-backup/grub"
-	else
-		echo
-		echo "/mnt/$1 not mounted"
-		echo
-	fi
-	
-	if `findmnt -M "/mnt/data" >/dev/null`;
-	then
-		do_rsync /mnt/data/Software/     "/mnt/$1/Software/"
-		do_rsync /mnt/data/Videos/       "/mnt/$1/Videos/"
-		do_rsync /mnt/data/FamilyPhotos/ "/mnt/$1/FamilyPhotos/"
-	else
-		echo
-		echo "/mnt/data not mounted"
-		echo
-	fi
-}
+do_rsync /home/will/Photographs/    /mnt/backup-internal/willhaley-backup/Photographs/
+do_rsync /home/will/Music/          /mnt/backup-internal/willhaley-backup/Music/
+do_rsync /home/will/Downloads/      /mnt/backup-internal/willhaley-backup/Downloads/
+do_rsync /home/will/Documents/      /mnt/backup-internal/willhaley-backup/Documents/
+do_rsync /home/will/Desktop/        /mnt/backup-internal/willhaley-backup/Desktop/
+do_rsync /home/will/dev/            /mnt/backup-internal/willhaley-backup/dev/
+do_rsync /home/will/.aws/           /mnt/backup-internal/willhaley-backup/aws/
+do_rsync /home/will/.ssh/           /mnt/backup-internal/willhaley-backup/ssh/
+do_rsync /home/will/.electrum/      /mnt/backup-internal/willhaley-backup/electrum/
+do_rsync /home/will/.config/rclone/ /mnt/backup-internal/willhaley-backup/rclone/
 
-horcrux-backup "horcrux1"
-horcrux-backup "horcrux2"
-horcrux-backup "horcrux3"
+do_rsync /etc/fstab             /mnt/backup-internal/system-backup/fstab
+do_rsync /etc/crypttab          /mnt/backup-internal/system-backup/crypttab
+do_rsync /etc/default/grub      /mnt/backup-internal/system-backup/grub
+do_rsync /etc/default/cryptdisk /mnt/backup-internal/system-backup/cryptdisk
 
-public-backup "pensieve"
+if ! `findmnt -M "/mnt/data" >/dev/null`;
+then
+	echo "/mnt/data is not mounted"
+	exit 1
+fi
 
-full-backup "backup-internal"
+do_rsync /mnt/data/Software/     /mnt/backup-internal/Software/
+do_rsync /mnt/data/Videos/       /mnt/backup-internal/Videos/
+do_rsync /mnt/data/FamilyPhotos/ /mnt/backup-internal/FamilyPhotos/
+
+do_rclone /home/will/Photographs/         "Backup:willhaley-backup/Photographs/"
+# No `Music`. Subject to changes, and can be recovered from elsewhere.
+do_rclone /mnt/backup-internal/Software/  "Backup:willhaley-backup/Software/"
+do_rclone /home/will/Documents/           "BackupCrypt:willhaley-backup/Documents/"
+do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
 

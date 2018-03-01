@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+printf "${SUDO_USER:-$USER}"
+
