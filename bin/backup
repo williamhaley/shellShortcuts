@@ -71,6 +71,7 @@ full-backup()
 		do_rsync "/etc/crypttab"              "/mnt/$1/system-backup/crypttab"
 		do_rsync "/etc/fstab"                 "/mnt/$1/system-backup/fstab"
 		do_rsync "/etc/default/cryptdisk"     "/mnt/$1/system-backup/cryptdisk"
+		do_rsync "/etc/default/grub"          "/mnt/$1/system-backup/grub"
 	else
 		echo
 		echo "/mnt/$1 not mounted"

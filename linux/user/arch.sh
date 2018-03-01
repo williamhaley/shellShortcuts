@@ -5,7 +5,7 @@
 pacman -Syy --noconfirm --needed \
 	firefox \
 	sane \
-	exfat-utils \
+	exfat-utils syslinux mtools gparted \
 	base-devel linux-headers go jdk8-openjdk \
 	cups \
 	keepassx2 \
@@ -22,7 +22,6 @@ pacman -Syy --noconfirm --needed \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
 	pavucontrol vlc cmus mplayer kid3 sound-juicer \
-	gparted \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
 	redshift \

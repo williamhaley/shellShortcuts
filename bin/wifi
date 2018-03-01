@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
+
+killall -9 wpa_supplicant
+
+sleep 1
+
+wpa_supplicant \
+	-B -\
+	i wlp8s0 \
+	-c /etc/wpa_supplicant/wpa_supplicant.conf \
+	-Dwext
+
+dhcpcd
+
