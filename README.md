@@ -77,12 +77,5 @@ git clone https://github.com/Valloric/YouCompleteMe ~/.vim/pack/plugins/start/yo
 
 ```
 sudo backup
-sudo archive
-```
-
-Use with caution!
-
-```
-restore
 ```
 

@@ -11,7 +11,7 @@ pacman -Syy --noconfirm --needed \
 	keepassx2 \
 	transmission-gtk \
 	aws-cli \
-	net-tools bluez bluez-utils \
+	net-tools tcpdump wireshark-cli bluez bluez-utils \
 	gimp \
 	jq \
 	vagrant \
