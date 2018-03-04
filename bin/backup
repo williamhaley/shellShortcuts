@@ -87,37 +87,37 @@ do_horcrux()
 
 do_full()
 {
-	if ! `findmnt -M "/mnt/backup-internal" >/dev/null`;
+	if ! `findmnt -M "/mnt/${1}" >/dev/null`;
 	then
-		echo "/mnt/backup-internal is not mounted"
-		exit 1
+		echo "/mnt/${1} is not mounted. Skipping."
+		return
 	fi
 
 	if ! `findmnt -M "/mnt/data" > /dev/null`;
 	then
-		echo "/mnt/data is not mounted"
-		exit 1
+		echo "/mnt/data is not available. Skipping ${1}."
+		return
 	fi
 
-	do_rsync /home/will/Photographs/    /mnt/backup-internal/willhaley-backup/Photographs/
-	do_rsync /home/will/Music/          /mnt/backup-internal/willhaley-backup/Music/
-	do_rsync /home/will/Downloads/      /mnt/backup-internal/willhaley-backup/Downloads/
-	do_rsync /home/will/Documents/      /mnt/backup-internal/willhaley-backup/Documents/
-	do_rsync /home/will/Desktop/        /mnt/backup-internal/willhaley-backup/Desktop/
-	do_rsync /home/will/dev/            /mnt/backup-internal/willhaley-backup/dev/
-	do_rsync /home/will/.aws/           /mnt/backup-internal/willhaley-backup/aws/
-	do_rsync /home/will/.ssh/           /mnt/backup-internal/willhaley-backup/ssh/
-	do_rsync /home/will/.electrum/      /mnt/backup-internal/willhaley-backup/electrum/
-	do_rsync /home/will/.config/rclone/ /mnt/backup-internal/willhaley-backup/rclone/
+	do_rsync /home/will/Photographs/    "/mnt/${1}/willhaley-backup/Photographs/"
+	do_rsync /home/will/Music/          "/mnt/${1}/willhaley-backup/Music/"
+	do_rsync /home/will/Downloads/      "/mnt/${1}/willhaley-backup/Downloads/"
+	do_rsync /home/will/Documents/      "/mnt/${1}/willhaley-backup/Documents/"
+	do_rsync /home/will/Desktop/        "/mnt/${1}/willhaley-backup/Desktop/"
+	do_rsync /home/will/dev/            "/mnt/${1}/willhaley-backup/dev/"
+	do_rsync /home/will/.aws/           "/mnt/${1}/willhaley-backup/aws/"
+	do_rsync /home/will/.ssh/           "/mnt/${1}/willhaley-backup/ssh/"
+	do_rsync /home/will/.electrum/      "/mnt/${1}/willhaley-backup/electrum/"
+	do_rsync /home/will/.config/rclone/ "/mnt/${1}/willhaley-backup/rclone/"
 
-	do_rsync /etc/fstab             /mnt/backup-internal/system-backup/fstab
-	do_rsync /etc/crypttab          /mnt/backup-internal/system-backup/crypttab
-	do_rsync /etc/default/grub      /mnt/backup-internal/system-backup/grub
-	do_rsync /etc/default/cryptdisk /mnt/backup-internal/system-backup/cryptdisk
+	do_rsync /etc/fstab             "/mnt/${1}/system-backup/fstab"
+	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/crypttab"
+	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/grub"
+	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/cryptdisk"
 
-	do_rsync /mnt/data/Software/     /mnt/backup-internal/Software/
-	do_rsync /mnt/data/Videos/       /mnt/backup-internal/Videos/
-	do_rsync /mnt/data/FamilyPhotos/ /mnt/backup-internal/FamilyPhotos/
+	do_rsync /mnt/data/Software/     "/mnt/${1}/Software/"
+	do_rsync /mnt/data/Videos/       "/mnt/${1}/Videos/"
+	do_rsync /mnt/data/FamilyPhotos/ "/mnt/${1}/FamilyPhotos/"
 }
 
 do_web()
@@ -152,7 +152,8 @@ do_public()
 	echo "" >> "${log}"
 }
 
-do_full
+do_full backup-internal
+do_full backup-external
 do_web
 do_horcrux 1
 do_horcrux 2
