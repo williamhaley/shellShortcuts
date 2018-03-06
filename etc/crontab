@@ -1,0 +1,2 @@
+*/3 * * * * echo "hey now" && date
+

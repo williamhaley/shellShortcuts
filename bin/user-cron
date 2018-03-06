@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+for pid in $(pgrep -f user-cron);
+do
+	if [ $pid != $$ ];
+	then
+		kill -9 $pid
+	fi
+done
+
+debug()
+{
+	if true;
+	then
+		return
+	fi
+
+	echo "$*"
+}
+
+# $1 = crontab piece
+# $2 = current timestamp
+# $3 = piece from `date`
+not_match()
+{
+	crontab_piece="$1"
+	exact_value=$(date --date="@${2}" +%${3})
+	multiple=$(echo "$1" | cut -d "/" -f 2)
+
+	debug "crontab_piece: $crontab_piece"
+	debug "multiple: $multiple"
+
+	[ "$crontab_piece" = "*" ]
+	wildcard_match=$?
+
+	[ "$crontab_piece" = "$exact_value" ]
+	exact_match=$?
+	
+	[[ "$multiple" =~ ^[0-9]+$ ]] && [ $(expr "$exact_value" % "$multiple") = 0 ]
+	multiple_match=$?
+
+	debug "wildcard_match: $wildcard_match - exact_match: $exact_match - multiple_match: $multiple_match"
+
+	[ "$wildcard_match" != 0 ] && [ "$exact_match" != 0 ] && [ "$multiple_match" != 0 ]
+}
+
+(
+while true;
+do
+	while read c;
+	do
+		if [ -z "$c" ];
+		then
+			continue
+		fi
+
+		cron_minute=$(echo "$c" | awk '{print $1}')
+		cron_hour=$(echo "$c" | awk '{print $2}')
+		cron_day_of_month=$(echo "$c" | awk '{print $3}')
+		cron_month_of_year=$(echo "$c" | awk '{print $4}')
+		cron_day_of_week=$(echo "$c" | awk '{print $5}')
+
+		bin=$(echo "$c" | cut -d " " -f6-)
+
+		actual=$(date +%s)
+		debug "$(date --date="@${actual}")"
+
+		if not_match "$cron_minute" "$actual" "M";
+		then
+			continue
+		fi
+
+		if not_match "$cron_hour" "$actual" "H";
+		then
+			continue
+		fi
+
+		if not_match "$cron_day_of_month" "$actual" "-d";
+		then
+			continue
+		fi
+
+		if not_match "$cron_month_of_year" "$actual" "-m";
+		then
+        	continue
+		fi
+
+		if not_match "$cron_day_of_week" "$actual" "-w";
+		then
+			continue
+		fi
+
+		eval $bin
+
+	done <"${CONFIGS_DIR}/etc/crontab"
+	
+	sleep 60
+done
+) &
+
