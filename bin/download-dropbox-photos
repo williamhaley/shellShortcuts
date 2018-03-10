@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+rclone sync "Dropbox:Camera Uploads/" ~/Desktop/DropboxPhotos/
+

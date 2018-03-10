@@ -1,100 +1,65 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-for pid in $(pgrep -f user-cron);
-do
-	if [ $pid != $$ ];
-	then
-		kill -9 $pid
-	fi
-done
+import sys, os, subprocess, datetime
+from time import sleep
 
-debug()
-{
-	if true;
-	then
-		return
-	fi
+pid = str(os.getpid())
+pidfile = '/tmp/user-cron.pid'
 
-	echo "$*"
-}
+if os.path.isfile(pidfile):
+    print("already running")
+    sys.exit()
 
-# $1 = crontab piece
-# $2 = current timestamp
-# $3 = piece from `date`
-not_match()
-{
-	crontab_piece="$1"
-	exact_value=$(date --date="@${2}" +%${3})
-	multiple=$(echo "$1" | cut -d "/" -f 2)
+with open(pidfile, 'w') as file:
+	file.write(pid)
+	file.close()
 
-	debug "crontab_piece: $crontab_piece"
-	debug "multiple: $multiple"
+def not_match(crontab_piece, exact_value):	
+	multiple_pieces = crontab_piece.split('/')
 
-	[ "$crontab_piece" = "*" ]
-	wildcard_match=$?
+	# print(crontab_piece, multiple_pieces, exact_value)
 
-	[ "$crontab_piece" = "$exact_value" ]
-	exact_match=$?
-	
-	[[ "$multiple" =~ ^[0-9]+$ ]] && [ $(expr "$exact_value" % "$multiple") = 0 ]
-	multiple_match=$?
+	wildcard_match = False
+	if crontab_piece == "*":
+		wildcard_match = True	
 
-	debug "wildcard_match: $wildcard_match - exact_match: $exact_match - multiple_match: $multiple_match"
+	exact_match = False
+	if crontab_piece == exact_value:
+		exact_match = True
 
-	[ "$wildcard_match" != 0 ] && [ "$exact_match" != 0 ] && [ "$multiple_match" != 0 ]
-}
+	multiple_match = False
+	if len(multiple_pieces) == 2 and exact_value % int(multiple_pieces[1]) == 0:
+		multiple_match = True
 
-(
-while true;
-do
-	while read c;
-	do
-		if [ -z "$c" ];
-		then
-			continue
-		fi
+	return (not wildcard_match) and (not exact_match) and (not multiple_match)
 
-		cron_minute=$(echo "$c" | awk '{print $1}')
-		cron_hour=$(echo "$c" | awk '{print $2}')
-		cron_day_of_month=$(echo "$c" | awk '{print $3}')
-		cron_month_of_year=$(echo "$c" | awk '{print $4}')
-		cron_day_of_week=$(echo "$c" | awk '{print $5}')
+def run_loop():
+	while True:
+		now = datetime.datetime.now()
 
-		bin=$(echo "$c" | cut -d " " -f6-)
+		with open(os.environ['CONFIGS_DIR'] + '/etc/crontab', 'r') as file:
+			for line in file:
+				line = line.strip('\n')
+				pieces = line.split(' ')
 
-		actual=$(date +%s)
-		debug "$(date --date="@${actual}")"
+				if not line or len(pieces) < 6:
+					continue
+				
+				m = pieces[0]
+				h = pieces[1]
+				dom = pieces[2]
+				moy = pieces[3]
+				dow = pieces[4]
 
-		if not_match "$cron_minute" "$actual" "M";
-		then
-			continue
-		fi
+				cmd = pieces[5:]
 
-		if not_match "$cron_hour" "$actual" "H";
-		then
-			continue
-		fi
+				if not_match(m, now.minute) or not_match(h, now.hour) or not_match(dom, now.day) or not_match(moy, now.month) or not_match(dow, now.weekday()):
+					continue
 
-		if not_match "$cron_day_of_month" "$actual" "-d";
-		then
-			continue
-		fi
+				# print("do it")
 
-		if not_match "$cron_month_of_year" "$actual" "-m";
-		then
-        	continue
-		fi
+				subprocess.call(cmd)
+		sleep(60)
 
-		if not_match "$cron_day_of_week" "$actual" "-w";
-		then
-			continue
-		fi
-
-		eval $bin
-
-	done <"${CONFIGS_DIR}/etc/crontab"
-	
-	sleep 60
-done
-) &
+run_loop()
 
