@@ -5,7 +5,7 @@ import re
 import pathlib
 import argparse
 from mutagen.mp4 import MP4
-from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, USLT, TCOM, TCON, TDRC, TRCK
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, USLT, TCOM, TCON, TDRC, TRCK, TPOS
 from mutagen.mp3 import MP3
 
 '''
@@ -14,6 +14,7 @@ Allowed formats:
 Artist - Album (Year)/## Title.extension
 Artist (Year)/## Title.extension
 Artist/## Title.extension
+Artist/##-## Title.extension
 Artist/Title.extension
 
 Use "Various Artists" as the Artist where applicable.
@@ -39,6 +40,7 @@ args = parser.parse_args()
 DEFAULT_ALBUM='Unknown Album'
 DEFAULT_YEAR=''
 DEFAULT_TRACK=0
+DEFAULT_DISK=1
 
 def process_album(album_dir):
 	if not os.path.isdir(album_dir):
@@ -59,7 +61,7 @@ def process_album(album_dir):
 	songs = os.listdir(album_dir)
 
 	for song in songs:
-		m2 = re.search('^(?:(?P<track>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', song)
+		m2 = re.search('^(?:(?P<disk>\d+)-)?(?:(?P<track>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', song)
 		if not m2:
 			print(song + ' did not match regex')
 			continue
@@ -67,6 +69,7 @@ def process_album(album_dir):
 		d2 = m2.groupdict()
 
 		extension = d2.get('extension')
+		disk      = d2.get('disk')  if d2.get('disk')  else DEFAULT_DISK
 		track     = d2.get('track') if d2.get('track') else DEFAULT_TRACK
 		title     = d2.get('title')
 
@@ -86,6 +89,7 @@ def process_album(album_dir):
 			meta['\xa9gen'] = ''
 			meta['\xa9day'] = year
 			meta['trkn'] = [(int(track), 0)]
+			meta['disk'] = [(int(disk),  0)]
 
 		if extension == 'mp3':
 			track = '' if track == 0 else track
@@ -98,7 +102,8 @@ def process_album(album_dir):
 			meta["TCON"] = TCON(encoding=3, text=u'')
 			meta["TDRC"] = TDRC(encoding=3, text=year)
 			meta["TRCK"] = TRCK(encoding=3, text=track)
-		
+			meta["TPOS"] = TPOS(encoding=3, text=disk)
+
 		meta.save()
 
 if args.album:
