@@ -21,7 +21,7 @@ pacman -Syy --noconfirm --needed \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
-	pavucontrol vlc cmus mplayer kid3 sound-juicer \
+	pavucontrol vlc cmus mplayer sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
 	redshift \
