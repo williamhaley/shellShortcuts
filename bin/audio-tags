@@ -2,6 +2,7 @@
 
 import os
 import re
+import pathlib
 import argparse
 from mutagen.mp4 import MP4
 from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, USLT, TCOM, TCON, TDRC, TRCK
@@ -39,23 +40,15 @@ DEFAULT_ALBUM='Unknown Album'
 DEFAULT_YEAR=''
 DEFAULT_TRACK=0
 
-if args.album:
-	process_album(album)
-elif args.directory:
-	albums = os.listdir(args.directory)
-	for album in albums:
-		process_album(album)
-else:
-	print('Must pass either an album of directory')
+def process_album(album_dir):
+	if not os.path.isdir(album_dir):
+		print("Not a dir" + album_dir)
+		return
 
-def process_album(album):
-	if not os.path.isdir(os.path.join(args.directory, album)):
-		continue
-
-	m = re.search('^(?P<artist>.*?)(?: - (?P<album>.*?))?\ *?(?:\((?P<year>\d{4})\))?$', album)
+	m = re.search('^(?P<artist>.*?)(?: - (?P<album>.*?))?\ *?(?:\((?P<year>\d{4})\))?$', album_dir)
 	if not m:
 		print(album + ' did not match regex')
-		continue
+		return
 
 	d = m.groupdict()
 
@@ -63,7 +56,7 @@ def process_album(album):
 	album  = d.get('album') if d.get('album') else DEFAULT_ALBUM
 	year   = d.get('year')  if d.get('year')  else DEFAULT_YEAR
 
-	songs = os.listdir(os.path.join(args.directory, album))
+	songs = os.listdir(album_dir)
 
 	for song in songs:
 		m2 = re.search('^(?:(?P<track>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', song)
@@ -80,7 +73,7 @@ def process_album(album):
 		if extension not in ['m4a', 'mp3']:
 			continue
 
-		path = os.path.abspath(os.path.join(args.directory, album, song))
+		path = os.path.abspath(os.path.join(album_dir, song))
 
 		# print(artist, album, year, track, title)
 
@@ -107,4 +100,15 @@ def process_album(album):
 			meta["TRCK"] = TRCK(encoding=3, text=track)
 		
 		meta.save()
-	
+
+if args.album:
+	p = pathlib.Path(args.album)
+	process_album(str(p.resolve()))
+elif args.directory:
+	albums = os.listdir(args.directory)
+	for album in albums:
+		p = Path(album)
+		process_album(str(p.resolve()))
+else:
+	print('Must pass either an album of directory')
+
