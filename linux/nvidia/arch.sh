@@ -18,5 +18,5 @@ When=PostTransaction
 Exec=/usr/bin/mkinitcpio -p linux
 EOF
 
-pacman -S --noconfirm --needed \
+pacman -Sy --noconfirm --needed \
 	nvidia nvidia-libgl
