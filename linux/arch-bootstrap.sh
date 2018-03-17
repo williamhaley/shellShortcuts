@@ -6,7 +6,7 @@ IFS=$'\n\t'
 locale_gen="en_US.UTF-8 UTF-8"
 locale_conf="LANG=en_US.UTF-8"
 timezone="/usr/share/zoneinfo/US/Central"
-applications="bash-completion git iw openssh"
+applications="bash-completion git iw wpa_supplicant openssh"
 mirror='http://mirror.us.leaseweb.net/archlinux/$repo/os/$arch'
 arch_hostname="archlinux"
 use_existing_key=false
