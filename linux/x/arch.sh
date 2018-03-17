@@ -5,6 +5,10 @@
 # If you want a full X WM, just install Mate
 
 pacman -Syy --noconfirm --needed \
-	xorg xorg-server gnome-keyring openbox \
+	xorg xorg-server xorg-xinit \
+	xterm lxterminal \
+	gnome-keyring \
+	openbox \
+	thunar \
 	noto-fonts noto-fonts-emoji ttf-dejavu
 
