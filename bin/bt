@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 
-# Script to automatically connect to a bluetooth speaker in Arch Linux
-
-[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
-
 device=BSK10
 
-if ! echo show | sudo bluetoothctl | awk '/Powered/{print $2;}' > /dev/null;
+command()
+{
+	echo "$@" | sudo bluetoothctl
+}
+
+if [ -n "$1" ]
 then
-	echo "${device} is not powered on"
+	command "$@"
+	exit
 fi
+
+command "power off"
+command "power on"
+command "scan on"
 
 # check list of devices. make sure we have a valid mac for our device.
 mac=$(
@@ -20,21 +26,18 @@ mac=$(
 		grep -i '[0-9A-F]\{2\}\(:[0-9A-F]\{2\}\)\{5\}'
 )
 
-# connect
-echo "connect $mac" | sudo bluetoothctl > /dev/null
+echo "mac ${mac}"
 
-while true;
-do
-	connected=$(echo "info ${mac}" | sudo bluetoothctl | awk '/Connected/{print $2;}')
-	if [ "${connected}" = "yes" ];
-	then
-		break
-	fi
+sleep 2
 
-	echo "${device} not connected. Trying again..."
+command "pair ${mac}"
+command "connect ${mac}"
 
-	sleep 5
-done
+#connected=$(echo "info ${mac}" | sudo bluetoothctl | awk '/Connected/{print $2;}')
+#if [ "${connected}" = "yes" ];
+#then
+#	break
+#fi
 
 card=$(printf "bluez_card.${mac}" | sed s/:/_/g)
 

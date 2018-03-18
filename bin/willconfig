@@ -30,9 +30,6 @@ ln -sf $CONFIGS_DIR/rc.conf $HOME/.config/ranger/rc.conf
 mkdir -p $HOME/.config/openbox
 ln -sf $CONFIGS_DIR/openbox/menu.xml $HOME/.config/openbox/menu.xml
 
-mkdir -p $HOME/.config/cmus
-ln -sf $CONFIGS_DIR/cmus/rc $HOME/.config/cmus/rc
-
 if [ "$IS_MAC" = true ];
 then
 	mac-config

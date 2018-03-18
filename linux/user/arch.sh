@@ -11,7 +11,7 @@ pacman -Syy --noconfirm --needed \
 	keepassx2 \
 	transmission-gtk \
 	aws-cli \
-	net-tools tcpdump wireshark-cli bluez bluez-utils \
+	net-tools tcpdump wireshark-cli \
 	gimp \
 	jq \
 	vagrant \
@@ -38,9 +38,6 @@ usermod -a -G docker $USERNAME
 
 systemctl enable docker
 systemctl start docker
-
-systemctl start bluetooth
-systemctl enable bluetooth
 
 systemctl enable org.cups.cupsd.service
 systemctl start org.cups.cupsd.service
