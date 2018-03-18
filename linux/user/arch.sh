@@ -21,7 +21,7 @@ pacman -Syy --noconfirm --needed \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
-	pavucontrol vlc cmus mplayer sound-juicer \
+	vlc cmus mplayer sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
 	redshift \
@@ -57,6 +57,5 @@ sudo -u $USERNAME \
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
 	google-chrome \
-	vokoscreen \
 	visual-studio-code-bin
 

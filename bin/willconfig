@@ -19,7 +19,6 @@ ln -sf $CONFIGS_DIR/aws/config $HOME/.aws/config
 
 mkdir -p $HOME/.vim
 ln -sf $CONFIGS_DIR/vimrc $HOME/.vimrc
-cp -R $CONFIGS_DIR/vim/* $HOME/.vim/
 
 mkdir -p $HOME/.tmux
 ln -sf $CONFIGS_DIR/tmux/tmux.conf $HOME/.tmux.conf
@@ -27,6 +26,12 @@ ln -sf $CONFIGS_DIR/tmux/session.4x3 $HOME/.tmux/session.4x3
 
 mkdir -p $HOME/.config/ranger
 ln -sf $CONFIGS_DIR/rc.conf $HOME/.config/ranger/rc.conf
+
+mkdir -p $HOME/.config/openbox
+ln -sf $CONFIGS_DIR/openbox/menu.xml $HOME/.config/openbox/menu.xml
+
+mkdir -p $HOME/.config/cmus
+ln -sf $CONFIGS_DIR/cmus/rc $HOME/.config/cmus/rc
 
 if [ "$IS_MAC" = true ];
 then
@@ -37,6 +42,10 @@ if [ "$IS_LINUX" = true ];
 then
 	mkdir -p $HOME/.config/Code/User
 	ln -sf $CONFIGS_DIR/vscode/settings.json "$HOME/.config/Code/User/settings.json"
+
+	ln -sf $CONFIGS_DIR/xscreensaver "${HOME}/.xscreensaver"
+
+	ln -sf $CONFIGS_DIR/xinitrc "${HOME}/.xinitrc"
 fi
 
 echo "Done."
