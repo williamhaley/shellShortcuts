@@ -32,7 +32,7 @@ GIT_PS1_STATESEPARATOR=" "
 system-emoji()
 {
 	EMOJIS=(🐶 ⚽️ 🏀 🏈 🎾 ⛵ 🐷 🐧 🍀 🌴 🌊)
-	HOSTNAME_HASH=$(hostname | xxd -pu)
+	HOSTNAME_HASH=$(for c in $(grep -o . <<<`hostname`); do printf '%d' "'$c"; done)
 	HOSTNAME_SHORT_HASH=$(echo ${HOSTNAME_HASH} | cut -b 1-5)
 
 	NUM_FROM_HASH=$(echo $HOSTNAME_HASH | echo $((16#${HOSTNAME_SHORT_HASH})))
