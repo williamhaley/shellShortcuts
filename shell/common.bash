@@ -27,7 +27,7 @@ PATH=$HOME/.pyenv/bin:$PATH
 PYENV_ROOT=$HOME/.pyenv
 
 export GOPATH=$HOME/dev/go
-if ! go -v >/dev/null 2>&1;
+if go -v >/dev/null 2>&1;
 then
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
