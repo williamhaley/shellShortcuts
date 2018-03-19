@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+[ $EUID -eq 0 ] && echo "should not be run as root" >&2 && exit 1
+
 rclone \
+	--config "$HOME/.rclone/rclone.conf" \
 	--verbose \
 	--exclude ".localized" \
 	--exclude ".DS_Store" \

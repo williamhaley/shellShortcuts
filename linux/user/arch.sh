@@ -5,7 +5,7 @@
 pacman -Syy --noconfirm --needed \
 	firefox \
 	sane \
-	exfat-utils syslinux mtools gparted \
+	ntfs-3g exfat-utils syslinux mtools gparted \
 	base-devel linux-headers go jdk8-openjdk \
 	cups \
 	keepassx2 \

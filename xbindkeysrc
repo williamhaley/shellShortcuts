@@ -1,0 +1,12 @@
+# ctrl + f to launch lxterminal
+#"lxterminal"
+#  c:41 + m:0x4
+
+"pactl set-sink-volume @DEFAULT_SINK@ +1000"
+	XF86AudioRaiseVolume
+
+"pactl set-sink-volume @DEFAULT_SINK@ -1000"
+	XF86AudioLowerVolume
+
+"pactl set-sink-mute @DEFAULT_SINK@ toggle"
+	XF86AudioMute

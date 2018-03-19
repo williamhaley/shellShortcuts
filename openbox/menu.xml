@@ -2,13 +2,18 @@
 
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
 
-<menu id="apps-term-menu" label="Terminals">
-  <item label="Terminal">
+<menu id="apps-accessories-menu" label="Accessories">
+  <item label="Passwords">
     <action name="Execute">
-      <command>lxterminal</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
+      <command>keepassx2</command>
+    </action>
+  </item>
+</menu>
+
+<menu id="apps-editors-menu" label="Editors">
+  <item label="Code">
+    <action name="Execute">
+      <command>code</command>
     </action>
   </item>
 </menu>
@@ -98,6 +103,15 @@
   <menu id="apps-multimedia-menu"/>
   <menu id="apps-term-menu"/>
   <menu id="apps-fileman-menu"/>
+  <separator label="Quick Access" />
+  <item label="Terminal">
+    <action name="Execute">
+      <command>lxterminal</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
   <separator label="System" />
   <menu id="system-menu"/>
   <separator />

@@ -2,6 +2,22 @@
 
 device=BSK10
 
+sudo systemctl stop bluetooth
+
+sleep 2
+
+sudo systemctl start bluetooth
+
+sleep 2
+
+pulseaudio --kill
+
+sleep 2
+
+pulseaudio --start
+
+sleep 2
+
 command()
 {
 	echo "$@" | sudo bluetoothctl

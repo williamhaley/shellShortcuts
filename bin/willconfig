@@ -42,6 +42,8 @@ then
 
 	ln -sf $CONFIGS_DIR/xscreensaver "${HOME}/.xscreensaver"
 
+	ln -sf $CONFIGS_DIR/xbindkeysrc "${HOME}/.xbindkeysrc"
+
 	ln -sf $CONFIGS_DIR/xinitrc "${HOME}/.xinitrc"
 fi
 
