@@ -25,8 +25,7 @@ pacman -Syy --noconfirm --needed \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
 	redshift \
-	fbida ranger w3m \
-	trash-cli
+	fbida ranger w3m
 
 # Allow viewing images with framebuffer ala `fbi`
 usermod -a -G video $USERNAME

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-rclone sync "GoogleDrive:Google Photos/" ~/Desktop/GooglePhotos/
+wrclone sync "GoogleDrive:Google Photos/" ~/GooglePhotos/
 

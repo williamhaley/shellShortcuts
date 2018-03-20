@@ -87,6 +87,11 @@
       <startupnotify><enabled>yes</enabled></startupnotify>
     </action>
   </item>
+  <item label="VirtualBox">
+    <action name="Execute">
+      <command>VirtualBox</command>
+    </action>
+  </item>
   <separator />
   <item label="Reconfigure Openbox">
     <action name="Reconfigure" />

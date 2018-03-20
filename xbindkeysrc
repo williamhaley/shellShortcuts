@@ -10,3 +10,12 @@
 
 "pactl set-sink-mute @DEFAULT_SINK@ toggle"
 	XF86AudioMute
+
+"xdotool set_desktop $((`xdotool get_desktop` - 1))"
+    m:0x40 + c:113
+    Mod4 + Left
+
+"xdotool set_desktop $((`xdotool get_desktop` + 1))"
+    m:0x40 + c:114
+    Mod4 + Right
+

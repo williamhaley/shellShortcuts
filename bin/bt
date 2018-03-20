@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
+
 device=BSK10
 
 sudo systemctl stop bluetooth
@@ -10,17 +12,17 @@ sudo systemctl start bluetooth
 
 sleep 2
 
-pulseaudio --kill
+sudo -u `real-user` pulseaudio --kill
 
 sleep 2
 
-pulseaudio --start
+sudo -u `real-user` pulseaudio --start
 
 sleep 2
 
 command()
 {
-	echo "$@" | sudo bluetoothctl
+	echo "$@" | sudo -u `real-user` bluetoothctl
 }
 
 if [ -n "$1" ]

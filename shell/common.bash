@@ -79,18 +79,3 @@ load-python()
 	pyenv global 3.6.0
 }
 
-# Use a function rather than a script/executable.
-# This is easier to deal with if there's an issue and
-# we break `rm` by mistake. Having an executable call
-# the real `rm` can be tricky if we aren't sure of the
-# exact path.
-rm()
-{
-	if trash-put --version &> /dev/null;
-	then
-		trash-put "$@"
-	else
-		command rm "$@"
-	fi
-}
-
