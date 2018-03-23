@@ -48,7 +48,15 @@
 </menu>
 
 <menu id="apps-multimedia-menu" label="Multimedia">
-  <item label="vlc">
+  <item label="Music">
+    <action name="Execute">
+      <command>lxterminal --command cmus</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="Video">
     <action name="Execute">
       <command>vlc</command>
       <startupnotify>

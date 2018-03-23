@@ -9,7 +9,7 @@ pacman -Syy --noconfirm --needed \
 	base-devel linux-headers go jdk8-openjdk \
 	cups \
 	keepassx2 \
-	transmission-gtk \
+	rtorrent \
 	aws-cli \
 	net-tools tcpdump wireshark-cli \
 	gimp \
@@ -17,7 +17,7 @@ pacman -Syy --noconfirm --needed \
 	vagrant \
 	virtualbox qemu \
 	intel-ucode \
-	docker \
+	docker docker-compose \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
 	ttf-symbola \
