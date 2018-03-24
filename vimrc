@@ -17,4 +17,6 @@ let g:ycm_filetype_whitelist = { 'go': 1 }
 " Spellcheck
 set spelllang=en
 set spell
+hi clear SpellBad
+hi SpellBad cterm=underline,bold
 

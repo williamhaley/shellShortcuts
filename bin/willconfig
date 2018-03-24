@@ -45,6 +45,9 @@ then
 	ln -sf $CONFIGS_DIR/xbindkeysrc "${HOME}/.xbindkeysrc"
 
 	ln -sf $CONFIGS_DIR/xinitrc "${HOME}/.xinitrc"
+
+	mkdir -p $HOME/.config/tint2
+	ln -sf $CONFIGS_DIR/tint2rc "${HOME}/.config/tint2/tint2rc"
 fi
 
 echo "Done."
