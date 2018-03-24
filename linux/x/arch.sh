@@ -12,6 +12,7 @@ pacman -Syy --noconfirm --needed \
 	gnome-keyring \
 	openbox obconf \
 	tint2 thunar \
+	feh \
 	xscreensaver xbindkeys xdotool \
 	noto-fonts noto-fonts-emoji ttf-dejavu
 
