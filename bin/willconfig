@@ -27,9 +27,6 @@ ln -sf $CONFIGS_DIR/tmux/session.4x3 $HOME/.tmux/session.4x3
 mkdir -p $HOME/.config/ranger
 ln -sf $CONFIGS_DIR/rc.conf $HOME/.config/ranger/rc.conf
 
-mkdir -p $HOME/.config/openbox
-ln -sf $CONFIGS_DIR/openbox/menu.xml $HOME/.config/openbox/menu.xml
-
 if [ "$IS_MAC" = true ];
 then
 	mac-config
@@ -37,6 +34,10 @@ fi
 
 if [ "$IS_LINUX" = true ];
 then
+	mkdir -p $HOME/.config/openbox
+	ln -sf $CONFIGS_DIR/openbox/menu.xml $HOME/.config/openbox/menu.xml
+	ln -sf $CONFIGS_DIR/openbox/autostart $HOME/.config/openbox/autostart
+
 	mkdir -p $HOME/.config/Code/User
 	ln -sf $CONFIGS_DIR/vscode/settings.json "$HOME/.config/Code/User/settings.json"
 

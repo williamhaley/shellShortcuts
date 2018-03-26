@@ -5,5 +5,5 @@ tint2 &
 # xrandr --output DVI-D-0 --auto --primary --left-of VGA-0 &
 # xrandr --output VGA-0 --auto &
 xscreensaver -no-splash &
-feh --bg-scale "${CONFIGS_DIR}/img/earth.jpg" &
 exec openbox-session
+
