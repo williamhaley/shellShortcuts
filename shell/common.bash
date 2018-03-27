@@ -60,6 +60,7 @@ load-node()
 {
 	\. "$NVM_DIR/nvm.sh"
 	\. "$NVM_DIR/bash_completion"
+	nvm alias default stable
 }
 
 load-python()
@@ -69,13 +70,13 @@ load-python()
 		git clone https://github.com/pyenv/pyenv.git "${PYENV_ROOT}"
 	fi
 
-	pyenv install 3.6.0 --skip-existing
+	pyenv install 3.6.4 --skip-existing
 
 	if command -v pyenv 1>/dev/null 2>&1;
 	then
 		eval "$(pyenv init -)"
 	fi
 
-	pyenv global 3.6.0
+	pyenv global 3.6.4
 }
 

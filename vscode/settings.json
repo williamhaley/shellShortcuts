@@ -16,4 +16,7 @@
     ],
     "go.formatTool": "gofmt",
     "go.lintOnSave": "package",
+    "extensions.ignoreRecommendations": true,
+    "workbench.activityBar.visible": true,
+    "editor.minimap.enabled": false,
 }
