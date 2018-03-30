@@ -18,5 +18,5 @@
     "go.lintOnSave": "package",
     "extensions.ignoreRecommendations": true,
     "workbench.activityBar.visible": true,
-    "editor.minimap.enabled": false,
+    "editor.minimap.enabled": false
 }

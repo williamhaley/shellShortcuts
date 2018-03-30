@@ -26,6 +26,8 @@ PATH=$HOME/.pyenv/shims:$PATH
 PATH=$HOME/.pyenv/bin:$PATH
 PYENV_ROOT=$HOME/.pyenv
 
+# GOLANG
+PATH=$HOME/dev/go/bin:$PATH
 export GOPATH=$HOME/dev/go
 if go -v >/dev/null 2>&1;
 then
@@ -60,6 +62,8 @@ load-node()
 {
 	\. "$NVM_DIR/nvm.sh"
 	\. "$NVM_DIR/bash_completion"
+
+	nvm install stable
 	nvm alias default stable
 }
 
