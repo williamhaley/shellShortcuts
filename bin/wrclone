@@ -2,10 +2,16 @@
 
 [ $EUID -eq 0 ] && echo "should not be run as root" >&2 && exit 1
 
+# Excludes do NOT work when using --drive-shared-with-me
+# https://github.com/ncw/rclone/issues/1902
+
 rclone \
 	--config "$HOME/.rclone/rclone.conf" \
 	--verbose \
 	--exclude ".localized" \
 	--exclude ".DS_Store" \
+	--exclude "Photos Library.photoslibrary" \
+	--exclude "Photo Booth Library" \
+	--exclude ".sync" \
 	"$@"
 

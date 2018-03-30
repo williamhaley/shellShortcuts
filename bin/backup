@@ -54,7 +54,7 @@ do_rsync()
 
 do_rclone()
 {
-	rsync_opts="--delete-excluded --delete-after"
+	rsync_opts="--delete-excluded --delete-after $3"
 
 	echo "rclone: $1 ==> $2" | tee -a "${log}"
 	echo "" >> "${log}"
@@ -106,6 +106,7 @@ do_full()
 	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/grub"
 	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/cryptdisk"
 
+	do_rsync /mnt/data/PlexDB/       "/mnt/${1}/PlexDB/"
 	do_rsync /mnt/data/Software/     "/mnt/${1}/Software/"
 	do_rsync /mnt/data/Videos/       "/mnt/${1}/Videos/"
 	do_rsync /mnt/data/FamilyPhotos/ "/mnt/${1}/FamilyPhotos/"
@@ -126,6 +127,11 @@ do_web()
 	do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
 }
 
+do_backup_family_photos()
+{
+	do_rclone "GoogleDrive:Google Photos/" "/mnt/data/FamilyPhotos/" --drive-shared-with-me
+}
+
 do_public()
 {
 	if ! `findmnt -m "/mnt/pensieve" >/dev/null`;
@@ -143,6 +149,7 @@ do_public()
 	echo "" >> "${log}"
 }
 
+do_backup_family_photos
 do_full backup-internal
 do_full backup-external
 do_web
