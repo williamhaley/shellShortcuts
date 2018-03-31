@@ -1,10 +1,13 @@
 RESET='\[\e[1;0m\]'
-CYAN_COLOR='\[\e[1;36m\]'
-RED_COLOR='\[\e[1;31m\]'
-GREEN_COLOR='\[\e[1;32m\]'
-GRAY_COLOR='\[\e[1;30m\]'
-YELLOW_COLOR='\[\e[1;33m\]'
-BLUE_COLOR='\[\e[1;34m\]'
+RED_FG='\[\e[1;31m\]'
+RED_BG='\[\e[1;41m\]'
+GREEN_BG='\[\e[1;42m\]'
+BLUE_BG='\[\e[1;44m\]'
+CYAN_BG='\[\e[1;46m\]'
+WHITE_FG='\[\e[1;37m\]'
+YELLOW_FG='\[\e[1;33m\]'
+PURPLE_BG='\[\e[1;45m\]'
+BOLD='\[\e[1;1m\]'
 
 # You can *only* print the color from a sub-shell like this for PS1. Not the color
 # *and* text. That causes issues with line length and so wrapping gets screwed up.
@@ -33,52 +36,31 @@ system-emoji()
 {
 	EMOJIS=(🐶 ⚽️ 🏀 🏈 🎾 ⛵ 🐷 🐧 🍀 🌴 🌊)
 	HOSTNAME_HASH=$(for c in $(grep -o . <<<`hostname`); do printf '%d' "'$c"; done)
-	HOSTNAME_SHORT_HASH=$(echo ${HOSTNAME_HASH} | cut -b 1-5)
+	HOSTNAME_SHORT_HASH=$(printf ${HOSTNAME_HASH} | cut -b 1-5)
 
-	NUM_FROM_HASH=$(echo $HOSTNAME_HASH | echo $((16#${HOSTNAME_SHORT_HASH})))
+	NUM_FROM_HASH=$(printf $HOSTNAME_HASH | printf $((16#${HOSTNAME_SHORT_HASH})))
 	LEN=${#EMOJIS[@]}
 
 	INDEX=$(expr ${NUM_FROM_HASH} % ${LEN})
 	printf ${EMOJIS[INDEX]}
 }
 
-PS1=""
+# Prompt
 
-# Hostname and current dir.
-PS1+="${CYAN_COLOR}\h:${BLUE_COLOR}\w"
+# Not sure if there's any downside to this pattern. None seen so far.
+# As a bonus, it also allows for easily setting conditionals since this
+# is invoked before every command.
+__prompt()
+{
+	PS1=""
+	PS1+="${WHITE_FG}${BOLD}${BLUE_BG} \h ${CYAN_BG} \u `system-emoji` ${PURPLE_BG} \t ${GREEN_BG} \w ${RESET}"
+	if [ -d ".git" ];
+	then
+		PS1+="${WHITE_FG}${BOLD}${RED_BG} $(__git_ps1 "%s") ${RESET}"
+	fi
+	PS1+="\n${RED_FG}$ ${RESET}"
+}
 
-# Username.
-PS1+=" ${GREEN_COLOR}(\u|`system-emoji`)"
+# Runs every time 
+PROMPT_COMMAND="__prompt"
 
-# Change color.
-PS1+=" ${YELLOW_COLOR}"
-
-# Git.
-PS1+='$(__git_ps1 "[%s]")'
-
-# Detect SSH
-
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-	session_type=remote/ssh
-# many other tests omitted
-else
-	case $(ps -o comm= -p $PPID) in
-		sshd|*/sshd) session_type=remote/ssh;;
-	esac
-fi
-
-if [ "${session_type}" = "remote/ssh" ];
-then
-	PS1+=" ~~ SSH ~~"
-fi
-
-# New line.
-PS1+="\n"
-
-# Prompt.
-PS1+="${RED_COLOR}\$"
-
-# Reset colors for input.
-PS1+="${RESET} "
-
-PROMPT_COMMAND="echo"
