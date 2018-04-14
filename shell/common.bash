@@ -60,11 +60,14 @@ load-ruby()
 
 load-node()
 {
-	(
-		cd $HOME
-		git clone https://github.com/creationix/nvm.git .nvm
-		git checkout $(git describe --tags)
-	)
+	if [ ! -d "$NVM_DIR" ];
+	then
+		(
+			cd $HOME
+			git clone https://github.com/creationix/nvm.git .nvm
+			git checkout $(git describe --tags)
+		)
+	fi
 	\. "$NVM_DIR/nvm.sh"
 	\. "$NVM_DIR/bash_completion"
 
