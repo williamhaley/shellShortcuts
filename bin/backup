@@ -99,7 +99,7 @@ do_full()
 		return
 	fi
 
-	do_rsync /mnt/will-home/		"/mnt/${1}/willhaley-backup/"
+	do_rsync /mnt/will-home/        "/mnt/${1}/willhaley-backup/"
 
 	do_rsync /etc/fstab             "/mnt/${1}/system-backup/fstab"
 	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/crypttab"
@@ -107,54 +107,27 @@ do_full()
 	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/cryptdisk"
 
 	do_rsync /mnt/data/PlexDB/       "/mnt/${1}/PlexDB/"
-	do_rsync /mnt/data/Software/     "/mnt/${1}/Software/"
 	do_rsync /mnt/data/Videos/       "/mnt/${1}/Videos/"
-	do_rsync /mnt/data/FamilyPhotos/ "/mnt/${1}/FamilyPhotos/"
 }
 
-do_web()
+do_b2()
 {
-	if ! `findmnt -M "/mnt/data" >/dev/null`;
-	then
-		echo "/mnt/data is not mounted"
-		exit 1
-	fi
-
 	do_rclone /home/will/Photographs/         "Backup:willhaley-backup/Photographs/"
 	# No `Music`. Subject to changes, and can be recovered from elsewhere.
-	do_rclone /mnt/data/Software/             "Backup:willhaley-backup/Software/"
+	do_rclone /home/will/Software/            "Backup:willhaley-backup/Software/"
 	do_rclone /home/will/Documents/           "BackupCrypt:willhaley-backup/Documents/"
 	do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
 }
 
 do_backup_family_photos()
 {
-	do_rclone "GoogleDrive:Google Photos/" "/mnt/data/FamilyPhotos/" --drive-shared-with-me
-}
-
-do_public()
-{
-	if ! `findmnt -m "/mnt/pensieve" >/dev/null`;
-	then
-		echo "/mnt/pensieve is not mounted"
-		exit 1
-	fi
-
-    echo "rclone: pensieve" | tee -a "${log}"
-    echo "" >> "${log}"
-
-	rsync -vr --delete /mnt/data/FamilyPhotos/ /mnt/pensieve/FamilyPhotos/ >> "${log}" 2>&1
-	rsync -vr --delete /home/will/Photographs/ /mnt/pensieve/Photographs/ >> "${log}" 2>&1
-
-	echo "" >> "${log}"
+	do_rclone "GoogleDrive:Google Photos/" "/home/will/FamilyPhotos/" --drive-shared-with-me
 }
 
 do_backup_family_photos
 do_full backup-internal
 do_full backup-external
-do_web
+do_b2
 do_horcrux 1
 do_horcrux 2
 do_horcrux 3
-do_public
-

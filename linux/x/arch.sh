@@ -11,7 +11,8 @@ pacman -Syy --noconfirm --needed \
 	xterm lxterminal \
 	gnome-keyring \
 	openbox obconf \
-	tint2 thunar \
+	tint2 \
+	thunar tumbler \
 	feh \
 	xscreensaver xbindkeys xdotool \
 	noto-fonts noto-fonts-emoji ttf-dejavu

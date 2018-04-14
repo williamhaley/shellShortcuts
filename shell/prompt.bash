@@ -1,8 +1,11 @@
 RESET='\[\e[1;0m\]'
 RED_FG='\[\e[1;31m\]'
 RED_BG='\[\e[1;41m\]'
+GREEN_FG='\[\e[1;32m\]'
 GREEN_BG='\[\e[1;42m\]'
+BLUE_FG='\[\e[1;34m\]'
 BLUE_BG='\[\e[1;44m\]'
+CYAN_FG='\[\e[1;36m\]'
 CYAN_BG='\[\e[1;46m\]'
 WHITE_FG='\[\e[1;37m\]'
 YELLOW_FG='\[\e[1;33m\]'
@@ -61,6 +64,20 @@ __prompt()
 	PS1+="\n${RED_FG}$ ${RESET}"
 }
 
-# Runs every time 
-PROMPT_COMMAND="__prompt"
+PS1=""
+PS1+="${CYAN_FG}\h:${BLUE_FG}\w"
+PS1+=" ${GREEN_FG}(\u)"
+PS1+=" ${YELLOW_FG}"
+PS1+='$(__git_ps1 "[%s]")'
+PS1+="\n"
+PS1+="${RED_FG}\$"
+PS1+="${RESET} "
+
+# Runs after every command.
+if shopt -q login_shell;
+then
+	PROMPT_COMMAND="echo"
+else
+	PROMPT_COMMAND="__prompt"
+fi
 

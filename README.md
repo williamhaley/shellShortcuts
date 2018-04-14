@@ -43,10 +43,11 @@ defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 ## VSCode
 
 ```
-code --install-extension \
-	EditorConfig.editorconfig
-code --install-extension \
-	lukehoban.Go
+code \
+	--install-extension EditorConfig.EditorConfig \
+	--install-extension lukehoban.Go \
+	--install-extension CoenraadS.bracket-pair-colorizer \
+	--install-extension oderwat.indent-rainbow
 ```
 
 The `direnv` command should pick up `GOPATH` if using `.envrc` files. Use the command palette -> `Go: Current GOPATH` to verify. Direnv assumes there's a single `.envrc` in your root workspace.

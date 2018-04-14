@@ -2,22 +2,6 @@
 
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
 
-<menu id="apps-accessories-menu" label="Accessories">
-  <item label="Passwords">
-    <action name="Execute">
-      <command>keepassx2</command>
-    </action>
-  </item>
-</menu>
-
-<menu id="apps-editors-menu" label="Editors">
-  <item label="Code">
-    <action name="Execute">
-      <command>code</command>
-    </action>
-  </item>
-</menu>
-
 <menu id="apps-net-menu" label="Internet">
   <item label="Firefox">
     <action name="Execute">
@@ -37,14 +21,6 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Transmission">
-    <action name="Execute">
-      <command>transmission-gtk</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
 </menu>
 
 <menu id="apps-multimedia-menu" label="Multimedia">
@@ -59,17 +35,6 @@
   <item label="Video">
     <action name="Execute">
       <command>vlc</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-</menu>
-
-<menu id="apps-fileman-menu" label="File Managers">
-  <item label="Thunar">
-    <action name="Execute">
-      <command>Thunar</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -95,11 +60,6 @@
       <startupnotify><enabled>yes</enabled></startupnotify>
     </action>
   </item>
-  <item label="VirtualBox">
-    <action name="Execute">
-      <command>VirtualBox</command>
-    </action>
-  </item>
   <separator />
   <item label="Reconfigure Openbox">
     <action name="Reconfigure" />
@@ -117,12 +77,35 @@
   <menu id="apps-term-menu"/>
   <menu id="apps-fileman-menu"/>
   <separator label="Quick Access" />
+  <item label="Code">
+    <action name="Execute">
+      <command>code</command>
+    </action>
+  </item>
+  <item label="Files">
+    <action name="Execute">
+      <command>Thunar</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="Passwords">
+    <action name="Execute">
+      <command>keepassx2</command>
+    </action>
+  </item>
   <item label="Terminal">
     <action name="Execute">
       <command>lxterminal</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
+    </action>
+  </item>
+  <item label="VirtualBox">
+    <action name="Execute">
+      <command>VirtualBox</command>
     </action>
   </item>
   <separator label="System" />

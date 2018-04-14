@@ -14,8 +14,9 @@ pacman -Syy --noconfirm --needed \
 	net-tools tcpdump wireshark-cli \
 	gimp \
 	jq \
+	pulseaudio pavucontrol \
 	vagrant \
-	virtualbox qemu \
+	virtualbox qemu qemu-arch-extra \
 	intel-ucode \
 	docker docker-compose \
 	electrum \
@@ -34,6 +35,7 @@ usermod -a -G video $USERNAME
 # need to worry about, but helps with image previews.
 
 usermod -a -G docker $USERNAME
+usermod -a -G vboxusers $USERNAME
 
 systemctl enable docker
 systemctl start docker
