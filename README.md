@@ -44,6 +44,7 @@ defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
 ```
 code \
+	--install-extension streetsidesoftware.code-spell-checker \
 	--install-extension EditorConfig.EditorConfig \
 	--install-extension lukehoban.Go \
 	--install-extension CoenraadS.bracket-pair-colorizer \
