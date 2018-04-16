@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.38 for will on Sun Mar 18 11:25:44 2018.
+# Written by xscreensaver-demo 5.39 for will on Mon Apr 16 17:31:48 2018.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:10:00
@@ -24,11 +24,11 @@ fadeTicks:	20
 captureStderr:	True
 ignoreUninstalledPrograms:False
 font:		*-medium-r-*-140-*-m-*
-dpmsEnabled:	False
-dpmsQuickOff:	False
-dpmsStandby:	2:00:00
-dpmsSuspend:	2:00:00
-dpmsOff:	4:00:00
+dpmsEnabled:	True
+dpmsQuickOff:	True
+dpmsStandby:	0:01:00
+dpmsSuspend:	0:01:00
+dpmsOff:	0:01:00
 grabDesktopImages:  True
 grabVideoFrames:    False
 chooseRandomImages: False
@@ -270,6 +270,10 @@ programs:								      \
   GL: 				unicrud -root				    \n\
   GL: 				esper -root				    \n\
   GL: 				vigilance -root				    \n\
+  GL: 				crumbler -root				    \n\
+  GL: 				maze3d -root				    \n\
+  GL: 				peepers -root				    \n\
+  GL: 				razzledazzle -root			    \n\
 
 
 pointerPollTime:    0:00:05
