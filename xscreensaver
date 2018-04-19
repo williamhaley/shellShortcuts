@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.39 for will on Mon Apr 16 17:31:48 2018.
+# Written by xscreensaver-demo 5.39 for will on Wed Apr 18 20:19:48 2018.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:10:00
@@ -26,9 +26,9 @@ ignoreUninstalledPrograms:False
 font:		*-medium-r-*-140-*-m-*
 dpmsEnabled:	True
 dpmsQuickOff:	True
-dpmsStandby:	0:01:00
-dpmsSuspend:	0:01:00
-dpmsOff:	0:01:00
+dpmsStandby:	0:11:00
+dpmsSuspend:	0:11:00
+dpmsOff:	0:11:00
 grabDesktopImages:  True
 grabVideoFrames:    False
 chooseRandomImages: False
