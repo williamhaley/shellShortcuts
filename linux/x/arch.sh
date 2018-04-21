@@ -9,6 +9,7 @@ set -e
 pacman -Syy --noconfirm --needed \
 	xorg xorg-server xorg-xinit \
 	xterm lxterminal \
+	numlockx \
 	gnome-keyring \
 	openbox obconf \
 	tint2 \
