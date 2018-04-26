@@ -9,7 +9,7 @@ pacman -Syy --noconfirm --needed \
 	base-devel linux-headers go jdk8-openjdk \
 	cups \
 	keepassx2 \
-	rtorrent \
+	aria2 \
 	aws-cli \
 	net-tools tcpdump wireshark-cli \
 	gimp \
