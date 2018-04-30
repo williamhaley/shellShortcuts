@@ -7,6 +7,7 @@ pacman -Syy --noconfirm --needed \
 	sane \
 	ntfs-3g exfat-utils syslinux mtools gparted \
 	base-devel linux-headers go jdk8-openjdk \
+	tmux screen \
 	cups \
 	keepassx2 \
 	aria2 \
