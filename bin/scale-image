@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Usage:
+# resize-image "input.png" "output.png" .5
+
+ffmpeg -i "${1}" -vf "scale=iw*${3}:ih*${3}" "${2}"
+
