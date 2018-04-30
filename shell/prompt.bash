@@ -57,7 +57,7 @@ __prompt()
 {
 	PS1=""
 	PS1+="${WHITE_FG}${BOLD}${BLUE_BG} \h ${CYAN_BG} \u `system-emoji` ${PURPLE_BG} \t ${GREEN_BG} \w ${RESET}"
-	if [ -d ".git" ];
+	if git -C . rev-parse 2> /dev/null;
 	then
 		PS1+="${WHITE_FG}${BOLD}${RED_BG} $(__git_ps1 "%s") ${RESET}"
 	fi
