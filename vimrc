@@ -4,6 +4,9 @@ syntax on
 " Show line numbers
 set number
 
+" Show horizontal ruler at 80 chars
+set colorcolumn=80
+
 " How many columns constitute a tab
 set tabstop=4
 
