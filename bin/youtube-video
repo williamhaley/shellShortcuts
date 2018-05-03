@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+FORMAT="mp4"
+
+FILENAME=$(youtube-dl "$1" -o "%(title)s" --get-filename)
+SANITIZED=$(echo $FILENAME | tr -d "\"" | tr -d "'")
+youtube-dl \
+	-f bestvideo+bestaudio \
+	--output "${SANITIZED}.%(ext)s" $1
+
