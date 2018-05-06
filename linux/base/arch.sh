@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 pacman -Syy --noconfirm --needed \
 	base-devel wget rsync vim tmux git curl unzip \
-	sudo openssh wpa_supplicant	
+	sudo openssh wpa_supplicant
 
 # sudo
 usermod -a -G sudo $USERNAME || true
@@ -46,4 +46,3 @@ sudo -u $USERNAME wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.ta
 sudo -u $USERNAME tar zxvf yaourt.tar.gz
 cd yaourt
 sudo -u $USERNAME makepkg -si --noconfirm
-

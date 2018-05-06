@@ -17,4 +17,3 @@ pacman -Syy --noconfirm --needed \
 	feh \
 	xscreensaver xbindkeys xdotool \
 	noto-fonts noto-fonts-emoji ttf-dejavu
-
