@@ -106,6 +106,7 @@ do_full()
 	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/grub"
 	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/cryptdisk"
 
+	do_rsync /mnt/data/FamilyBackups/ "/mnt/${1}/FamilyBackups/"
 	do_rsync /mnt/data/PlexDB/       "/mnt/${1}/PlexDB/"
 	do_rsync /mnt/data/Videos/       "/mnt/${1}/Videos/"
 }
@@ -119,12 +120,6 @@ do_b2()
 	do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
 }
 
-do_backup_family_photos()
-{
-	do_rclone "GoogleDrive:Google Photos/" "/home/will/FamilyPhotos/" --drive-shared-with-me
-}
-
-do_backup_family_photos
 do_full backup-internal
 do_full backup-external
 do_b2
