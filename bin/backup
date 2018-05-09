@@ -117,6 +117,7 @@ do_b2()
 	# No `Music`. Subject to changes, and can be recovered from elsewhere.
 	do_rclone /home/will/Software/            "Backup:willhaley-backup/Software/"
 	do_rclone /home/will/Documents/           "BackupCrypt:willhaley-backup/Documents/"
+	do_rclone /mnt/data/FamilyBackups/        "BackupCrypt:willhaley-backup/FamilyBackups/"
 	do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
 }
 

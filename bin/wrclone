@@ -6,7 +6,7 @@
 # https://github.com/ncw/rclone/issues/1902
 
 rclone \
-	--config "$HOME/.rclone/rclone.conf" \
+	--config "$HOME/.config/rclone/rclone.conf" \
 	--verbose \
 	--exclude ".localized" \
 	--exclude ".DS_Store" \
