@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-	
+
 tput setaf 3
 printf "$@"
 tput sgr0
-

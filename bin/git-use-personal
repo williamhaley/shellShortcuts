@@ -13,4 +13,3 @@ EMAIL=$(git config --file $CONFIGS_DIR/gitconfig.personal user.email)
 
 git config --local user.name $NAME
 git config --local user.email $EMAIL
-

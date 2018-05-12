@@ -3,4 +3,3 @@
 tput setaf 6
 printf "$@"
 tput sgr0
-

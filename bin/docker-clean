@@ -13,4 +13,3 @@ for I in "$IMAGES"
 do
 	docker rmi $I
 done
-

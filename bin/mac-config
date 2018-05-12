@@ -75,4 +75,3 @@ dockutil --no-restart --add "/Applications/Visual Studio Code.app"
 dockutil --no-restart --add "/Applications/Slack.app"
 
 killall Dock
-

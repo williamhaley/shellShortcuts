@@ -37,4 +37,3 @@ done
 
 echo ""
 echo "Replaced occurences in ${NUM_MATCHED_LINES} line(s)"
-

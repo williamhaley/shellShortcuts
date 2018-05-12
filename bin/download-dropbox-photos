@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
 wrclone sync "Dropbox:Camera Uploads/" ~/DropboxPhotos/
-

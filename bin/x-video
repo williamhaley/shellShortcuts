@@ -12,4 +12,3 @@ trap finish EXIT
 setterm -cursor off
 
 mplayer -vo fbdev2 -fs -zoom -quiet -really-quiet "$1"
-

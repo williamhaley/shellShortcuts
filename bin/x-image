@@ -3,4 +3,3 @@
 # May need to add user to `video` group.
 
 fbi "$1"
-

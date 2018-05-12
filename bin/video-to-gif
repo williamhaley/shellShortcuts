@@ -8,4 +8,3 @@ ffmpeg \
 	$dir/ffout%03d.png
 
 convert -loop 0 $dir/ffout*.png output.gif
-

@@ -9,4 +9,3 @@ SANITIZED=$(echo $FILENAME | tr -d "\"" | tr -d "'")
 youtube-dl \
 	-f bestvideo+bestaudio \
 	--output "${SANITIZED}.%(ext)s" $1
-

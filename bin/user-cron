@@ -14,14 +14,14 @@ with open(pidfile, 'w') as file:
 	file.write(pid)
 	file.close()
 
-def not_match(crontab_piece, exact_value):	
+def not_match(crontab_piece, exact_value):
 	multiple_pieces = crontab_piece.split('/')
 
 	# print(crontab_piece, multiple_pieces, exact_value)
 
 	wildcard_match = False
 	if crontab_piece == "*":
-		wildcard_match = True	
+		wildcard_match = True
 
 	exact_match = False
 	if crontab_piece == exact_value:
@@ -44,7 +44,7 @@ def run_loop():
 
 				if not line or len(pieces) < 6:
 					continue
-				
+
 				m = pieces[0]
 				h = pieces[1]
 				dom = pieces[2]
@@ -62,4 +62,3 @@ def run_loop():
 		sleep(60)
 
 run_loop()
-

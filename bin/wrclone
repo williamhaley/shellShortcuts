@@ -14,4 +14,3 @@ rclone \
 	--exclude "Photo Booth Library" \
 	--exclude ".sync" \
 	"$@"
-

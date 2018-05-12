@@ -2,15 +2,123 @@
 
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
-killall -9 wpa_supplicant
+show_help()
+{
+	cat << EOF
+Usage: ${0##*/} [-hcslo]
+Connect to or scan for WiFi
 
-sleep 1
+	-h    Display this help
 
-wpa_supplicant \
-	-B \
-	-i wlp8s0 \
-	-c /etc/wpa_supplicant/wpa_supplicant.conf \
-	-Dwext
+	-c    Connect to WiFi
+	-s    Scan for networks
+	-l    List WiFi cards
+	-o    Configure the WiFi network
+EOF
+}
 
-dhcpcd
+list()
+{
+	# List all wireless devices
+	# iw dev
 
+	# List device names.
+	for dev in `ls /sys/class/net`; do
+		if [ -d "/sys/class/net/$dev/wireless" ]; then echo $dev; fi;
+	done
+}
+
+first_card()
+{
+	list | head -1
+}
+
+scan()
+{
+	wpa_cli scan
+	sleep 5
+	wpa_cli scan_results
+}
+
+configure()
+{
+	read -p "Enter SSID: " ssid
+	read -p "Enter password: " -s password
+	echo ""
+
+	mkdir -p /etc/wpa_supplicant
+
+	if [ -z "$password" ];
+	then
+		cat <<EOF >/etc/wpa_supplicant/wpa_supplicant.conf
+ap_scan=1
+country=US
+ctrl_interface=/var/run/wpa_supplicant
+update_config=1
+
+network={
+	ssid="$ssid"
+	scan_ssid=1
+	key_mgmt=NONE
+}
+EOF
+	else
+		wpa_passphrase "$ssid" "$password" > /etc/wpa_supplicant/wpa_supplicant.conf
+		cat <<EOF >/etc/wpa_supplicant/wpa_supplicant.conf
+ap_scan=1
+country=US
+ctrl_interface=/var/run/wpa_supplicant
+update_config=1
+
+network={
+	ssid="$ssid"
+	psk="$password"
+	scan_ssid=1
+	proto=WPA RSN
+	key_mgmt=WPA-PSK
+	pairwise=CCMP TKIP
+	group=CCMP TKIP
+}
+EOF
+	fi
+}
+
+connect()
+{
+	killall -9 wpa_supplicant
+
+	sleep 1
+
+	wpa_supplicant \
+		-B \
+		-i $(first_card) \
+		-c /etc/wpa_supplicant/wpa_supplicant.conf \
+		-Dwext
+
+	dhcpcd
+}
+
+while getopts "h?cslo" opt;
+do
+	case "$opt" in
+	h|\?)
+		show_help
+		exit 0
+		;;
+	c)
+		connect
+		;;
+	s)
+		scan
+		;;
+	l)
+		list
+		;;
+	o)
+		configure
+		;;
+	esac
+done
+
+shift $((OPTIND-1))
+[ "${1:-}" = "--" ] && shift
