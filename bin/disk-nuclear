@@ -3,5 +3,6 @@
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
 #badblocks -wsv -p 1 -t random $1
+ddrescue --force /dev/urandom $1
 ddrescue --force /dev/zero $1
 
