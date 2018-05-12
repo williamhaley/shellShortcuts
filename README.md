@@ -8,22 +8,34 @@ Various application config files can be copied manually as needed.
 
 Clone the repo to `$HOME` using the SSH clone URL.
 
-Add this to `.bashrc` or whatever shell config is appropriate.
+```
+cat <<'EOF' >~/.bash_profile
+#
+# ~/.bash_profile
+#
+# Loaded only for login bash sessions (new TTY/SSH).
+
+[[ -f ~/.bashrc ]] && . ~/.bashrc
+EOF
+```
+
+Load my common shell configuration file.
 
 ```
+cat <<'EOF' >~/.bashrc
+#
+# ~/.bashrc
+#
+# Loaded for non-login bash sessions (new tab) and sourced by bash_profile.
+
 export CONFIGS_DIR=$HOME/configs
-source $CONFIGS_DIR/shell/shellrc
+source $CONFIGS_DIR/shell/bashrc
+EOF
 ```
 
 Close and re-open the terminal so that those changes take effect.
 
-On a Mac, you may need to create a `.profile` file that looks like this.
-
-```
-source $HOME/.bashrc
-```
-
-Set up dotfiles, configs, etc.
+Run this to set up aliases, symlinks, copy config files into place, etc.
 
 ```
 willconfig

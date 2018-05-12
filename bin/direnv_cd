@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# Recommended by direnv author to properly cd with direnv in shell scripts.
-# https://github.com/direnv/direnv/issues/262
-
-cd "$1"
-eval "$(direnv export bash)"
-

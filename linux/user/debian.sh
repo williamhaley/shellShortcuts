@@ -25,6 +25,8 @@ apt-get install --no-install-recommends --yes \
 	fonts-symbola \
 	vlc cmus mplayer sound-juicer \
 	rclone \
+	youtube-dl \
+	ffmpeg \
 	xfburn \
 	ranger w3m
 

@@ -1,4 +1,11 @@
+if [[ $- != *i* ]];
+then
+	# Put any code here that should only run interactively.
+	export IS_INTERACTIVE=true
+else
+	export IS_INTERACTIVE=false
+fi
+
 . $CONFIGS_DIR/shell/prompt.bash
 . $CONFIGS_DIR/shell/git-completion.bash
 . $CONFIGS_DIR/shell/common.bash
-

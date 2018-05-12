@@ -2,7 +2,7 @@
 
 set -e
 
-FORMAT="m4a"
+FORMAT="mp3"
 
 FILENAME=$(youtube-dl "$1" -o "%(title)s" --get-filename)
 SANITIZED=$(echo $FILENAME | tr -d "\"" | tr -d "'")
