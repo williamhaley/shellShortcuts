@@ -1,0 +1,78 @@
+#!/usr/bin/env expect
+
+# Script to automatically connect/pair with a bluetooth speaker in Arch Linux.
+#
+# https://www.safaribooksonline.com/library/view/exploring-expect/9781565920903/ch01.html
+#
+# Bluetooth needs to be enabled/running on the system. Pulse will start
+# automatically as needed.
+
+# Set log level. 1 for debugging. 0 for no output.
+log_user 0
+
+set deviceName "BSK10"
+
+spawn bluetoothctl
+expect -re "#"
+
+send "power off\r"
+expect "Changing power off succeeded"
+expect "Powered: no"
+
+send "power on\r"
+expect "Changing power on succeeded"
+expect "Powered: yes"
+
+send "scan on\r"
+expect "Discovery started"
+expect "Discovering: yes"
+
+set count 0
+set found false
+set mac ""
+while { $count < 5 } {
+	send "devices\r"
+	set timeout 5
+	expect {
+		timeout {
+			puts "$deviceName not found. Trying again."
+			continue
+		}
+		-re "Device (\[A-F0-9:]*) $deviceName" {
+			set found true
+			set mac $expect_out(1,string)
+			break
+		}
+	}
+	incr count 1
+}
+
+if { ! $found } {
+	puts "Device not found after $count attempts. Is it available? Already paired somewhere else?"
+	exit 1
+}
+
+puts "Mac is: $mac"
+
+send "pair $mac\r"
+expect "Attempting to pair with"
+expect {
+	"Failed to pair*AlreadyExists" {
+		puts "Already paired"
+	}
+}
+
+send "connect $mac\r"
+expect "connect $mac"
+expect "Attempting to connect to $mac"
+expect "Device FC:58:FA:24:48:66 Connected: yes"
+puts "Connected: $deviceName $mac"
+
+regsub -all ":" $mac "_" card
+set card "bluez.$card"
+puts "Setting pulse sink card: $card"
+eval spawn pacmd set-card-profile $card a2dp_sink
+
+puts "You may need to go into pavucontrol and set the $deviceName profile to A2DP"
+
+exit 0
