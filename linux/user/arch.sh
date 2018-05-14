@@ -26,7 +26,6 @@ pacman -Syy --noconfirm --needed \
 	vlc cmus mplayer sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
-	redshift \
 	fbida ranger w3m
 
 # Allow viewing images with framebuffer ala `fbi`
@@ -43,15 +42,6 @@ systemctl start docker
 
 systemctl enable org.cups.cupsd.service
 systemctl start org.cups.cupsd.service
-
-sudo -u $USERNAME \
-	XDG_RUNTIME_DIR="/run/user/$(id -u $USERNAME)" \
-	DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" \
-	systemctl --user enable redshift
-sudo -u $USERNAME \
-	XDG_RUNTIME_DIR="/run/user/$(id -u $USERNAME)" \
-	DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus" \
-	systemctl --user start redshift
 
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
