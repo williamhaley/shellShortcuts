@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Install and enable spice-vdagent in the guest for copy/paste.
+
+snapshot=1
+while getopts ":bh:" opt;
+do
+  case ${opt} in
+    b ) snapshot=0
+      ;;
+    h ) disk="-hda ${OPTARG}"
+      ;;
+    \? ) echo "Usage: cmd [-b] [-h path/to/disk]"
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+flags=""
+if [ $snapshot -eq 1 ];
+then
+	flags="-snapshot"
+fi
+
+qemu-system-x86_64 \
+	-m 2048 \
+	-enable-kvm \
+	-daemonize \
+	-vga qxl \
+	-spice port=5930,disable-ticketing \
+	-device virtio-serial-pci \
+	-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+	-chardev spicevmc,id=spicechannel0,name=vdagent \
+	${disk} ${flags}
+
+if [ $? -eq 0 ];
+then
+	remote-viewer spice://127.0.0.1:5930 > /dev/null 2>&1 &
+fi
+
+echo "Connect with: remote-viewer spice://127.0.0.1:5930"
+

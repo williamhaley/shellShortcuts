@@ -17,7 +17,7 @@ pacman -Syy --noconfirm --needed \
 	jq \
 	pulseaudio pavucontrol \
 	vagrant \
-	virtualbox qemu qemu-arch-extra \
+	virtualbox qemu qemu-arch-extra virt-viewer \
 	intel-ucode \
 	docker docker-compose \
 	electrum \
