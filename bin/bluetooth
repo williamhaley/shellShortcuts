@@ -23,36 +23,58 @@ send "power on\r"
 expect "Changing power on succeeded"
 expect "Powered: yes"
 
-send "scan on\r"
-expect "Discovery started"
-expect "Discovering: yes"
+proc findDevice { deviceName } {
+	send "scan on\r"
+	expect "Discovery started"
+	expect "Discovering: yes"
 
-set count 0
-set found false
-set mac ""
-while { $count < 5 } {
-	send "devices\r"
-	set timeout 5
-	expect {
-		timeout {
-			puts "$deviceName not found. Trying again."
-			continue
+	set count 0
+	set found false
+	set mac ""
+	while { $count < 5 } {
+		send "devices\r"
+		set timeout 5
+		expect {
+			timeout {
+				puts "$deviceName not found. Trying again."
+				continue
+			}
+			-re "Device (\[A-F0-9:]*) $deviceName" {
+				set found true
+				set mac $expect_out(1,string)
+				break
+			}
 		}
-		-re "Device (\[A-F0-9:]*) $deviceName" {
-			set found true
-			set mac $expect_out(1,string)
-			break
-		}
+		incr count 1
 	}
-	incr count 1
+	
+	send "scan off\r"
+
+	if { ! $found } {
+		puts "Device not found after $count attempts. Is it available? Already paired somewhere else?"
+		exit 1
+	} else {
+		puts "Mac is: $mac"
+	}
+	return $mac
 }
 
-if { ! $found } {
-	puts "Device not found after $count attempts. Is it available? Already paired somewhere else?"
-	exit 1
-}
+# Get the mac address of the device.
+set mac [findDevice $deviceName]
 
-puts "Mac is: $mac"
+# Delete the device.
+send "remove $mac\r"
+expect "Device has been removed"
+
+# Wait a few moments so we can discover again.
+sleep 2
+
+# We don't _really_ need to get the mac again, but we do want to rediscover it.
+# Could probably break out the findDevice function in a more meaningful way.
+set mac [findDevice $deviceName]
+
+send "trust $mac\r"
+expect "Changing $mac trust succeeded"
 
 send "pair $mac\r"
 expect "Attempting to pair with"
@@ -65,7 +87,25 @@ expect {
 send "connect $mac\r"
 expect "connect $mac"
 expect "Attempting to connect to $mac"
-expect "Device FC:58:FA:24:48:66 Connected: yes"
+set timeout 5
+expect {
+	timeout {
+		puts "device not connected"
+		exit 1
+	}
+	"Device FC:58:FA:24:48:66 Connected: yes" {
+		puts "device connected"
+	}
+}
+# I've seen cases where we get "Connected: yes" on connect, but then the
+# connection failed when checking "info". Using this as an extra safeguard.
+send "info $mac\r"
+expect {
+	"Connected: no" {
+		puts "Failed to connect"
+		exit 1
+	}
+}
 puts "Connected: $deviceName $mac"
 
 regsub -all ":" $mac "_" card
