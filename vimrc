@@ -23,3 +23,6 @@ set spell
 hi clear SpellBad
 hi SpellBad cterm=underline,bold
 
+" Whitespace characters
+set list
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<
