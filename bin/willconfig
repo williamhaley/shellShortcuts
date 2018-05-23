@@ -27,6 +27,9 @@ ln -sf $CONFIGS_DIR/tmux/session.4x3 $HOME/.tmux/session.4x3
 mkdir -p $HOME/.config/ranger
 ln -sf $CONFIGS_DIR/rc.conf $HOME/.config/ranger/rc.conf
 
+mkdir -p $HOME/.config/alacritty
+ln -sf $CONFIGS_DIR/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+
 if [ "$IS_MAC" = true ];
 then
 	mac-config

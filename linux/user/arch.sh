@@ -46,5 +46,6 @@ systemctl start org.cups.cupsd.service
 sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
 	google-chrome \
-	visual-studio-code-bin
+	visual-studio-code-bin \
+	alacritty-git
 
