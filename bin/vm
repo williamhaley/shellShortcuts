@@ -2,15 +2,47 @@
 
 # Install and enable spice-vdagent in the guest for copy/paste.
 
+show_help()
+{
+cat << EOF
+Usage: cmd [-e] [-h path/to/disk] [-c path/to/cd.iso]
+
+    -e  Edit the disk image. No snapshot. Otherwise
+        a temporary snapshot is always used.
+
+    -d  Specify the path to a disk image.
+
+    -c  Specify the path to a CD ISO image.
+
+    -h  Show help
+    -?  Show help
+
+EOF
+
+exit 1
+}
+
+if [ $# -eq 0 ];
+then
+    show_help
+    exit 1
+fi
+
 snapshot=1
-while getopts ":bh:" opt;
+while getopts ":ed:c:" opt;
 do
   case ${opt} in
-    b ) snapshot=0
+    e ) snapshot=0
       ;;
-    h ) disk="-hda ${OPTARG}"
+    d ) disk="-hda ${OPTARG}"
       ;;
-    \? ) echo "Usage: cmd [-b] [-h path/to/disk]"
+    c ) cdrom="-cdrom ${OPTARG}"
+      ;;
+    \? ) show_help
+      ;;
+    h ) show_help
+      ;;
+    * ) show_help # catch-all for invalid args
       ;;
   esac
 done
@@ -19,23 +51,29 @@ shift $((OPTIND -1))
 flags=""
 if [ $snapshot -eq 1 ];
 then
-	flags="-snapshot"
+    flags="-snapshot"
 fi
 
+PIDFILE=$(mktemp)
+
 qemu-system-x86_64 \
-	-m 2048 \
-	-enable-kvm \
-	-daemonize \
-	-vga qxl \
-	-spice port=5930,disable-ticketing \
-	-device virtio-serial-pci \
-	-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
-	-chardev spicevmc,id=spicechannel0,name=vdagent \
-	${disk} ${flags}
+    -m 2048 \
+    -vga qxl \
+    -enable-kvm \
+    -daemonize \
+    -machine q35,accel=kvm \
+    -spice port=5930,disable-ticketing \
+    -device virtio-serial-pci \
+    -device amd-iommu \
+    -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+    -chardev spicevmc,id=spicechannel0,name=vdagent \
+    -pidfile $PIDFILE \
+    ${disk} ${cdrom} ${flags}
+echo "Run 'kill -9 $(cat $PIDFILE)' to kill VM"
 
 if [ $? -eq 0 ];
 then
-	remote-viewer spice://127.0.0.1:5930 > /dev/null 2>&1 &
+    remote-viewer spice://127.0.0.1:5930 > /dev/null 2>&1 &
 fi
 
 echo "Connect with: remote-viewer spice://127.0.0.1:5930"
