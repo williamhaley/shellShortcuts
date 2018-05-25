@@ -10,6 +10,23 @@
 # Set log level. 1 for debugging. 0 for no output.
 log_user 0
 
+eval spawn pulseaudio -k
+expect {
+	"Failed to kill daemon" {
+		continue
+	}
+}
+
+eval spawn rm -rf ~/.config/pulse
+
+eval spawn pulseaudio --start
+expect {
+	"Daemon startup failed" {
+		puts "Could not start pulseaudio"
+		exit 1
+	}
+}
+
 set deviceName "BSK10"
 
 spawn bluetoothctl
@@ -93,6 +110,9 @@ expect {
 		puts "device not connected"
 		exit 1
 	}
+	"Connection successful" {
+		puts "device connected"
+	}
 	"Device FC:58:FA:24:48:66 Connected: yes" {
 		puts "device connected"
 	}
@@ -116,3 +136,4 @@ eval spawn pacmd set-card-profile $card a2dp_sink
 puts "You may need to go into pavucontrol and set the $deviceName profile to A2DP"
 
 exit 0
+
