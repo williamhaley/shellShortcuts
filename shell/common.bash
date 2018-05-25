@@ -2,17 +2,18 @@
 
 mkdir -p $HOME/dev
 
-# Specifically put *our* overrides before the standard system paths. This
-# ensures we can (hopefully, when it makes sense) override executables from
-# the system.
-PATH=$CONFIGS_DIR/bin:$PATH
-PATH=$HOME/bin:$PATH
-PATH=$PATH:/opt/local/bin
+# Append system paths to end of $PATH
 PATH=$PATH:/opt/bin
+PATH=$PATH:/opt/local/bin
 PATH=$PATH:/opt/local/sbin
-PATH=$HOME/.local/bin:$PATH
 PATH=$PATH:/sbin
+PATH=$PATH:/usr/local/bin
+
+# Prepend user paths to start of $PATH
+PATH=$HOME/bin:$PATH
+PATH=$HOME/.local/bin:$PATH
 PATH=$HOME/.yarn/bin:$PATH
+PATH=$CONFIGS_DIR/bin:$PATH
 
 # RVM
 PATH=$PATH:$HOME/.rvm/bin

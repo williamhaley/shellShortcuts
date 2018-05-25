@@ -43,15 +43,6 @@ willconfig
 
 # Specific config instructions
 
-## iTerm
-
-[Run these](http://stratus3d.com/blog/2015/02/28/sync-iterm2-profile-with-dotfiles-repository/) then close and reopen iTerm.
-
-```
-defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/configs/iTermSettings"
-defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
-```
-
 ## VSCode
 
 ```
@@ -60,7 +51,8 @@ code \
 	--install-extension EditorConfig.EditorConfig \
 	--install-extension lukehoban.Go \
 	--install-extension CoenraadS.bracket-pair-colorizer \
-	--install-extension oderwat.indent-rainbow
+	--install-extension oderwat.indent-rainbow \
+	--install-extension eg2.tslint
 ```
 
 The `direnv` command should pick up `GOPATH` if using `.envrc` files. Use the command palette -> `Go: Current GOPATH` to verify. Direnv assumes there's a single `.envrc` in your root workspace.
