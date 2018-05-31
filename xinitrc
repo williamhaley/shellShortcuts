@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if command -v dropbox > /dev/null;
+then
+	dropbox &
+fi
+
 xbindkeys -p &
 tint2 &
 
