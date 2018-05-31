@@ -4,22 +4,19 @@
 #
 # https://www.safaribooksonline.com/library/view/exploring-expect/9781565920903/ch01.html
 #
-# Bluetooth needs to be enabled/running on the system. Pulse will start
-# automatically as needed.
 
-# Set log level. 1 for debugging. 0 for no output.
-log_user 0
-
-eval spawn pulseaudio -k
-expect {
-	"Failed to kill daemon" {
-		continue
-	}
+if { [lindex $argv 0] == "-v" } {
+	# Set log level. 1 for debugging. 0 for no output.
+	log_user 1
+} else {
+	log_user 0
 }
 
+eval spawn pulseaudio -k
 eval spawn rm -rf ~/.config/pulse
-
+sleep 2
 eval spawn pulseaudio --start
+set timeout -0
 expect {
 	"Daemon startup failed" {
 		puts "Could not start pulseaudio"
@@ -32,6 +29,7 @@ set deviceName "BSK10"
 spawn bluetoothctl
 expect -re "#"
 
+set timeout 5
 send "power off\r"
 expect "Changing power off succeeded"
 expect "Powered: no"
@@ -49,11 +47,12 @@ proc findDevice { deviceName } {
 	set found false
 	set mac ""
 	while { $count < 5 } {
+		incr count 1
 		send "devices\r"
 		set timeout 5
 		expect {
 			timeout {
-				puts "$deviceName not found. Trying again."
+				puts "$deviceName not found. Trying again \[$count\]"
 				continue
 			}
 			-re "Device (\[A-F0-9:]*) $deviceName" {
@@ -62,7 +61,6 @@ proc findDevice { deviceName } {
 				break
 			}
 		}
-		incr count 1
 	}
 	
 	send "scan off\r"
