@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+total=$(ffprobe -v 0 -show_entries format=duration -of compact=p=0:nk=1 "${1}")
+
+echo "Total duration of audio: $total seconds"
+
+if [ -z "$2" ];
+then
+	echo "Must specify duration to trim"
+	exit 1
+fi
+
+path=$(dirname "${1}")
+filename=$(basename -- "$1")
+extension="${filename##*.}"
+filename="${filename%.*}"
+new_name="${path}/${filename}.new.${extension}"
+
+trim=$2
+
+if [ $trim -lt 0 ];
+then
+	# Trim off the last X seconds.
+	duration=$(echo "$total + $trim" | bc)
+	ffmpeg -i "${1}" -t $duration -acodec copy -vcodec copy "${new_name}"
+else
+	# Trim off the first X seconds.
+	seek_position=$trim
+	ffmpeg -i "${1}" -ss $seek_position -acodec copy -vcodec copy "${new_name}"
+fi
+
