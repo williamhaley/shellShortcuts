@@ -2,6 +2,8 @@
 
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
+set -e
+
 pacman -Syy --noconfirm --needed \
 	firefox \
 	sane \
@@ -22,11 +24,11 @@ pacman -Syy --noconfirm --needed \
 	docker docker-compose \
 	electrum \
 	handbrake handbrake-cli dvdbackup cdrkit \
-	ttf-symbola \
 	vlc cmus mplayer sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
-	fbida ranger w3m
+	fbida ranger w3m \
+	expect
 
 # Allow viewing images with framebuffer ala `fbi`
 usermod -a -G video $USERNAME
@@ -48,5 +50,6 @@ sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	google-chrome \
 	visual-studio-code-bin \
 	alacritty-git \
+	ttf-symbola \
 	dropbox
 

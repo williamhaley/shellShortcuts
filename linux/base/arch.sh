@@ -6,7 +6,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 pacman -Syy --noconfirm --needed \
 	base-devel wget rsync vim tmux git curl unzip \
-	sudo openssh wpa_supplicant
+	sudo openssh wpa_supplicant \
+	memtest86+
 
 # sudo
 usermod -a -G sudo $USERNAME || true

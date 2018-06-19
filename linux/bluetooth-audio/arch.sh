@@ -9,7 +9,7 @@
 
 sudo pacman -Syy --needed --noconfirm \
 	pulseaudio pulseaudio-bluetooth pavucontrol \
-	bluez bluez-utils
+	bluez bluez-utils expect
 
 systemctl start bluetooth
 systemctl enable bluetooth

@@ -14,6 +14,6 @@ pacman -Syy --noconfirm --needed \
 	openbox obconf \
 	tint2 \
 	thunar tumbler \
-	feh \
+	feh gpicview \
 	xscreensaver xbindkeys xdotool \
 	noto-fonts noto-fonts-emoji ttf-dejavu
