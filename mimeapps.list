@@ -1,0 +1,10 @@
+[Added Associations]
+audio/mp4=vlc.desktop;
+image/gif=gpicview.desktop;
+image/jpeg=gpicview.desktop;
+image/png=gpicview.desktop;
+video/mp4=vlc.desktop;
+video/quicktime=vlc.desktop;
+
+[Default Applications]
+audio/x-m4a=vlc.desktop

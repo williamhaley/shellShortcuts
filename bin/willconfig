@@ -30,6 +30,9 @@ ln -sf $CONFIGS_DIR/rc.conf $HOME/.config/ranger/rc.conf
 mkdir -p $HOME/.config/alacritty
 ln -sf $CONFIGS_DIR/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 
+mkdir -p $HOME/.config/
+ln -sf $CONFIGS_DIR/mimeapps.list $HOME/.config/mimeapps.list
+
 if [ "$IS_MAC" = true ];
 then
 	mac-config
