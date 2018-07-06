@@ -15,6 +15,8 @@ xrandr \
 
 numlockx &
 
+eval $(ssh-agent)
+
 xscreensaver -no-splash &
 exec openbox-session
 
