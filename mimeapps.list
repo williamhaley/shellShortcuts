@@ -1,3 +1,7 @@
+# xdg-utils
+# xdg-mime query filetype ~/some/file
+# File may be overwritten. *Should* be a symlink in ~/.config 
+
 [Added Associations]
 audio/mp4=vlc.desktop;
 image/gif=gpicview.desktop;
@@ -5,6 +9,8 @@ image/jpeg=gpicview.desktop;
 image/png=gpicview.desktop;
 video/mp4=vlc.desktop;
 video/quicktime=vlc.desktop;
+application/pdf=firefox.desktop;
 
 [Default Applications]
 audio/x-m4a=vlc.desktop
+
