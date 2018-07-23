@@ -62,7 +62,7 @@ proc findDevice { deviceName } {
 			}
 		}
 	}
-	
+
 	send "scan off\r"
 
 	if { ! $found } {
@@ -112,6 +112,9 @@ expect {
 		puts "device connected"
 	}
 	"Device FC:58:FA:24:48:66 Connected: yes" {
+		puts "device connected"
+	}
+	"Pairing successful" {
 		puts "device connected"
 	}
 }

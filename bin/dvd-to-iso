@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+SCRATCH='.'
+device='/dev/sr0'
+
+NAME=$(isoinfo -i ${device} -d | grep -i 'Volume id:' | sed 's|Volume id: ||g')
+
+if [ -z "$NAME" ];
+then
+	echo "No name detected."
+	exit 1
+fi
+
+echo "Name is '$NAME'"
+
+# More supported, but not-always-reliable, method
+# ddrescue -n -b 2048 $DEVICE "$SCRATCH/$NAME.iso" "$SCRATCH/$NAME.mapfile"
+# package is python3-dvdvideo
+
+/home/will/.pyenv/versions/3.6.4/bin/dvdvideo-backup-image ${device} "$SCRATCH/$NAME.iso"
+
+# More supported, but not-always-reliable, method
+# dvdbackup -i "${device}" -o "${SCRATCH}" --mirror --name="${NAME}"
+# mkisofs -V "${NAME}" -dvd-video -udf -o "${SCRATCH}/${NAME}.iso" "${SCRATCH}/${NAME}"
+

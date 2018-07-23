@@ -5,6 +5,7 @@ syntax on
 set number
 
 " Show horizontal ruler at 80 chars
+highlight ColorColumn ctermbg=gray
 set colorcolumn=80
 
 " How many columns constitute a tab

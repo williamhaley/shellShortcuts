@@ -15,6 +15,7 @@ pacman -Syy --noconfirm --needed \
 	aria2 \
 	aws-cli \
 	net-tools tcpdump wireshark-cli \
+	hugo \
 	gimp \
 	jq \
 	pulseaudio pavucontrol \
@@ -23,7 +24,7 @@ pacman -Syy --noconfirm --needed \
 	intel-ucode \
 	docker docker-compose \
 	electrum \
-	handbrake handbrake-cli dvdbackup cdrkit \
+	handbrake handbrake-cli libdvdcss dvdbackup cdrkit \
 	vlc cmus mplayer sound-juicer \
 	rclone \
 	xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
