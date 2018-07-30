@@ -19,5 +19,6 @@
     "extensions.ignoreRecommendations": true,
     "workbench.activityBar.visible": true,
     "editor.minimap.enabled": false,
-    "window.zoomLevel": 0
+    "window.zoomLevel": 0,
+    "typescript.updateImportsOnFileMove.enabled": "always"
 }
