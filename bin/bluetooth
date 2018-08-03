@@ -134,7 +134,7 @@ set card "bluez.$card"
 puts "Setting pulse sink card: $card"
 eval spawn pacmd set-card-profile $card a2dp_sink
 
-puts "You may need to go into pavucontrol and set the $deviceName profile to A2DP"
+#puts "You may need to go into pavucontrol and set the $deviceName profile to A2DP"
 
 exit 0
 

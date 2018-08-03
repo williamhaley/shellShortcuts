@@ -1,14 +1,31 @@
 #!/usr/bin/env bash
 
-total=$(ffprobe -v 0 -show_entries format=duration -of compact=p=0:nk=1 "${1}")
+show_help()
+{
+cat << EOF
+$(basename "$0") FILE DURATION
 
-echo "Total duration of audio: $total seconds"
+    FILE      path to audio file to trim
+    DURATION  positive or negative number. positive trims from start. negative trims from end
+
+EOF
+}
+
+if [ -z "$1" ];
+then
+	show_help
+	exit 1
+fi
 
 if [ -z "$2" ];
 then
-	echo "Must specify duration to trim"
+	show_help
 	exit 1
 fi
+
+total=$(ffprobe -v 0 -show_entries format=duration -of compact=p=0:nk=1 "${1}")
+
+echo "Total duration of audio clip: $total seconds"
 
 path=$(dirname "${1}")
 filename=$(basename -- "$1")
