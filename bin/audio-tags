@@ -114,7 +114,7 @@ if args.album:
 elif args.directory:
 	albums = os.listdir(args.directory)
 	for album in albums:
-		p = Path(album)
+		p = pathlib.Path(album)
 		process_album(str(p.resolve()))
 else:
 	print('Must pass either an album of directory')

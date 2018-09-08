@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://github.com/kholia/OSX-KVM
+
 MY_OPTIONS="+aes,+xsave,+avx,+xsaveopt,avx2,+smep"
 
 if [ -z "${1}" ];
@@ -15,12 +17,16 @@ OVMF_VARS=$DIR/OVMF_VARS-1024x768.fd
 CLOVER=$DIR/Clover.qcow2
 MAC=52:54:00:c9:18:27
 HDD=$DIR/mac_hdd.img
+CORES=2
 
 MY_OPTIONS="+aes,+xsave,+avx,+xsaveopt,avx2,+smep"
 
-qemu-system-x86_64 -enable-kvm -m 3072 -cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,$MY_OPTIONS\
+qemu-system-x86_64 \
+	-enable-kvm \
+	-m 3072 \
+	-cpu Penryn,kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on,$MY_OPTIONS \
 	-machine pc-q35-2.9 \
-	-smp 4,cores=2 \
+	-smp 4,cores=${CORES} \
 	-usb -device usb-kbd -device usb-tablet \
 	-device isa-applesmc,osk="ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc" \
 	-drive if=pflash,format=raw,readonly,file="${OVMF_CODE}" \
@@ -34,5 +40,7 @@ qemu-system-x86_64 -enable-kvm -m 3072 -cpu Penryn,kvm=on,vendor=GenuineIntel,+i
 	-netdev user,id=net0 -device e1000-82545em,netdev=net0,id=net0,mac="${MAC}" \
 	-monitor stdio
 
+#	-usb -device usb-host,vendorid=0x05ac,productid=0x12a8 \
 #	-device ide-drive,bus=ide.0,drive=MacDVD \
 #	-drive id=MacDVD,if=none,snapshot=on,media=cdrom,file=./'HighSierra-10.13.5.iso' \
+
