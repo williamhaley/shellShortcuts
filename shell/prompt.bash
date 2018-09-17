@@ -64,11 +64,78 @@ __prompt()
 	PS1+="\n${RED_FG}$ ${RESET}"
 }
 
+function __versions()
+{
+	local str=""
+
+	if type python | grep pyenv > /dev/null;
+	then
+		if hash python 2>/dev/null;
+		then
+			local v=$(python --version)
+
+			if [ -n "${v}" ];
+			then
+				if [ -n "${str}" ];
+				then
+					str+=" | "
+				fi
+
+				str+="\n\001$(tput setaf 3)\002pyenv:\001$(tput sgr0)\002 ${v:7}"
+			fi
+		fi
+	fi
+
+	if hash go 2>/dev/null;
+	then
+		local v=$(go version)
+
+		if [ -n "${v}" ];
+		then
+			if [ -n "{$str}" ];
+			then
+				str+=" | "
+			fi
+
+			str+="\001$(tput setaf 6)\002Golang:\001$(tput sgr0)\002 ${v:13:5}"
+		fi
+	fi
+
+	if type node | grep nvm > /dev/null;
+	then
+		if hash node 2>/dev/null;
+		then
+			local v=$(node -v)
+		fi
+
+		if [ -n "${v}" ];
+		then
+			if [ -n "${str}" ];
+			then
+				str+=" | "
+			fi
+			str+="\001$(tput setaf 2)\002Node (nvm):\001$(tput sgr0)\002 ${v:1}"
+		fi
+	fi
+
+	if type ruby | grep rvm > /dev/null;
+	then
+		local v=$(ruby -v)
+		if [ -n "${str}" ];
+		then
+			str+=" | "
+		fi
+		str+="\001$(tput setaf 1)\002Ruby (rvm):\001$(tput sgr0)\002 ${v:5:8}\n"
+	fi
+
+	printf "${str}"
+}
+
 PS1=""
 PS1+="${CYAN_FG}\h:${BLUE_FG}\w"
 PS1+=" ${GREEN_FG}(\u)"
-PS1+=" ${YELLOW_FG}"
-PS1+='$(__git_ps1 "[%s]")'
+PS1+='$(__versions)'
+PS1+="${GREEN_FG}"'$(__git_ps1 "\n%s")'"${RESET}"
 PS1+="\n"
 PS1+="${RED_FG}\$"
 PS1+="${RESET} "

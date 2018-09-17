@@ -10,6 +10,24 @@ for APP in `ls $1`;
 		cd "$1/$APP"
 		if [ -d ".git" ];
 		then
+			git submodule update --init --recursive > /dev/null 2>&1
+			git pull --rebase > /dev/null 2>&1
+		fi
+	) &
+done
+
+wait
+
+for APP in `ls $1`;
+	do (
+		if [ ! -d "${1}/${APP}" ];
+		then
+			continue
+		fi
+
+		cd "$1/$APP"
+		if [ -d ".git" ];
+		then
 			printf "${APP}: "
 			printfgreen "[$(git currentbranch)] "
 			git isdirty && printfred "dirty"
@@ -23,9 +41,8 @@ for APP in `ls $1`;
 			else
 				printf "${numbranches}\n"
 			fi
-			git submodule update --init --recursive
-			git pull --rebase
 			echo ""
 		fi
 	)
 done
+

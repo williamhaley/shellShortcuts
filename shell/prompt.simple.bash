@@ -7,7 +7,6 @@ GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_STATESEPARATOR=" "
 
 PS1=""
-
 PS1+='\h \u \w $(__git_ps1 "[%s]")'
 PS1+="\n$ "
 
