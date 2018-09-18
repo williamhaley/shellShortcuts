@@ -52,7 +52,8 @@ code \
 	--install-extension lukehoban.Go \
 	--install-extension CoenraadS.bracket-pair-colorizer \
 	--install-extension oderwat.indent-rainbow \
-	--install-extension eg2.tslint
+	--install-extension eg2.tslint \
+	--install-extension vsmobile.vscode-react-native
 ```
 
 The `direnv` command should pick up `GOPATH` if using `.envrc` files. Use the command palette -> `Go: Current GOPATH` to verify. Direnv assumes there's a single `.envrc` in your root workspace.
