@@ -101,7 +101,7 @@ function __versions()
 		fi
 	fi
 
-	if type node | grep nvm > /dev/null;
+	if type node 2> /dev/null | grep nvm > /dev/null;
 	then
 		if hash node 2>/dev/null;
 		then
@@ -132,11 +132,10 @@ function __versions()
 }
 
 PS1=""
-PS1+="${CYAN_FG}\h:${BLUE_FG}\w"
-PS1+=" ${GREEN_FG}(\u)"
+PS1+="${CYAN_FG}\h (\u)"
 PS1+='$(__versions)'
-PS1+="${GREEN_FG}"'$(__git_ps1 "\n%s")'"${RESET}"
 PS1+="\n"
+PS1+="${BLUE_FG}\w${GREEN_FG} "'$(__git_ps1 "[%s]")'"\n"
 PS1+="${RED_FG}\$"
 PS1+="${RESET} "
 

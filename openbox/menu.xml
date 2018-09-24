@@ -23,25 +23,6 @@
   </item>
 </menu>
 
-<menu id="apps-multimedia-menu" label="Multimedia">
-  <item label="Music">
-    <action name="Execute">
-      <command>alacritty --command cmus</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-  <item label="Video">
-    <action name="Execute">
-      <command>vlc</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-  </item>
-</menu>
-
 <menu id="apps-graphics-menu" label="Graphics">
   <item label="Gimp">
     <action name="Execute">
@@ -73,7 +54,6 @@
   <menu id="apps-graphics-menu"/>
   <menu id="apps-net-menu"/>
   <menu id="apps-office-menu"/>
-  <menu id="apps-multimedia-menu"/>
   <menu id="apps-term-menu"/>
   <menu id="apps-fileman-menu"/>
   <separator label="Quick Access" />
@@ -106,6 +86,11 @@
   <item label="VirtualBox">
     <action name="Execute">
       <command>VirtualBox</command>
+    </action>
+  </item>
+  <item label="VLC">
+    <action name="Execute">
+      <command>vlc</command>
     </action>
   </item>
   <separator label="System" />
