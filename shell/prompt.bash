@@ -131,11 +131,10 @@ function __versions()
 	printf "${str}"
 }
 
-PS1=""
-PS1+="${CYAN_FG}\h (\u)"
+PS1="\n"
+PS1+="${CYAN_FG}\u${RESET} on ${CYAN_FG}\h${RESET} at ${CYAN_FG}\w${RESET} ${GREEN_FG}"'$(__git_ps1 "[%s]")'"${RESET}"
 PS1+='$(__versions)'
 PS1+="\n"
-PS1+="${BLUE_FG}\w${GREEN_FG} "'$(__git_ps1 "[%s]")'"\n"
 PS1+="${RED_FG}\$"
 PS1+="${RESET} "
 
