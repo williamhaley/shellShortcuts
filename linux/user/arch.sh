@@ -18,7 +18,7 @@ pacman -Syy --noconfirm --needed \
 	hugo \
 	gimp \
 	jq \
-	pulseaudio pavucontrol \
+	alsa-utils pulseaudio pavucontrol \
 	vagrant \
 	virtualbox qemu qemu-arch-extra virt-viewer \
 	intel-ucode \
