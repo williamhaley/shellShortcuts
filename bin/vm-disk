@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+out=sda.img
+
+if [ -f "$out" ];
+then
+	echo "$out already exists"
+	exit 1
+fi
+
+qemu-img create -f qcow2 "${out}" 40G
+

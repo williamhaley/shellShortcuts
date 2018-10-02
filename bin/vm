@@ -68,6 +68,7 @@ qemu-system-x86_64 \
     -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
     -chardev spicevmc,id=spicechannel0,name=vdagent \
     -pidfile $PIDFILE \
+    -boot d \
     ${disk} ${cdrom} ${flags}
 echo "Run 'kill -9 $(cat $PIDFILE)' to kill VM"
 
