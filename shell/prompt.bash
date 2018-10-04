@@ -64,77 +64,58 @@ __prompt()
 	PS1+="\n${RED_FG}$ ${RESET}"
 }
 
+__version()
+{
+	label=$1
+	bin=$2
+	regex=$3
+	versionCmd=$4
+	tputColor=$5
+	useSeparator=$6
+
+	if ! $(test -x $(which "$bin" | head -1)) 2>/dev/null;
+	then
+		return 1
+	fi
+
+	location="sys"
+	if [[ "$(which "$bin" | head -1)" =~ "$HOME" ]];
+	then
+		location="user"
+	fi
+
+	if [[ ! "$(eval "$versionCmd")" =~ $regex ]];
+	then
+		return 1
+	fi
+
+	local v="${BASH_REMATCH[1]}"
+	if [ $useSeparator = 0 ];
+	then
+		printf " | "
+	fi
+	printf "\001$(tput setaf $tputColor)\002${label} [$location]:\001$(tput sgr0)\002 ${v}"
+}
+
 function __versions()
 {
-	local str=""
+	# Use return status to indicate whether or not we prepend a
+	# separator for each version number. 0 means separator, 1 means
+	# no separator.
+	local sep=1
 
-	if type python | grep pyenv > /dev/null;
-	then
-		if hash python 2>/dev/null;
-		then
-			local v=$(python --version)
-
-			if [ -n "${v}" ];
-			then
-				if [ -n "${str}" ];
-				then
-					str+=" | "
-				fi
-
-				str+="\n\001$(tput setaf 3)\002pyenv:\001$(tput sgr0)\002 ${v:7}"
-			fi
-		fi
-	fi
-
-	if hash go 2>/dev/null;
-	then
-		local v=$(go version)
-
-		if [ -n "${v}" ];
-		then
-			if [ -n "{$str}" ];
-			then
-				str+=" | "
-			fi
-
-			str+="\001$(tput setaf 6)\002Golang:\001$(tput sgr0)\002 ${v:13:5}"
-		fi
-	fi
-
-	if type node 2> /dev/null | grep nvm > /dev/null;
-	then
-		if hash node 2>/dev/null;
-		then
-			local v=$(node -v)
-		fi
-
-		if [ -n "${v}" ];
-		then
-			if [ -n "${str}" ];
-			then
-				str+=" | "
-			fi
-			str+="\001$(tput setaf 2)\002Node (nvm):\001$(tput sgr0)\002 ${v:1}"
-		fi
-	fi
-
-	if type ruby | grep rvm > /dev/null;
-	then
-		local v=$(ruby -v)
-		if [ -n "${str}" ];
-		then
-			str+=" | "
-		fi
-		str+="\001$(tput setaf 1)\002Ruby (rvm):\001$(tput sgr0)\002 ${v:5:8}\n"
-	fi
-
-	printf "${str}"
+	__version "Go" "go" "go([0-9]+.[0-9]+.[0-9]+)" "go version" 6 $sep
+	sep="$?"
+	__version "Python" "python" "([0-9]+.[0-9]+.[0-9]+)" "python --version" 3 $sep
+	sep="$?"
+	__version "Node" "node" "([0-9]+.[0-9]+.[0-9]+)" "node -v" 2 $sep
+	sep="$?"
+	__version "Ruby" "ruby" "([0-9]+.[0-9]+.[0-9]+)" "ruby -v" 1 $sep
 }
 
 PS1="\n"
 PS1+="${CYAN_FG}\u${RESET} on ${CYAN_FG}\h${RESET} at ${CYAN_FG}\w${RESET} ${GREEN_FG}"'$(__git_ps1 "[%s]")'"${RESET}"
-PS1+='$(__versions)'
-PS1+="\n"
+PS1+="\n"'$(__versions)'"\n"
 PS1+="${RED_FG}\$"
 PS1+="${RESET} "
 
