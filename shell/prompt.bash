@@ -73,18 +73,18 @@ __version()
 	tputColor=$5
 	useSeparator=$6
 
-	if ! $(test -x $(which "$bin" | head -1)) 2>/dev/null;
+	if ! $(test -x $(which "$bin" 2> /dev/null | head -1)) 2>/dev/null;
 	then
 		return 1
 	fi
 
 	location="sys"
-	if [[ "$(which "$bin" | head -1)" =~ "$HOME" ]];
+	if [[ "$(which "$bin" 2> /dev/null | head -1)" =~ "$HOME" ]];
 	then
 		location="user"
 	fi
 
-	if [[ ! "$(eval "$versionCmd")" =~ $regex ]];
+	if [[ ! "$(eval "$versionCmd" 2> /dev/null)" =~ $regex ]];
 	then
 		return 1
 	fi
@@ -104,13 +104,10 @@ function __versions()
 	# no separator.
 	local sep=1
 
-	__version "Go" "go" "go([0-9]+.[0-9]+.[0-9]+)" "go version" 6 $sep
-	sep="$?"
-	__version "Python" "python" "([0-9]+.[0-9]+.[0-9]+)" "python --version" 3 $sep
-	sep="$?"
-	__version "Node" "node" "([0-9]+.[0-9]+.[0-9]+)" "node -v" 2 $sep
-	sep="$?"
-	__version "Ruby" "ruby" "([0-9]+.[0-9]+.[0-9]+)" "ruby -v" 1 $sep
+	__version "Go" "go" "go([0-9]+.[0-9]+[.[0-9]+]?)" "go version" 6 $sep && sep=0
+	__version "Python" "python" "([0-9]+.[0-9]+.[0-9]+)" "python --version" 3 $sep && sep=0
+	__version "Node" "node" "([0-9]+.[0-9]+.[0-9]+)" "node -v" 2 $sep && sep=0
+	__version "Ruby" "ruby" "([0-9]+.[0-9]+.[0-9]+)" "ruby -v" 1 $sep && sep=0
 }
 
 PS1="\n"
