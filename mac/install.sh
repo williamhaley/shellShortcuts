@@ -21,10 +21,11 @@ brew cask install \
 	gimp \
 	google-chrome \
 	google-drive \
-	vlc \
 	slack \
+	vagrant \
 	virtualbox \
-	vagrant
+	visual-studio-code \
+	vlc
 
 # Install the App, not just binaries.
 brew cask install docker

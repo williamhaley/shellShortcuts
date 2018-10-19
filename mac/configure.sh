@@ -16,7 +16,7 @@ function menuicons
 		"/System/Library/CoreServices/Menu Extras/AirPort.menu" \
 		"/System/Library/CoreServices/Menu Extras/Volume.menu" \
 		"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
-		"/System/Library/CoreServices/Menu Extras/Displays.menu"
+		"/System/Library/CoreServices/Menu Extras/Displays.menu" \
 		"/System/Library/CoreServices/Menu Extras/Clock.menu"
 
 	killall SystemUIServer
