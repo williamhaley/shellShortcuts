@@ -4,9 +4,14 @@ docker stop $(docker ps -aq)
 
 docker system prune -a -f
 
-if [ -f "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2" ];
+if [ "$IS_MAC" = "true" ];
 then
-	rm "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2"
+	if [ -f "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2" ];
+	then
+		rm "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2"
+
+	fi
 
 	killall Docker ; open /Applications/Docker.app
 fi
+

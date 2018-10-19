@@ -12,33 +12,6 @@ Try to keep this as pristine as possible. Avoid clutter.
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-# Scripted configuration
-
-It is possible to use AppleScript or bash to configure settings, but kind of a nightmare.
-
-AppleScript requires access to accessibility, which is fine, unless a malicious script runs on your machine.
-
-The bash scripts, `/usr/libexec/PlistBuddy`, and `defaults` _can_ work, but seem hit or miss to me.
-
-Best bet is to configure by hand.
-
-Here are some sample scripts though.
-
-```
-# config.scpt
-tell application "System Preferences"
-	reveal anchor "General" of pane id "com.apple.preference.security"
-	tell application "System Events" to tell process "System Preferences"
-		click checkbox "Require password" of tab group 1 of window "Security"
-	end tell
-	quit
-end tell
-```
-
-```
-defaults -currentHost read com.apple.screensaver
-```
-
 # Install apps
 
 Install XCode, then...
@@ -49,17 +22,9 @@ Install XCode, then...
 
 # Configure
 
-* Select the correct audio output device.
-* Show on-screen-display for volume changes.
-* Play sound effect for volume changes.
-* Load iTerm2 preferences from `configs`.
-* Log in to the App Store.
-* Log in to iTunes.
-* Setup whatever configs are needed using this repo.
-* Enable the firewall under security.
-* Change duration for password requirement on lock/screensaver to "immediately" under security.
-* Set the screen saver to start after 5 minutes.
-* Disable sleeping (set the time interval to "Never").
+```
+./configure.sh
+```
 
 # Encrypted $HOME
 
