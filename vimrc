@@ -11,6 +11,12 @@ set colorcolumn=80
 " How many columns constitute a tab
 set tabstop=4
 
+" How many spaces to use if we shift (indent or dedent) code
+set shiftwidth=4
+
+" Use spaces for tab
+set expandtab
+
 " Change line number highlight
 hi LineNr ctermfg=DarkMagenta
 
