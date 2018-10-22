@@ -11,16 +11,18 @@ xcode-select --install
 brew install \
 	qemu \
 	ffmpeg \
+	jq \
 	tmux \
 	rsync \
 	golang
 
 brew cask install \
+	1password \
 	caffeine \
 	firefox \
 	gimp \
 	google-chrome \
-	google-drive \
+	google-backup-and-sync \
 	slack \
 	vagrant \
 	virtualbox \

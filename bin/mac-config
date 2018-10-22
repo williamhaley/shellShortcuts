@@ -47,31 +47,3 @@ defaults write com.apple.menuextra.clock IsAnalog -bool false
 # Show battery percentage in menu bar
 defaults write com.apple.menuextra.battery ShowPercent -string "YES"
 
-add-to-dock()
-{
-	defaults \
-		write \
-		com.apple.dock \
-		persistent-apps \
-		-array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/${1}</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
-}
-
-# Clear all the apps first
-defaults write com.apple.dock persistent-apps -array
-
-add-to-dock "Google Chrome.app"
-add-to-dock "iTerm.app"
-add-to-dock "Visual Studio Code.app"
-add-to-dock "Slack.app"
-
-killall Dock
-
-exit 1
-
-dockutil --no-restart --remove all
-dockutil --no-restart --add "/Applications/Google Chrome.app"
-dockutil --no-restart --add "/Applications/Utilities/Terminal.app"
-dockutil --no-restart --add "/Applications/Visual Studio Code.app"
-dockutil --no-restart --add "/Applications/Slack.app"
-
-killall Dock

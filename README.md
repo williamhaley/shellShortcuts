@@ -49,7 +49,7 @@ willconfig
 code \
 	--install-extension streetsidesoftware.code-spell-checker \
 	--install-extension EditorConfig.EditorConfig \
-	--install-extension lukehoban.Go \
+	--install-extension ms-vscode.Go \
 	--install-extension CoenraadS.bracket-pair-colorizer \
 	--install-extension oderwat.indent-rainbow \
 	--install-extension eg2.tslint \
