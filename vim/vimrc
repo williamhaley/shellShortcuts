@@ -1,6 +1,9 @@
 " Syntax highlighting
 syntax on
 
+" Use the dracula syntax theme
+color dracula
+
 " Show line numbers
 set number
 

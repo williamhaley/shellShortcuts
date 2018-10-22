@@ -18,7 +18,8 @@ mkdir -p $HOME/.aws
 ln -sf $CONFIGS_DIR/aws/config $HOME/.aws/config
 
 mkdir -p $HOME/.vim
-ln -sf $CONFIGS_DIR/vimrc $HOME/.vimrc
+ln -sf $CONFIGS_DIR/vim/vimrc $HOME/.vimrc
+ln -sf $CONFIGS_DIR/vim/dracula.vim $HOME/.vim/colors/
 
 mkdir -p $HOME/.tmux
 ln -sf $CONFIGS_DIR/tmux/tmux.conf $HOME/.tmux.conf
