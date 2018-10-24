@@ -36,7 +36,10 @@ ln -sf $CONFIGS_DIR/mimeapps.list $HOME/.config/mimeapps.list
 
 if [ "$IS_MAC" = true ];
 then
-	mac-config
+	mkdir -p "$HOME/Library/Application Support/Code/User"
+	ln -sf \
+		"$CONFIGS_DIR/vscode/settings.json" \
+		"$HOME/Library/Application Support/Code/User/settings.json"
 fi
 
 if [ "$IS_LINUX" = true ];
