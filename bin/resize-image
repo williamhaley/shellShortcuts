@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+width=-1
+height=-1
+ratio=1
+file=""
+
+while getopts "w:f:h:r:" opt;
+do
+  case ${opt} in
+    w)
+      width=$OPTARG
+      ;;
+    h)
+      height=$OPTARG
+      ;;
+    r)
+      ratio=$OPTARG
+      ;;
+    f)
+      file=$OPTARG
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+if [ -z "$file" ];
+then
+    echo "must specify file with -f"
+    exit 1
+fi
+
+echo $ratio
+if [ "$ratio" != "1" ];
+then
+    echo "use ratio:$ratio"
+    ffmpeg -i "${file}" -vf "scale=iw*${ratio}:ih*${ratio}" "${file}"
+else
+    echo "use width and height:$width $height"
+    ffmpeg -i "${file}" -vf "scale=${width}:${height}" "${file}"
+fi
+

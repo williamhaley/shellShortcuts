@@ -18,6 +18,7 @@ mkdir -p $HOME/.aws
 ln -sf $CONFIGS_DIR/aws/config $HOME/.aws/config
 
 mkdir -p $HOME/.vim
+mkdir -p $HOME/.vim/colors
 ln -sf $CONFIGS_DIR/vim/vimrc $HOME/.vimrc
 ln -sf $CONFIGS_DIR/vim/dracula.vim $HOME/.vim/colors/
 
