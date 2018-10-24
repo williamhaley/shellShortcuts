@@ -283,7 +283,7 @@ call s:h('Conceal', s:comment, s:bglight)
 if has('nvim')
   hi! link SpecialKey DraculaRed
 else
-  hi! link SpecialKey DraculaSubtle
+  hi! link SpecialKey DraculaGreenBold
 endif
 
 hi! link Comment DraculaComment
