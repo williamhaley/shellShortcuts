@@ -4,25 +4,12 @@ If you can't install it from the App Store or Homebrew, then don't.
 
 Try to keep this as pristine as possible. Avoid clutter.
 
-# Install Homebrew
+# Configure
 
-[Homebrew](http://brew.sh/)
-
-```
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-# Install apps
-
-Install XCode, then...
+Install Xcode from the App Store and then install [Homebrew](http://brew.sh/).
 
 ```
 ./install.sh
-```
-
-# Configure
-
-```
 ./configure.sh
 ```
 

@@ -6,23 +6,20 @@ Various application config files can be copied manually as needed.
 
 # Install
 
-Clone the repo to `$HOME` using the SSH clone URL.
+Clone the repo to `$HOME` using the SSH clone URL. Clobber `.bash_profile` with this.
 
 ```
-cat <<'EOF' >~/.bash_profile
 #
 # ~/.bash_profile
 #
 # Loaded only for login bash sessions (new TTY/SSH).
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
-EOF
 ```
 
-Load my common shell configuration file.
+Append this to `.bashrc`.
 
 ```
-cat <<'EOF' >~/.bashrc
 #
 # ~/.bashrc
 #
@@ -30,7 +27,6 @@ cat <<'EOF' >~/.bashrc
 
 export CONFIGS_DIR=$HOME/configs
 source $CONFIGS_DIR/shell/bashrc
-EOF
 ```
 
 Close and re-open the terminal so that those changes take effect.
@@ -40,6 +36,8 @@ Run this to set up aliases, symlinks, copy config files into place, etc.
 ```
 willconfig
 ```
+
+Create a `.gitconfig.work` if you want to override standard `.gitconfig` with settings on this machine.
 
 # Specific config instructions
 
