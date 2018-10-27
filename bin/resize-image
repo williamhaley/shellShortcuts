@@ -4,8 +4,9 @@ width=-1
 height=-1
 ratio=1
 file=""
+compression=2 # 31 is worst quality. 10 seems decent for web images, but will vary
 
-while getopts "w:f:h:r:" opt;
+while getopts "w:f:h:r:c:" opt;
 do
   case ${opt} in
     w)
@@ -20,6 +21,9 @@ do
     f)
       file=$OPTARG
       ;;
+    c)
+      compression=$OPTARG
+      ;;
   esac
 done
 shift $((OPTIND -1))
@@ -30,13 +34,14 @@ then
     exit 1
 fi
 
-echo $ratio
+vf=""
 if [ "$ratio" != "1" ];
 then
-    echo "use ratio:$ratio"
-    ffmpeg -i "${file}" -vf "scale=iw*${ratio}:ih*${ratio}" "${file}"
+    vf="scale=iw*${ratio}:ih*${ratio}"
 else
-    echo "use width and height:$width $height"
-    ffmpeg -i "${file}" -vf "scale=${width}:${height}" "${file}"
+    vf="scale=${width}:${height}"
 fi
+
+set -x
+ffmpeg -i "${file}" -qscale:v "${compression}" -vf "${vf}" "${file}"
 
