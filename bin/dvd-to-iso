@@ -17,7 +17,7 @@ echo "Name is '$NAME'"
 # ddrescue -n -b 2048 $DEVICE "$SCRATCH/$NAME.iso" "$SCRATCH/$NAME.mapfile"
 # package is python3-dvdvideo
 
-/home/will/.pyenv/versions/3.6.4/bin/dvdvideo-backup-image ${device} "$SCRATCH/$NAME.iso"
+$HOME/dev/python-dvdvideo/dvdvideo-backup-image "${device}" "${SCRATCH}/${NAME}.iso" && eject
 
 # More supported, but not-always-reliable, method
 # dvdbackup -i "${device}" -o "${SCRATCH}" --mirror --name="${NAME}"

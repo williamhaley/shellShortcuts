@@ -7,6 +7,7 @@ audio/mp4=vlc.desktop;
 image/gif=gpicview.desktop;
 image/jpeg=gpicview.desktop;
 image/png=gpicview.desktop;
+video/mkv=vlc.desktop;
 video/mp4=vlc.desktop;
 video/quicktime=vlc.desktop;
 application/pdf=firefox.desktop;

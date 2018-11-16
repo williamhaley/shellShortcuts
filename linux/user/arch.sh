@@ -5,6 +5,7 @@
 set -e
 
 pacman -Syy --noconfirm --needed \
+    smartmontools \
 	firefox \
 	sane \
 	ntfs-3g exfat-utils syslinux mtools gparted \

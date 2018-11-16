@@ -61,6 +61,9 @@ The `direnv` command should pick up `GOPATH` if using `.envrc` files. Use the co
 Vim 8 plugins.
 
 ```
+# EditorConfig
+git clone https://github.com/editorconfig/editorconfig-vim ~/.vim/pack/plugins/start/editorconfig-vim
+
 # Fuzzy Find
 git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/plugins/start/ctrlp
 
