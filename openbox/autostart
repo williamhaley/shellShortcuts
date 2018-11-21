@@ -1,2 +1,2 @@
-feh --bg-scale $CONFIGS_DIR/img/winter.jpg --bg-image white
+feh --bg-max $CONFIGS_DIR/img/winter.jpg --image-bg white
 
