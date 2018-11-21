@@ -1,3 +1,4 @@
 img/south.jpg filter=lfs diff=lfs merge=lfs -text
 img/winter.jpg filter=lfs diff=lfs merge=lfs -text
 img/night.png filter=lfs diff=lfs merge=lfs -text
+snd/beep.mp3 filter=lfs diff=lfs merge=lfs -text
