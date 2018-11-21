@@ -7,7 +7,7 @@
     // the path anyway.
     "editor.fontSize": 14,
     "editor.renderWhitespace": "all",
-    "workbench.colorTheme": "Monokai Dimmed",
+    "workbench.colorTheme": "Default Light+",
     "editor.trimAutoWhitespace": true,
     "files.trimTrailingWhitespace": true,
     "editor.rulers": [

@@ -1,8 +1,10 @@
 " Syntax highlighting
 syntax on
 
-" Use the dracula syntax theme
-color dracula
+" Light theme
+set t_Co=256
+set background=light
+colorscheme PaperColor
 
 " Show line numbers
 set number
