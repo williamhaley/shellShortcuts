@@ -2,36 +2,6 @@
 
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
 
-if [ -n "${1}" ];
-then
-	if [ "${1}" = "--log" ];
-	then
-		if [ -n "${2}" ];
-		then
-			last=$(ls "$(real-home)/Logs/backup/" | tail -${2} | head -1)
-		else
-			last=$(ls "$(real-home)/Logs/backup/" | tail -1)
-		fi
-
-		echo "log file: ${last}"
-		echo
-
-		cat "$(real-home)/Logs/backup/${last}"
-		exit 0
-	else
-		echo "--log is the only valid parameter"
-		exit 1
-	fi
-fi
-
-name="$(date-8601)"
-log="$(real-home)/Logs/backup/${name}.log"
-
-echo "log file: ${log}"
-echo
-
-mkdir -p "$(real-home)/Logs/backup"
-
 interrupt()
 {
 	echo "Script interrupted."
@@ -44,24 +14,20 @@ do_rsync()
 {
 	rsync_opts="--delete-excluded --delete-after --exclude=node_modules $3"
 
-	echo "rsync: $1 ==> $2" | tee -a "${log}"
-	echo "" >> "${log}"
-
-	wrsync ${rsync_opts} "$1" "$2" >> "${log}" 2>&1
-
-	echo "" >> "${log}"
+	echo "rsync: $1 ==> $2"
+	echo ""
+	wrsync ${rsync_opts} "$1" "$2"
+	echo ""
 }
 
 do_rclone()
 {
 	rsync_opts="--delete-excluded --delete-after $3"
 
-	echo "rclone: $1 ==> $2" | tee -a "${log}"
-	echo "" >> "${log}"
-
-	sudo -u ${SUDO_USER:-$USER} wrclone sync ${rsync_opts} "$1" "$2" >> "${log}" 2>&1
-
-	echo "" >> "${log}"
+	echo "rclone: $1 ==> $2"
+	echo ""
+	sudo -u ${SUDO_USER:-$USER} wrclone sync ${rsync_opts} "$1" "$2"
+	echo ""
 }
 
 do_horcrux()
@@ -70,18 +36,16 @@ do_horcrux()
 	then
 		echo "/mnt/horcrux${1} is not mounted"
 	else
-		echo "rclone: horcrux${1}" | tee -a "${log}"
-		echo "" >> "${log}"
-
+		echo "rclone: horcrux${1}"
+		echo ""
 		rsync -avr \
 			--include=Documents/*** \
 			--include=.electrum/*** \
 			--include=lost+found \
 			--exclude=* \
 			--delete-excluded \
-			/home/will/ "/mnt/horcrux${1}/" >> "${log}" 2>&1
-
-		echo "" >> "${log}"
+			/home/will/ "/mnt/horcrux${1}/"
+		echo ""
 	fi
 }
 
