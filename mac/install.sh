@@ -10,6 +10,7 @@ xcode-select --install
 
 brew install \
     ack \
+    awscli \
     qemu \
     ffmpeg \
     jq \
