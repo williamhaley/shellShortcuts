@@ -3,17 +3,20 @@
 # File may be overwritten. *Should* be a symlink in ~/.config
 
 [Added Associations]
+application/pdf=firefox.desktop;
 audio/mp4=vlc.desktop;
+audio/mpeg=vlc.desktop;
 image/gif=gpicview.desktop;
 image/jpeg=gpicview.desktop;
 image/png=gpicview.desktop;
 video/mkv=vlc.desktop;
 video/mkv=vlc.desktop
 video/mp4=vlc.desktop;
+video/mpeg=vlc.desktop;
 video/quicktime=vlc.desktop;
-application/pdf=firefox.desktop;
 
 [Default Applications]
+audio/mpeg=vlc.desktop;
 audio/x-m4a=vlc.desktop
 video/x-matroska=vlc.desktop
 
