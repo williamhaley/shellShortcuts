@@ -163,7 +163,7 @@ def parse_file_name(track_file_name):
 	Raises:
 		IgnoredFileException: if file is not an audio file that needs tagging
 	"""
-	m2 = re.search('^(?:(?P<disk_number>\d+)-)?(?:(?P<track>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', track_file_name)
+	m2 = re.search('^(?:(?P<disk_number>\d+)-)?(?:(?P<track_number>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', track_file_name)
 	if not m2:
 		raise Exception(f'{track_file_name} did not match regex')
 

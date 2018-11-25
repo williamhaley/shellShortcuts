@@ -48,22 +48,6 @@ system-emoji()
 	printf ${EMOJIS[INDEX]}
 }
 
-# Prompt
-
-# Not sure if there's any downside to this pattern. None seen so far.
-# As a bonus, it also allows for easily setting conditionals since this
-# is invoked before every command.
-__prompt()
-{
-	PS1=""
-	PS1+="${WHITE_FG}${BOLD}${BLUE_BG} \h ${CYAN_BG} \u `system-emoji` ${PURPLE_BG} \t ${GREEN_BG} \w ${RESET}"
-	if git -C . rev-parse 2> /dev/null;
-	then
-		PS1+="${WHITE_FG}${BOLD}${RED_BG} $(__git_ps1 "%s") ${RESET}"
-	fi
-	PS1+="\n${RED_FG}$ ${RESET}"
-}
-
 __version()
 {
 	label=$1
@@ -117,10 +101,5 @@ PS1+="${RED_FG}\$"
 PS1+="${RESET} "
 
 # Runs after every command.
-if shopt -q login_shell;
-then
-	PROMPT_COMMAND="echo"
-else
-	PROMPT_COMMAND="__prompt"
-fi
+PROMPT_COMMAND="echo"
 
