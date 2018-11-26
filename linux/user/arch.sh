@@ -10,7 +10,7 @@ pacman -Syy --noconfirm --needed \
 	sane \
 	ntfs-3g exfat-utils syslinux mtools gparted \
 	base-devel linux-headers go jdk8-openjdk \
-	tmux screen \
+	alacritty tmux screen \
 	cups \
 	keepassx2 \
 	aria2 \
@@ -52,7 +52,6 @@ sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	hfsprogs \
 	google-chrome google-musicmanager \
 	visual-studio-code-bin \
-	alacritty-git \
 	ttf-symbola \
 	dropbox
 
