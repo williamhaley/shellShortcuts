@@ -37,23 +37,6 @@
 	status = auto
 	branch = auto
 
-[color "diff"]
-  new = green bold
-  whitespace = red reverse
-  meta = yellow bold
-  frag = magenta bold
-  old = red bold
-
-[color "branch"]
-  current = green bold
-  local = green
-  remote = blue
-
-[color "status"]
-  added = green
-  changed = yellow
-  untracked = cyan
-
 [core]
 	editor = vim
 
