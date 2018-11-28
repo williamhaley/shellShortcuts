@@ -78,7 +78,7 @@ do_full()
 do_b2()
 {
 	do_rclone /home/will/Photographs/         "Backup:willhaley-backup/Photographs/"
-	# No `Music`. Subject to constant metadata changes, and can be recovered from elsewhere.
+	# No `Audio`. Subject to constant metadata changes, and can be recovered from elsewhere.
 	do_rclone /home/will/Software/            "Backup:willhaley-backup/Software/"
 
 	# Encrypted
