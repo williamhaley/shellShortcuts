@@ -9,4 +9,3 @@ if [ "${IS_LINUX}" = "true" ];
 then
 	notify-send --expire-time=20000 "Rest your eyes"
 fi
-

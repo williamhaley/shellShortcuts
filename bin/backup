@@ -12,7 +12,7 @@ trap interrupt INT
 
 do_rsync()
 {
-	rsync_opts="--delete-excluded --delete-after --exclude=node_modules $3"
+	rsync_opts="--delete-excluded --delete-after --exclude=node_modules --exclude=lost+found $3"
 
 	echo "rsync: $1 ==> $2"
 	echo ""
@@ -65,14 +65,38 @@ do_full()
 
 	do_rsync /mnt/will-home/        "/mnt/${1}/willhaley-backup/"
 
-	do_rsync /etc/fstab             "/mnt/${1}/system-backup/fstab"
-	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/crypttab"
-	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/grub"
-	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/cryptdisk"
+	mkdir -p "/mnt/${1}/system-backup"
+	do_rsync /etc/fstab             "/mnt/${1}/system-backup/"
+	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/"
+	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/"
+	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/"
 
-	do_rsync /mnt/data/FamilyBackups/ "/mnt/${1}/FamilyBackups/"
-	do_rsync /mnt/data/PlexDB/       "/mnt/${1}/PlexDB/"
-	do_rsync /mnt/data/Videos/       "/mnt/${1}/Videos/"
+	do_rsync /mnt/data/ "/mnt/${1}/data/"
+}
+
+do_3tb()
+{
+	if ! `findmnt -M "/mnt/${1}" >/dev/null`;
+	then
+		echo "/mnt/${1} is not mounted. Skipping."
+		return
+	fi
+
+	if ! `findmnt -M "/mnt/data" > /dev/null`;
+	then
+		echo "/mnt/data is not available. Skipping ${1}."
+		return
+	fi
+
+	do_rsync /mnt/will-home/        "/mnt/${1}/willhaley-backup/"
+
+	mkdir -p "/mnt/${1}/system-backup"
+	do_rsync /etc/fstab             "/mnt/${1}/system-backup/"
+	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/"
+	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/"
+	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/"
+
+	do_rsync /mnt/data/ "/mnt/${1}/data/" --exclude=Renders
 }
 
 do_b2()
@@ -88,7 +112,7 @@ do_b2()
 }
 
 do_full backup-internal
-do_full backup-external
+do_3tb backup-external
 do_b2
 do_horcrux 1
 do_horcrux 2
