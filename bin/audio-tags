@@ -102,9 +102,7 @@ def process_album(abs_path_to_album, artist_name):
 	for track_file_name in track_file_names:
 		try:
 			disk_number, track_number, title, extension = parse_file_name(track_file_name)
-			log(disk_number, track_number, title, extension)
 			abs_path_to_track = os.path.abspath(os.path.join(abs_path_to_album, track_file_name))
-			log(abs_path_to_track)
 			tag_file(abs_path_to_track, artist_name, album_name, year, disk_number, track_number, title, extension)
 		except IgnoredFileException:
 			continue
@@ -184,6 +182,7 @@ def parse_file_name(track_file_name):
 
 def tag_file(abs_path_to_track, artist_name, album_name, year, disk_number, track_number, title, extension):
 	if extension == 'm4a':
+		log("m4a tag:", abs_path_to_track, disk_number, track_number, artist_name, album_name, title)
 		meta = MP4(abs_path_to_track)
 		meta.clear()
 		meta['\xa9alb'] = album_name
@@ -196,6 +195,7 @@ def tag_file(abs_path_to_track, artist_name, album_name, year, disk_number, trac
 			meta['disk'] = [(int(disk_number),  0)]
 
 	if extension == 'mp3':
+		log("mp3 tag:", abs_path_to_track, disk_number, track_number, artist_name, album_name, title)
 		meta = MP3(abs_path_to_track)
 		meta.clear()
 		meta["TALB"] = TALB(encoding=3, text=album_name)
