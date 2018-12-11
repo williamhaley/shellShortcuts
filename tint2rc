@@ -151,6 +151,7 @@ startup_notifications = 1
 launcher_tooltip = 1
 launcher_item_app = firefox.desktop
 launcher_item_app = google-chrome.desktop
+launcher_item_app = chromium.desktop
 
 #-------------------------------------
 # Clock

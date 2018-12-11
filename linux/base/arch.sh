@@ -35,6 +35,9 @@ cp $DIR/locale.conf /etc/locale.conf
 locale-gen en_US.UTF-8
 locale-gen
 
+# timezone
+ln -sf /usr/share/zoneinfo/US/Central /etc/localtime
+
 # ssh
 mkdir -p /home/$USERNAME/.ssh
 chown $USERNAME:$USERNAME /home/$USERNAME/.ssh
@@ -61,3 +64,4 @@ sudo -u $USERNAME wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.ta
 sudo -u $USERNAME tar zxvf yaourt.tar.gz
 cd yaourt
 sudo -u $USERNAME makepkg -si --noconfirm
+
