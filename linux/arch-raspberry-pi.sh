@@ -39,27 +39,6 @@ EOF
     groupadd sudo
 }
 
-user()
-{
-    local username=$1
-
-    if [ -z ${username} ];
-    then
-        echo "user() func needs a username as an argument"
-    fi
-
-    cat /etc/passwd | grep ${username} >/dev/null 2>&1
-    if [ $? -ne 0 ];
-    then
-        useradd -m -s /bin/bash -G sudo ${username}
-    fi
-    usermod -a -G sudo ${username} || true
-    if getent shadow | grep '^[^:]*:.\?:' | cut -d: -f1 | grep -w ${username} >/dev/null 2>&1;
-    then
-        passwd ${username}
-    fi
-}
-
 aur()
 {
     # makepkg requires sudo
@@ -239,13 +218,13 @@ init
 locale
 sudo
 aur # depends on sudo
-user will # depends on sudo. Prompts for a password for new users.
 firewall
 x
 wifi
 sshd # depends on firewall. Run after so we can add exception for port 22.
 apps
 bluetooth
-usermod -a -G sshusers will || true
-usermod -a -G sshusers aur-user || true
-usermod -a -G docker will || true
+
+# useradd -m -s /bin/bash -G sshusers,docker,sudo will || true
+# usermod -a -G sshusers,docker,sudo will || true
+# passwd will
