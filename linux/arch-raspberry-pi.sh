@@ -60,7 +60,7 @@ user()
     fi
 }
 
-aur-helper()
+aur()
 {
     # makepkg requires sudo
     pacman -Syy --noconfirm --needed \
@@ -167,7 +167,7 @@ sshd()
     usermod -a -G sshusers ${username} || true
     ufw allow 22
 
-    cat <<'EOF' >
+    cat <<'EOF' >/etc/ssh/sshd_config
 PermitRootLogin                 no
 
 UsePAM                          yes
@@ -188,7 +188,6 @@ StrictModes                     yes
 Subsystem                       sftp    internal-sftp
 
 AllowGroups                     sshusers
-
 EOF
 
     chmod 644 /etc/ssh/sshd_config
@@ -239,6 +238,8 @@ apps()
         ack \
         vim
 
+    # go get lfs...
+
     usermod -a -G docker ${username}
 
     systemctl enable docker
@@ -248,7 +249,7 @@ apps()
 init
 locale
 sudo
-aur-helper # depends on sudo running first
+aur # depends on sudo running first
 bluetooth
 user will # depends on sudo running first. Will prompt for a password.
 # firewall
