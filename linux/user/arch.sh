@@ -54,4 +54,3 @@ sudo -u $USERNAME yaourt -S --needed --noconfirm \
 	visual-studio-code-bin \
 	ttf-symbola \
 	dropbox
-

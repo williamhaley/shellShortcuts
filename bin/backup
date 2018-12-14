@@ -112,7 +112,8 @@ do_b2()
 }
 
 do_full backup-internal
-do_3tb backup-external
+do_3tb backup-external-1
+do_3tb backup-external-2
 do_b2
 do_horcrux 1
 do_horcrux 2

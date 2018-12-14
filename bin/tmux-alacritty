@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [ `tmux ls | grep -v attached | wc -l` -gt 0 ];
+then
+	echo "attach to existing!"
+	tmux attach
+else
+	echo "start new"
+	tmux
+fi
+
