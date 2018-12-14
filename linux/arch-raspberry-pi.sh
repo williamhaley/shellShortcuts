@@ -105,9 +105,8 @@ bluetooth()
 {
     # https://wiki.archlinux.org/index.php/Bluetooth_headset#Headset_via_Bluez5.2Fbluez-alsa
 
-    # expect is here for the sake of scripting bluetooth connections.
     pacman -Syy --needed --noconfirm \
-        pulseaudio pulseaudio-bluetooth pavucontrol bluez bluez-utils expect
+        pulseaudio pulseaudio-bluetooth pavucontrol bluez bluez-utils
 
     systemctl start bluetooth
     systemctl enable bluetooth
@@ -153,18 +152,10 @@ wifi()
 
 sshd()
 {
-    local username=$1
-
-    if [ -z ${username} ];
-    then
-        echo "sshd() func needs a username as an argument"
-    fi
-
     pacman -S --noconfirm --needed \
 	    openssh
 
     groupadd sshusers || true
-    usermod -a -G sshusers ${username} || true
     ufw allow 22
 
     cat <<'EOF' >/etc/ssh/sshd_config
@@ -199,13 +190,6 @@ EOF
 
 apps()
 {
-    local username=$1
-
-    if [ -z ${username} ];
-    then
-        echo "apps() func needs a username as an argument"
-    fi
-
     # non-arm - handbrake handbrake-cli vagrant virtualbox intel-ucode memtest86+ rclone syslinux
     # non-arm needs vboxusers group too
 
@@ -238,9 +222,14 @@ apps()
         ack \
         vim
 
-    # go get lfs...
+    cat <<'EOF' >/etc/profile.d/go.sh
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=/usr/local/go
+EOF
 
-    usermod -a -G docker ${username}
+    source /etc/profile.d/go.sh
+
+    go get github.com/git-lfs/git-lfs
 
     systemctl enable docker
     systemctl start docker
@@ -249,10 +238,14 @@ apps()
 init
 locale
 sudo
-aur # depends on sudo running first
-bluetooth
-user will # depends on sudo running first. Will prompt for a password.
-# firewall
+aur # depends on sudo
+user will # depends on sudo. Prompts for a password for new users.
+firewall
 x
 wifi
-sshd will
+sshd # depends on firewall. Run after so we can add exception for port 22.
+apps
+bluetooth
+usermod -a -G sshusers will || true
+usermod -a -G sshusers aur-user || true
+usermod -a -G docker will || true
