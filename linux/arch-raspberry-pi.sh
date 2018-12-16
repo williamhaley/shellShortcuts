@@ -58,7 +58,7 @@ aur-user ALL = (root) NOPASSWD: /usr/bin/makepkg, /usr/bin/pacman
 EOF
 
     # package-query
-    sudo -u aur-user -- sh -c "
+    su - aur-user -c "
         rm -rf /tmp/package-query
         mkdir -p /tmp/package-query
         cd /tmp/package-query
@@ -69,7 +69,7 @@ EOF
     "
 
     # yay
-    sudo -u aur-user -- sh -c "
+    su - aur-user -c "
         rm -rf /tmp/yay
         mkdir -p /tmp/yay
         cd /tmp/yay
@@ -105,6 +105,9 @@ x()
         feh gpicview \
         xscreensaver xbindkeys xdotool \
         noto-fonts noto-fonts-emoji ttf-dejavu
+
+    sed -i '/gpu_mem=/d' /boot/config.txt
+    echo "gpu_mem=128" | tee -a /boot/config.txt
 }
 
 firewall()
@@ -167,6 +170,20 @@ EOF
     systemctl start sshd
 }
 
+audio()
+{
+    pacman -Sy --noconfirm --needed \
+        alsa-firmware alsa-plugins alsaplayer
+
+    sed -i '/dtparam=/d' /boot/config.txt
+    echo "dtparam=audio=on" | tee -a /boot/config.txt
+
+    # HDMI
+    # amixer cset numid=3 2
+    # Headphones
+    # amixer cset numid=3 1
+}
+
 apps()
 {
     # non-arm - handbrake handbrake-cli vagrant virtualbox intel-ucode memtest86+ rclone syslinux
@@ -210,21 +227,30 @@ EOF
 
     go get github.com/git-lfs/git-lfs
 
-    systemctl enable docker
-    systemctl start docker
+	 curl -L \
+		-o /usr/local/bin/dbxcli \
+		https://github.com/dropbox/dbxcli/releases/download/v2.1.2/dbxcli-linux-arm && \
+	chmod +x /usr/local/bin/dbxcli
 }
 
-init
-locale
-sudo
-aur # depends on sudo
-firewall
-x
-wifi
-sshd # depends on firewall. Run after so we can add exception for port 22.
-apps
-bluetooth
+if [ -n "${1}" ];
+then
+    ${1}
+else
+    init
+    locale
+    sudo
+    aur # depends on sudo
+    firewall
+    audio
+    x
+    wifi
+    sshd # depends on firewall. Run after so we can add exception for port 22.
+    apps
+    bluetooth
 
-# useradd -m -s /bin/bash -G sshusers,docker,sudo will || true
-# usermod -a -G sshusers,docker,sudo will || true
-# passwd will
+    # useradd -m -s /bin/bash -G sshusers,docker,sudo will || true
+    # usermod -a -G sshusers,docker,sudo will || true
+    # passwd will
+fi
+
