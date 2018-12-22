@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import re, sys
+
+"""
+convert EXIF GPS data in degrees, minutes, seconds to decimal values
+
+exiftool -filename -gpslatitude -gpslongitude -T photo.jpg
+photo.jpg	41 deg 53' 33.46" N	87 deg 38' 2.71" W
+"""
+
+if len(sys.argv) != 3:
+	print('expected two arguments')
+	sys.exit(1)
+
+def convert(exifDegrees):
+	m = re.match('([0-9]+) .* ([0-9]+)\' ([0-9.]+)" ([NSEW])', exifDegrees)
+
+	degrees = float(m.group(1))
+	minutes = float(m.group(2))
+	seconds = float(m.group(3))
+	direction = m.group(4).upper()
+
+	sign = 1
+	if direction == 'S' or direction == 'W':
+		sign = -1
+
+	return sign * (degrees + (minutes / 60) + (seconds / 3600))
+
+lat = convert(sys.argv[1])
+lng = convert(sys.argv[2])
+
+print(str(lat) + ', ' + str(lng))
+

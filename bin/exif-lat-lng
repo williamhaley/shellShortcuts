@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+lat="$(exiftool -b -gpslatitude# "${1}")"
+lng="$(exiftool -b -gpslongitude# "${1}")"
+
+printf "${lat}, ${lng}\n"
+
