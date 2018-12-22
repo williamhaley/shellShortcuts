@@ -5,6 +5,7 @@ then
 	dropbox &
 fi
 
+xmodmap ~/.Xmodmap
 xbindkeys -p &
 tint2 &
 

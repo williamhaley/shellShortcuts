@@ -56,9 +56,8 @@ then
 	ln -sf $CONFIGS_DIR/vscode/settings.json "$HOME/.config/Code/User/settings.json"
 
 	ln -sf $CONFIGS_DIR/xscreensaver "${HOME}/.xscreensaver"
-
 	ln -sf $CONFIGS_DIR/xbindkeysrc "${HOME}/.xbindkeysrc"
-
+	ln -sf $CONFIGS_DIR/Xmodmap "${HOME}/.Xmodmap"
 	ln -sf $CONFIGS_DIR/xinitrc "${HOME}/.xinitrc"
 
 	mkdir -p $HOME/.config/tint2

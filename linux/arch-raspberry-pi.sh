@@ -91,9 +91,8 @@ bluetooth()
     systemctl enable bluetooth
 }
 
-x()
+video()
 {
-    # non-arm - doesn't need xf86-video-fbdev
     pacman -Syy --noconfirm --needed \
         xorg xorg-server xorg-xinit xf86-video-fbdev \
         xterm lxterminal \
@@ -126,8 +125,6 @@ firewall()
 
 wifi()
 {
-    # non-arm - linux-headers broadcom-wl-dkms
-
     pacman -Syy --noconfirm --needed \
 	    wpa_supplicant
 }
@@ -186,9 +183,6 @@ audio()
 
 apps()
 {
-    # non-arm - handbrake handbrake-cli vagrant virtualbox intel-ucode memtest86+ rclone syslinux
-    # non-arm needs vboxusers group too
-
     pacman -Syy --noconfirm --needed \
         sudo openssh \
         smartmontools \
@@ -246,7 +240,7 @@ else
     aur # depends on sudo
     firewall
     audio
-    x
+    video
     wifi
     sshd # depends on firewall. Run after so we can add exception for port 22.
     apps
