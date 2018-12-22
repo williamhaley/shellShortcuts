@@ -231,6 +231,9 @@ EOF
 		-o /usr/local/bin/dbxcli \
 		https://github.com/dropbox/dbxcli/releases/download/v2.1.2/dbxcli-linux-arm && \
 	chmod +x /usr/local/bin/dbxcli
+
+	yay -Syy --noconfirm --needed \
+		hangups
 }
 
 if [ -n "${1}" ];
