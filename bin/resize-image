@@ -43,5 +43,9 @@ else
 fi
 
 set -x
-ffmpeg -i "${file}" -qscale:v "${compression}" -vf "${vf}" "${file}"
+# We could auto-rotate, but that seems beyond the scope of this script
+orientation="$(exiftool -Orientation -b "${file}")"
+ffmpeg -noautorotate -i "${file}" -qscale:v "${compression}" -vf "${vf}" "${file}" -y
+# Maintain the orientation as EXIF data
+exiftool -overwrite_original -Orientation="${orientation}" -n "${file}"
 
