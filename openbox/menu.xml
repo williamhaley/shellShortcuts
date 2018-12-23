@@ -62,6 +62,11 @@
       <command>code</command>
     </action>
   </item>
+  <item label="Text">
+    <action name="Execute">
+      <command>gedit</command>
+    </action>
+  </item>
   <item label="Files">
     <action name="Execute">
       <command>Thunar</command>

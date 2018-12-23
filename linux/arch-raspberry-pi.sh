@@ -210,7 +210,7 @@ apps()
         fbida ranger w3m \
         expect \
         ack \
-        vim
+        vim gedit
 
     cat <<'EOF' >/etc/profile.d/go.sh
 export PATH=$PATH:/usr/local/go/bin

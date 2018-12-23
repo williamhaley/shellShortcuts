@@ -225,7 +225,7 @@ apps()
         fbida ranger w3m \
         expect \
         ack \
-        vim
+        vim gedits
 
     systemctl start docker
     systemctl enable docker
