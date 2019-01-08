@@ -42,10 +42,24 @@ else
     vf="scale=${width}:${height}"
 fi
 
-set -x
+filename="$(basename ${file})"
+extension="${filename##*.}"
+tmp_dir=$(mktemp -d)
+mkdir -p "${tmp_dir}"
+tmp_file="${tmp_dir}/file.${extension}"
+
 # We could auto-rotate, but that seems beyond the scope of this script
 orientation="$(exiftool -Orientation -b "${file}")"
-ffmpeg -noautorotate -i "${file}" -qscale:v "${compression}" -vf "${vf}" "${file}" -y
+
+set -x
+ffmpeg \
+	-noautorotate \
+	-i "${file}" \
+	-qscale:v "${compression}" \
+	-vf "${vf}" \
+	"${tmp_file}" -y && \
+mv "${tmp_file}" "${file}"
+
 # Maintain the orientation as EXIF data
 exiftool -overwrite_original -Orientation="${orientation}" -n "${file}"
 
