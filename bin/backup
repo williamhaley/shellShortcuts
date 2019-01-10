@@ -39,12 +39,10 @@ do_horcrux()
 		echo "rclone: horcrux${1}"
 		echo ""
 		rsync -avr \
-			--include=Documents/*** \
-			--include=.electrum/*** \
-			--include=lost+found \
-			--exclude=* \
-			--delete-excluded \
-			/home/will/ "/mnt/horcrux${1}/"
+			/home/will/Documents \
+			/home/will/.electrum \
+			/home/will/keys \
+			"/mnt/horcrux${1}/"
 		echo ""
 	fi
 }
