@@ -2,11 +2,21 @@
 
 # Scriptable terminal/iTerm/bash/command line configurations/preferences/settings for Apple Mac OSX
 
+function fonts
+{
+	cd /tmp
+	curl -o inconsolata.zip https://fonts.google.com/download?family=Inconsolata
+	unzip inconsolata.zip
+	# TODO WFH Script these installs.
+	open Inconsolata-Regular.ttf
+	open Inconsolata-Bold.ttf
+}
+
 function screensaver
 {
     /usr/bin/defaults -currentHost write com.apple.screensaver 'CleanExit' -string "YES"
     /usr/bin/defaults -currentHost write com.apple.screensaver 'PrefsVersion' -int "100"
-    /usr/bin/defaults -currentHost write com.apple.screensaver 'idleTime' -int "60"
+    /usr/bin/defaults -currentHost write com.apple.screensaver 'idleTime' -int "180"
     /usr/bin/defaults -currentHost write com.apple.screensaver "moduleDict" -dict-add "path" -string "/System/Library/Frameworks/ScreenSaver.framework/Resources/Computer Name.saver"
     /usr/bin/defaults -currentHost write com.apple.screensaver "moduleDict" -dict-add "type" -int "0"
     /usr/bin/defaults -currentHost write com.apple.screensaver 'tokenRemovalAction' -int "0"
@@ -43,11 +53,12 @@ function preferences
     # Double click the titlebar to maximize a window
     defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"
 
-    # Show indicator lights for open applications in the Dock
-    defaults write com.apple.dock show-process-indicators -bool true
+	defaults write com.apple.Terminal.plist "Default Window Settings" "Pro"
+	defaults write com.apple.Terminal.plist "Startup Window Settings" "Pro"
+	defaults write com.apple.Terminal.plist."Window Settings.Pro"
+	/usr/libexec/PlistBuddy -c "Set \"Window Settings\":Pro:shellExitAction 0" ~/Library/Preferences/com.apple.Terminal.plist
 
-    # Minimize windows into their application’s icon
-    defaults write com.apple.dock minimize-to-application -bool true
+	echo "Start and completely exist Terminal **twice** for settings to take effect"
 }
 
 function dock
@@ -69,6 +80,12 @@ function dock
     # Initialize an empty array of persistent apps for the dock
     defaults write com.apple.dock persistent-apps -array
 
+    # Show indicator lights for open applications in the Dock
+    defaults write com.apple.dock show-process-indicators -bool true
+
+    # Minimize windows into their application’s icon
+    defaults write com.apple.dock minimize-to-application -bool true
+
     # This is how one could add a persistent app to the dock
     #defaults write com.apple.dock persistent-apps -array-add \
     #    "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/VLC.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
@@ -76,6 +93,7 @@ function dock
     killall Dock
 }
 
+fonts
 screensaver
 menu
 preferences

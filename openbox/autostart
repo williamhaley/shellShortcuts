@@ -1,2 +1,2 @@
-feh --bg-max $CONFIGS_DIR/img/winter.jpg --image-bg white
+feh --bg-max $CONFIGS_DIR/img/south.jpg --image-bg black
 
