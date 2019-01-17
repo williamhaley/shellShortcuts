@@ -35,8 +35,9 @@ GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_STATESEPARATOR=" "
 
-PS1="\n"
-PS1+="${CYAN_FG}\u${RESET} on ${CYAN_FG}\h${RESET} at ${CYAN_FG}\w${RESET} ${GREEN_FG}"'$(__git_ps1 "[%s] ")'"${RESET}"
+PS1=""
+PS1+="${CYAN_FG}\u${RESET} on ${CYAN_FG}\h${RESET} at ${CYAN_FG}\w${RESET}\n"
+PS1+="${GREEN_FG}"'$(__git_ps1 "[%s] ")'"${RESET}\n"
 PS1+="${RED_FG}\$"
 PS1+="${RESET} "
 
