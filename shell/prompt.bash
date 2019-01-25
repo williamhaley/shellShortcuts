@@ -1,15 +1,8 @@
 RESET='\[\e[1;0m\]'
 RED_FG='\[\e[1;31m\]'
-RED_BG='\[\e[1;41m\]'
 GREEN_FG='\[\e[1;32m\]'
-GREEN_BG='\[\e[1;42m\]'
 BLUE_FG='\[\e[1;34m\]'
-BLUE_BG='\[\e[1;44m\]'
 CYAN_FG='\[\e[1;36m\]'
-CYAN_BG='\[\e[1;46m\]'
-WHITE_FG='\[\e[1;37m\]'
-YELLOW_FG='\[\e[1;33m\]'
-PURPLE_BG='\[\e[1;45m\]'
 BOLD='\[\e[1;1m\]'
 
 # You can *only* print the color from a sub-shell like this for PS1. Not the color
@@ -36,8 +29,8 @@ GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_STATESEPARATOR=" "
 
 PS1=""
-PS1+="${CYAN_FG}\u${RESET} on ${CYAN_FG}\h${RESET} at ${CYAN_FG}\w${RESET}\n"
-PS1+="${GREEN_FG}"'$(__git_ps1 "[%s] ")'"${RESET}\n"
+PS1+="${CYAN_FG}\u${RESET} at ${CYAN_FG}\w${RESET} (${BLUE_FG}\t${RESET})"
+PS1+=" ${GREEN_FG}"'$(__git_ps1 "%s")'"${RESET}\n"
 PS1+="${RED_FG}\$"
 PS1+="${RESET} "
 
