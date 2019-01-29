@@ -59,17 +59,18 @@ apps-x86_64()
 		virtualbox \
 		docker docker-compose \
 
-
 	systemctl start docker
 	systemctl enable docker
 
 	groupadd vboxusers || true
 
-	yay -Syy --noconfirm --needed \
-		google-chrome \
-		visual-studio-code-bin \
-		dropbox \
-		git-lfs
+	su - aur-user -c "
+		yay -Syy --noconfirm --needed \
+			google-chrome \
+			visual-studio-code-bin \
+			dropbox \
+			git-lfs
+	"
 }
 
 if [ -n "${1}" ];
