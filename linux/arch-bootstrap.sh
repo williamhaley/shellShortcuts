@@ -9,13 +9,19 @@ timezone="/usr/share/zoneinfo/US/Central"
 applications="bash-completion git iw wpa_supplicant openssh memtest86+"
 mirror='http://mirror.us.leaseweb.net/archlinux/$repo/os/$arch'
 arch_hostname="archlinux"
-use_existing_key=false
-key_path="/key_mnt/root.crypt.key"
-key_format="vfat"
 root_format="ext4"
 hooks="base udev autodetect modconf block encrypt filesystems keyboard fsck"
-# Load vfat or ext4 regardless of what the key uses. Simpler to support either.
-modules="nls_cp437 vfat ext4"
+
+encrypt_with_key=false
+
+if [ "${encrypt_with_key}" = true ];
+then
+	use_existing_key=false
+	key_path="/key_mnt/root.crypt.key"
+	key_format="vfat"
+	# Load vfat or ext4 regardless of what the key uses. Simpler to support either.
+	modules="nls_cp437 vfat ext4"
+fi
 
 # Traps for signals.
 
@@ -23,7 +29,10 @@ finish()
 {
 	echo "Finished. Clean up..."
 	umount /mnt/boot || true
-	umount "${key_dir}" || true
+	if [ "${encrypt_with_key}" = true ];
+	then
+		umount "${key_dir}" || true
+	fi
 	umount /mnt || true
 	cryptsetup luksClose cryptroot || true
 }
@@ -41,19 +50,27 @@ trap finish EXIT
 
 print_help()
 {
-	echo "Usage: /bin/bash bootstrap.sh --disk=disk --name=name --key=/path/to/key.keyfile"
+	if [ "${encrypt_with_key}" = true ];
+	then
+		echo "Usage: /bin/bash bootstrap.sh --disk=disk --name=name --key=/path/to/key.keyfile"
+	else
+		echo "Usage: /bin/bash bootstrap.sh --disk=disk --name=name"
+	fi
 	echo
 	echo "     --disk       Required. The disk on which to install Arch."
 	echo "                  e.g. --disk=/dev/sda"
 	echo
 	echo "     --name       Required. The name of the initial user."
 	echo "                  e.g. --name=will"
-	echo
-	echo "     --key        Optional. Path to an existing key file. This should"
-	echo "                  be a path to a mounted, persistent, file. The script"
-	echo "                  can then infer the partition id and other info."
-	echo "                  e.g. --key=/some/mnt/some.keyfile"
-	echo
+	if [ "${encrypt_with_key}" = true ];
+	then
+		echo
+		echo "     --key        Optional. Path to an existing key file. This should"
+		echo "                  be a path to a mounted, persistent, file. The script"
+		echo "                  can then infer the partition id and other info."
+		echo "                  e.g. --key=/some/mnt/some.keyfile"
+		echo
+	fi
 	exit 1
 }
 
@@ -89,8 +106,11 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-key_dir=`dirname ${key_path}`
-mkdir -p "${key_dir}"
+if [ "${encrypt_with_key}" = true ];
+then
+	key_dir=`dirname ${key_path}`
+	mkdir -p "${key_dir}"
+fi
 
 if [ -z "${username}" ];
 then
@@ -122,9 +142,12 @@ parted --script ${disk} mklabel msdos
 echo -e "o\nn\np\n1\n\n+1000M\nw" | fdisk ${disk}
 sleep 3
 
-# Create key partition 10MB large (we may not use this, but it is tiny).
-echo -e "n\np\n2\n\n+10M\nw" | fdisk ${disk}
-sleep 3
+if [ "${encrypt_with_key}" = true ];
+then
+	# Create key partition 10MB large (we may not use this, but it is tiny).
+	echo -e "n\np\n2\n\n+10M\nw" | fdisk ${disk}
+	sleep 3
+fi
 
 # Create root partition using remaining space.
 echo -e "n\np\n3\n\n\nw" | fdisk ${disk}
@@ -136,38 +159,54 @@ sleep 3
 
 # Format boot partition.
 mkfs.${root_format} -F ${boot_part}
-# Create a tiny partition for the key file (we may not use this, but it is tiny).
-mkfs.${key_format} ${key_part}
+
+if [ "${encrypt_with_key}" = true ];
+then
+	# Create a tiny partition for the key file (we may not use this, but it is tiny).
+	mkfs.${key_format} ${key_part}
+fi
 
 ############################################
 # 2. Create key, or validate existing key  #
 ############################################
 
-# The user specified a path to an existing key.
-if [ "${use_existing_key}" = true ];
+if [ "${encrypt_with_key}" = true ];
 then
-	# Does the specified key exist?
-	if [ ! -f "${key_path}" ];
+	# The user specified a path to an existing key.
+	if [ "${use_existing_key}" = true ];
 	then
-		echo "Existing key file not found"
-		exit 1
+		# Does the specified key exist?
+		if [ ! -f "${key_path}" ];
+		then
+			echo "Existing key file not found"
+			exit 1
+		fi
+	else
+		# The user did not specify a key, so we will make one.
+		mount ${key_part} "${key_dir}"
+		# Generate random key.
+		dd if=/dev/urandom bs=512 count=24 | tr -dc _A-Z-a-z-0-9 | head -c 4096 | dd of="${key_path}"
 	fi
-else
-	# The user did not specify a key, so we will make one.
-	mount ${key_part} "${key_dir}"
-	# Generate random key.
-	dd if=/dev/urandom bs=512 count=24 | tr -dc _A-Z-a-z-0-9 | head -c 4096 | dd of="${key_path}"
 fi
 
 ###################
 # 3. Encrypt root #
 ###################
 
-# Encrypt and format root partition.
-cryptsetup --batch-mode -y -v luksFormat ${root_part} "${key_path}"
-cryptsetup open ${root_part} cryptroot --key-file="${key_path}"
-mkfs.${root_format} -F /dev/mapper/cryptroot
-mount /dev/mapper/cryptroot /mnt
+if [ "${encrypt_with_key}" = true ];
+then
+	# Encrypt and format root partition.
+	cryptsetup --batch-mode -y -v luksFormat ${root_part} "${key_path}"
+	cryptsetup open ${root_part} cryptroot --key-file="${key_path}"
+	mkfs.${root_format} -F /dev/mapper/cryptroot
+	mount /dev/mapper/cryptroot /mnt
+else
+	# Encrypt and format root partition.
+	cryptsetup -v luksFormat ${root_part}
+	cryptsetup open ${root_part} cryptroot
+	mkfs.${root_format} -F /dev/mapper/cryptroot
+	mount /dev/mapper/cryptroot /mnt
+fi
 
 mkdir /mnt/boot
 mount ${boot_part} /mnt/boot
@@ -234,22 +273,37 @@ echo "LOGLEVEL=low" >> /mnt/etc/ufw/ufw.conf
 # 5. Grub  #
 ############
 
-arch-chroot /mnt mkinitcpio -p linux
-arch-chroot /mnt pacman -S --noconfirm grub
+if [ "${encrypt_with_key}" = true ];
+then
+	arch-chroot /mnt mkinitcpio -p linux
+	arch-chroot /mnt pacman -S --noconfirm grub
 
-root_part_uuid="$(blkid -s UUID -o value ${root_part})"
-key_mount=$(stat -c %m -- "${key_path}")
-key_relative_path=$(echo ${key_path}|sed "s|^${key_mount}||")
-key_part_dev=$(df -P "${key_mount}" | tail -1 | cut -d' ' -f 1)
-key_part_uuid=$(blkid -s UUID -o value ${key_part_dev})
+	root_part_uuid="$(blkid -s UUID -o value ${root_part})"
+	key_mount=$(stat -c %m -- "${key_path}")
+	key_relative_path=$(echo ${key_path}|sed "s|^${key_mount}||")
+	key_part_dev=$(df -P "${key_mount}" | tail -1 | cut -d' ' -f 1)
+	key_part_uuid=$(blkid -s UUID -o value ${key_part_dev})
 
-grub_cmdline_linux="cryptdevice=UUID=${root_part_uuid}:cryptroot"
-grub_cmdline_linux+=" root=/dev/mapper/cryptroot"
-grub_cmdline_linux+=" cryptkey=UUID=${key_part_uuid}:${key_format}:${key_relative_path}"
-sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${grub_cmdline_linux}\"|" /mnt/etc/default/grub
+	grub_cmdline_linux="cryptdevice=UUID=${root_part_uuid}:cryptroot"
+	grub_cmdline_linux+=" root=/dev/mapper/cryptroot"
+	grub_cmdline_linux+=" cryptkey=UUID=${key_part_uuid}:${key_format}:${key_relative_path}"
+	sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${grub_cmdline_linux}\"|" /mnt/etc/default/grub
 
-arch-chroot /mnt grub-install --target=i386-pc --recheck --debug ${disk}
-arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+	arch-chroot /mnt grub-install --target=i386-pc --recheck --debug ${disk}
+	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+else
+	arch-chroot /mnt mkinitcpio -p linux
+	arch-chroot /mnt pacman -S --noconfirm grub
+
+	root_part_uuid="$(blkid -s UUID -o value ${root_part})"
+
+	grub_cmdline_linux="cryptdevice=UUID=${root_part_uuid}:cryptroot"
+	grub_cmdline_linux+=" root=/dev/mapper/cryptroot"
+	sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${grub_cmdline_linux}\"|" /mnt/etc/default/grub
+
+	arch-chroot /mnt grub-install --target=i386-pc --recheck --debug ${disk}
+	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+fi
 
 clear
 

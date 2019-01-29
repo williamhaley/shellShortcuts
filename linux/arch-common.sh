@@ -164,3 +164,13 @@ apps()
 		ack \
 		vim gedit
 }
+
+kvm()
+{
+	LC_ALL=C lscpu | grep -E 'VT-x|AMD-V' > /dev/null || {
+		echo "virtualization not supported"
+		return
+	}
+
+
+}
