@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-dir=$(mktemp --directory)
+# Use -d as a portable flag across Unix/Linux
+dir=$(mktemp -d)
 
 ffmpeg \
 	-i $1 \
@@ -8,3 +9,4 @@ ffmpeg \
 	$dir/ffout%03d.png
 
 convert -loop 0 $dir/ffout*.png output.gif
+

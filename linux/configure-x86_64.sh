@@ -74,25 +74,109 @@ _apps_platform()
 
 _kvm()
 {
-	set -e
+	# https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Setting_up_IOMMU
+	# https://medium.com/@calerogers/gpu-virtualization-with-kvm-qemu-63ca98a6a172
+	# https://davidyat.es/2016/09/08/gpu-passthrough/
+	# https://heiko-sieger.info/running-windows-10-on-linux-using-kvm-with-vga-passthrough/
+	# https://en.wikipedia.org/wiki/Kernel-based_Virtual_Machine
+	# https://taxes.moe/2017/07/08/linux-and-windows-running-simultaneously-with-gpu-passthrough/
+	# https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Setting_up_the_guest_OS
+
+	pacman -Syy --noconfirm --needed \
+		qemu libvirt ovmf virt-manager \
+		ebtables dnsmasq
+
+# 	cat <<EOF > /etc/libvirt/qemu.conf
+# nvram = [
+# 	"/usr/share/ovmf/x64/OVMF_CODE.fd:/usr/share/ovmf/x64/OVMF_VARS.fd"
+# ]
+
+# # user = "will"
+# # group = "kvm"
+
+# # cgroup_device_acl = [
+# #     "/dev/kvm",
+# #     "/dev/input/by-id/KEYBOARD_NAME",
+# #     "/dev/input/by-id/MOUSE_NAME",
+# #     "/dev/null", "/dev/full", "/dev/zero",
+# #     "/dev/random", "/dev/urandom",
+# #     "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+# #     "/dev/rtc","/dev/hpet", "/dev/sev"
+# # ]
+# EOF
 
 	LC_ALL=C lscpu | grep -E 'VT-x|AMD-V' > /dev/null || {
 		echo "virtualization not supported"
 		return
 	}
 
-	grep for whatever... uh, devices?
+	zgrep CONFIG_KVM /proc/config.gz | grep -E 'KVM=m|KVM=y' > /dev/null || {
+		echo "KVM module not available in kernel"
+		return
+	}
 
-	# https://medium.com/@calerogers/gpu-virtualization-with-kvm-qemu-63ca98a6a172
-	# https://davidyat.es/2016/09/08/gpu-passthrough/
-	# https://heiko-sieger.info/running-windows-10-on-linux-using-kvm-with-vga-passthrough/
-	# https://en.wikipedia.org/wiki/Kernel-based_Virtual_Machine
-	# https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF
+	zgrep CONFIG_KVM /proc/config.gz | grep -E 'KVM_INTEL=m|KVM_INTEL=y|KVM_AMD=m|KVM_AMD=y' > /dev/null || {
+		echo "KVM_AMD or KVM_INTEL module not available in kernel"
+		return
+	}
 
-	# I should get a second PCI card, isolate its group/PCI info, then see the kernel module and other stuff loading.
+	zgrep VIRTIO /proc/config.gz > /dev/null || {
+		echo "VIRTIO modules not available in kernel"
+		return
+	}
 
-	# First one should be obvious. Second one is to make sure non-compatible hardware isn't made available
-	# Get amd_iommu=on iommu=pt in /etc/default/grub and re-generate
+	# AMD
+	cat /proc/cpuinfo | grep -i AuthenticAMD > /dev/null && {
+		cat /etc/default/grub | grep -i GRUB_CMDLINE_LINUX_DEFAULT | grep -i amd_iommu=on > /dev/null || {
+			echo "Add AMD IOMMU support to Grub config"
+			sed -i -E 's|GRUB_CMDLINE_LINUX_DEFAULT=\"(.*)\"|GRUB_CMDLINE_LINUX_DEFAULT=\"\1 amd_iommu=on\"|g' /etc/default/grub
+		}
+	}
 
-	set +e
+	# Intel
+	cat /proc/cpuinfo | grep -i intel > /dev/null && {
+		cat /etc/default/grub | grep -i GRUB_CMDLINE_LINUX_DEFAULT | grep -i amd_iommu=on > /dev/null || {
+			echo "Add Intel IOMMU support to Grub config"
+			sed -i -E 's|GRUB_CMDLINE_LINUX_DEFAULT=\"(.*)\"|GRUB_CMDLINE_LINUX_DEFAULT=\"\1 intel_iommu=on\"|g' /etc/default/grub
+		}
+	}
+
+	cat /etc/default/grub | grep -i GRUB_CMDLINE_LINUX_DEFAULT | grep -i iommu=pt > /dev/null || {
+		echo "Set IOMMU selective passthrough support in Grub config"
+		sed -i -E 's|GRUB_CMDLINE_LINUX_DEFAULT=\"(.*)\"|GRUB_CMDLINE_LINUX_DEFAULT=\"\1 iommu=pt\"|g' /etc/default/grub
+	}
+
+	cat /etc/mkinitcpio.conf | grep -i MODULES= | grep -i "vfio_pci vfio vfio_iommu_type1 vfio_virqfd" > /dev/null || {
+		echo "Add entry to mkinitcpio MODULES config"
+		# If ever adding/using graphics modules here. i915, noveau, etc., add them at the *end* of the MODULES
+		sed -i -E 's|MODULES=\((.*)\)|MODULES=\(vfio_pci vfio vfio_iommu_type1 vfio_virqfd \1\)|g' /etc/mkinitcpio.conf
+	}
+
+	cat /etc/mkinitcpio.conf | grep -i HOOKS= | grep -i "modconf" > /dev/null || {
+		echo "Add entry to mkinitcpio HOOKS config"
+		sed -i -E 's|HOOKS=\((.*)\)|HOOKS=\(modconf \1\)|g' /etc/mkinitcpio.conf
+	}
+
+	declare iommu_groups=$(
+		shopt -s nullglob
+		for d in /sys/kernel/iommu_groups/*/devices/*;
+		do
+			n=${d#*/iommu_groups/*}; n=${n%%/*}
+			printf 'IOMMU Group %s ' "$n"
+			lspci -nns "${d##*/}"
+		done
+	)
+
+	if [ `(echo "${iommu_groups}") | wc -l` -le 0 ];
+	then
+		echo "No IOMMU groups found!"
+		echo "The kernel config for IOMMU should be valid. Reboot and try again to see if that works"
+		return
+	fi
+
+	groups will | grep "libvirt" > /dev/null || usermod -a -G libvirt will
+	groups will | grep "kvm" > /dev/null || usermod -a -G kvm will
+	groups will | grep "input" > /dev/null || usermod -a -G input will
+
+	echo "you may need to re-build grub, re-build initrams, log out and in, reboot, or some combo of these"
 }

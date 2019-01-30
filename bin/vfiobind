@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+dev="$1"
+vendor=$(cat /sys/bus/pci/devices/$dev/vendor)
+device=$(cat /sys/bus/pci/devices/$dev/device)
+if [ -e /sys/bus/pci/devices/$dev/driver ];
+then
+	echo $dev > /sys/bus/pci/devices/$dev/driver/unbind
+fi
+echo $vendor $device > /sys/bus/pci/drivers/vfio-pci/new_id
+
+lspci -nnk -d $vendor:$device | grep "Kernel driver in use: vfio-pci" > /dev/null || {
+	echo "vfio not currently enabled for $dev - $vendor:$device"
+	echo "did you add the xxxx:xxxx ids to /etc/modprobe.d/vfio.conf, rebuild initramfs, and reboot?"
+	echo ""
+	echo "options vfio-pci ids=0000:0000,0000:0001,etc"
+	echo ""
+}

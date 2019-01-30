@@ -9,3 +9,6 @@ fi
 . $CONFIGS_DIR/shell/prompt.bash
 . $CONFIGS_DIR/shell/git-completion.bash
 . $CONFIGS_DIR/shell/common.bash
+
+export EDITOR=vim
+

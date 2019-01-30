@@ -100,10 +100,11 @@ do_3tb()
 do_b2()
 {
 	do_rclone /home/will/Photographs/         "Backup:willhaley-backup/Photographs/"
-	# No `Audio`. Subject to constant metadata changes, and can be recovered from elsewhere.
+	# No `Audio`. Subject to frequent metadata changes, and can be recovered from elsewhere.
 	do_rclone /home/will/Software/            "Backup:willhaley-backup/Software/"
 
 	# Encrypted
+	do_rclone /home/will/keys/                "BackupCrypt:willhaley-backup/keys/"
 	do_rclone /home/will/Documents/           "BackupCrypt:willhaley-backup/Documents/"
 	do_rclone /mnt/data/FamilyBackups/        "BackupCrypt:willhaley-backup/FamilyBackups/"
 	do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
