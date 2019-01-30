@@ -1,10 +1,9 @@
-#!/usr/bin/env bash
+_init()
+{
+	_noop
+}
 
-[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
-
-source ./arch-common.sh
-
-video()
+_video()
 {
 	pacman -Syy --noconfirm --needed \
 		xorg xorg-server xorg-xinit \
@@ -19,7 +18,7 @@ video()
 		noto-fonts noto-fonts-emoji ttf-dejavu
 }
 
-nvidia()
+_nvidia()
 {
 	mkdir -p /etc/pacman.d/hooks
 
@@ -41,19 +40,19 @@ EOF
 		nvidia nvidia-libgl
 }
 
-wifi()
+_wifi()
 {
 	pacman -Syy --noconfirm --needed \
 		wpa_supplicant linux-headers broadcom-wl-dkms
 }
 
-audio()
+_audio()
 {
 	pacman -Sy --noconfirm --needed \
 		alsa-firmware alsa-plugins alsaplayer
 }
 
-apps-x86_64()
+_apps_platform()
 {
 	pacman -Syy --noconfirm --needed \
 		virtualbox \
@@ -73,26 +72,27 @@ apps-x86_64()
 	"
 }
 
-if [ -n "${1}" ];
-then
-	${1}
-else
-	locale
-	sudo
-	aur # depends on sudo
-	firewall
-	audio
-	video
-	nvidia
-	wifi
-	sshd # depends on firewall. Run after so we can add exception for port 22.
-	apps
-	apps-x86_64
-	virtualbox
-	bluetooth
+_kvm()
+{
+	set -e
 
-	# useradd -m -s /bin/bash -G sshusers,docker,sudo,vboxusers will || true
-	# usermod -a -G sshusers,docker,sudo,vboxusers || true
-	# passwd will
-fi
+	LC_ALL=C lscpu | grep -E 'VT-x|AMD-V' > /dev/null || {
+		echo "virtualization not supported"
+		return
+	}
 
+	grep for whatever... uh, devices?
+
+	# https://medium.com/@calerogers/gpu-virtualization-with-kvm-qemu-63ca98a6a172
+	# https://davidyat.es/2016/09/08/gpu-passthrough/
+	# https://heiko-sieger.info/running-windows-10-on-linux-using-kvm-with-vga-passthrough/
+	# https://en.wikipedia.org/wiki/Kernel-based_Virtual_Machine
+	# https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF
+
+	# I should get a second PCI card, isolate its group/PCI info, then see the kernel module and other stuff loading.
+
+	# First one should be obvious. Second one is to make sure non-compatible hardware isn't made available
+	# Get amd_iommu=on iommu=pt in /etc/default/grub and re-generate
+
+	set +e
+}

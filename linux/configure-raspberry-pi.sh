@@ -1,16 +1,10 @@
-#!/usr/bin/env bash
-
-[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
-
-source ./arch-common.sh
-
-init()
+_init()
 {
 	pacman-key --init
 	pacman-key --populate archlinuxarm
 }
 
-video()
+_video()
 {
 	pacman -Syy --noconfirm --needed \
 		xorg xorg-server xorg-xinit xf86-video-fbdev \
@@ -28,13 +22,18 @@ video()
 	echo "gpu_mem=128" | tee -a /boot/config.txt
 }
 
-wifi()
+_nvidia()
+{
+	_noop
+}
+
+_wifi()
 {
 	pacman -Syy --noconfirm --needed \
 		wpa_supplicant
 }
 
-audio()
+_audio()
 {
 	pacman -Sy --noconfirm --needed \
 		alsa-firmware alsa-plugins alsaplayer
@@ -48,7 +47,7 @@ audio()
 	# amixer cset numid=3 1
 }
 
-apps-pi()
+_apps_platform()
 {
 	cat <<'EOF' >/etc/profile.d/go.sh
 export PATH=$PATH:/usr/local/go/bin
@@ -68,25 +67,7 @@ EOF
 		hangups
 }
 
-if [ -n "${1}" ];
-then
-	${1}
-else
-	init
-	locale
-	sudo
-	aur # depends on sudo
-	firewall
-	audio
-	video
-	wifi
-	sshd # depends on firewall. Run after so we can add exception for port 22.
-	apps
-	apps-pi
-	bluetooth
-
-	# useradd -m -s /bin/bash -G sshusers,docker,sudo will || true
-	# usermod -a -G sshusers,docker,sudo will || true
-	# passwd will
-fi
-
+_kvm()
+{
+	_noop
+}

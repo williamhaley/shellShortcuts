@@ -1,4 +1,19 @@
-sudo()
+#!/usr/bin/env bash
+
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
+
+if uname -a | grep -i 'x86_64' > /dev/null;
+then
+	source ./configure-x86_64.sh
+fi
+#source ./configure-raspberry-pi.sh
+
+_noop()
+{
+	echo "not implemented"
+}
+
+_sudo()
 {
 	pacman -Syy --noconfirm --needed \
 		sudo
@@ -15,7 +30,7 @@ EOF
 	groupadd sudo
 }
 
-locale()
+_locale()
 {
 	cat <<'EOF' >/etc/locale.gen
 en_US.UTF-8 UTF-8
@@ -29,7 +44,7 @@ EOF
 	ln -sf "/usr/share/zoneinfo/US/Central" /etc/localtime
 }
 
-firewall()
+_firewall()
 {
 	pacman -S --noconfirm --needed \
 		ufw
@@ -43,7 +58,7 @@ firewall()
 	ufw --force enable
 }
 
-aur()
+_aur()
 {
 	# makepkg requires sudo
 	pacman -Syy --noconfirm --needed \
@@ -84,7 +99,7 @@ EOF
 	"
 }
 
-sshd()
+_sshd()
 {
 	pacman -S --noconfirm --needed \
 		openssh
@@ -122,7 +137,7 @@ EOF
 	systemctl start sshd
 }
 
-bluetooth()
+_bluetooth()
 {
 	# https://wiki.archlinux.org/index.php/Bluetooth_headset#Headset_via_Bluez5.2Fbluez-alsa
 
@@ -133,7 +148,7 @@ bluetooth()
 	systemctl enable bluetooth
 }
 
-apps()
+_apps()
 {
 	pacman -Syy --noconfirm --needed \
 		sudo openssh \
@@ -163,14 +178,29 @@ apps()
 		expect \
 		ack \
 		vim gedit
+
+	if type _apps_platform | grep 'is a function' >/dev/null;
+	then
+		_apps_platform
+	fi
 }
 
-kvm()
-{
-	LC_ALL=C lscpu | grep -E 'VT-x|AMD-V' > /dev/null || {
-		echo "virtualization not supported"
-		return
-	}
+commands=( _apps _audio _aur _bluetooth _firewall _init _kvm _locale _nvidia _sshd _sudo _video _virtualbox _wifi )
+for command in "${commands[@]}"
+do
+	for arg in "$@"
+	do
+		if [ "_${arg}" = "${command}" ];
+		then
+			echo "executing: ${arg}"
+			${command}
+		fi
+	done
+done
 
+# apps-pi
+# apps-x86_64
 
-}
+# useradd -m -s /bin/bash -G sshusers,docker,sudo,vboxusers will || true
+# usermod -a -G sshusers,docker,sudo,vboxusers || true
+# passwd will
