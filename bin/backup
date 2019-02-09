@@ -20,33 +20,6 @@ do_rsync()
 	echo ""
 }
 
-do_rclone()
-{
-	rsync_opts="--delete-excluded --delete-after $3"
-
-	echo "rclone: $1 ==> $2"
-	echo ""
-	sudo -u ${SUDO_USER:-$USER} wrclone sync ${rsync_opts} "$1" "$2"
-	echo ""
-}
-
-do_horcrux()
-{
-	if ! `findmnt -M "/mnt/horcrux${1}" >/dev/null`;
-	then
-		echo "/mnt/horcrux${1} is not mounted"
-	else
-		echo "rclone: horcrux${1}"
-		echo ""
-		rsync -avr \
-			/home/will/Documents \
-			/home/will/.electrum \
-			/home/will/keys \
-			"/mnt/horcrux${1}/"
-		echo ""
-	fi
-}
-
 do_full()
 {
 	if ! `findmnt -M "/mnt/${1}" >/dev/null`;
@@ -55,66 +28,30 @@ do_full()
 		return
 	fi
 
-	if ! `findmnt -M "/mnt/data" > /dev/null`;
+	if ! `findmnt -M "/mnt/will-home" > /dev/null`;
 	then
-		echo "/mnt/data is not available. Skipping ${1}."
+		echo "/mnt/will-home is not available. Skipping ${1}."
 		return
+	else
+		do_rsync /mnt/will-home/ "/mnt/${1}/willhaley-backup/"
 	fi
-
-	do_rsync /mnt/will-home/        "/mnt/${1}/willhaley-backup/"
 
 	mkdir -p "/mnt/${1}/system-backup"
-	do_rsync /etc/fstab             "/mnt/${1}/system-backup/"
-	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/"
-	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/"
-	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/"
-
-	do_rsync /mnt/data/ "/mnt/${1}/data/"
-}
-
-do_3tb()
-{
-	if ! `findmnt -M "/mnt/${1}" >/dev/null`;
-	then
-		echo "/mnt/${1} is not mounted. Skipping."
-		return
-	fi
+	do_rsync /etc/fstab "/mnt/${1}/system-backup"
+	do_rsync /etc/crypttab "/mnt/${1}/system-backup"
+	do_rsync /etc/default/grub "/mnt/${1}/system-backup"
+	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup"
+	do_rsync /etc/mkinitcpio.conf "/mnt/${1}/system-backup"
 
 	if ! `findmnt -M "/mnt/data" > /dev/null`;
 	then
 		echo "/mnt/data is not available. Skipping ${1}."
 		return
+	else
+		do_rsync /mnt/data/ "/mnt/${1}/data/"
 	fi
-
-	do_rsync /mnt/will-home/        "/mnt/${1}/willhaley-backup/"
-
-	mkdir -p "/mnt/${1}/system-backup"
-	do_rsync /etc/fstab             "/mnt/${1}/system-backup/"
-	do_rsync /etc/crypttab          "/mnt/${1}/system-backup/"
-	do_rsync /etc/default/grub      "/mnt/${1}/system-backup/"
-	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup/"
-
-	do_rsync /mnt/data/ "/mnt/${1}/data/" --exclude=Renders
-}
-
-do_b2()
-{
-	do_rclone /home/will/Photographs/         "Backup:willhaley-backup/Photographs/"
-	# No `Audio`. Subject to frequent metadata changes, and can be recovered from elsewhere.
-	do_rclone /home/will/Software/            "Backup:willhaley-backup/Software/"
-
-	# Encrypted
-	do_rclone /home/will/keys/                "BackupCrypt:willhaley-backup/keys/"
-	do_rclone /home/will/Documents/           "BackupCrypt:willhaley-backup/Documents/"
-	do_rclone /mnt/data/FamilyBackups/        "BackupCrypt:willhaley-backup/FamilyBackups/"
-	do_rclone /home/will/.electrum/           "BackupCrypt:willhaley-backup/electrum/"
 }
 
 do_full backup-internal
-do_3tb backup-external-1
-do_3tb backup-external-2
-do_b2
-do_horcrux 1
-do_horcrux 2
-do_horcrux 3
-
+do_full backup-external-1
+do_full backup-external-2
