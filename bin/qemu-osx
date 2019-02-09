@@ -17,17 +17,25 @@
 
 vm_dir="/home/will/VMs"
 memory="16g"
-disk="${vm_dir}/osx.img"
-disk_format="raw"
+disk="${vm_dir}/macOS.qcow2"
+disk_format="qcow2"
 options=""
 clover="${vm_dir}/mojave.clover.qcow2"
+cdrom=""
 
-while getopts "s" opt; do
+while getopts "c:s" opt; do
 	case $opt in
 		s) options+="-snapshot " ;;
+		c) cdrom="${OPTARG}" ;;
 	esac
 done
 shift $((OPTIND -1))
+
+if [ -n "${cdrom}" ];
+then
+	options+=" -drive file=${cdrom},media=cdrom"
+	options+=" -boot d"
+fi
 
 qemu-system-x86_64 \
 	-enable-kvm \
