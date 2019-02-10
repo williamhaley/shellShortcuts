@@ -20,38 +20,66 @@ do_rsync()
 	echo ""
 }
 
-do_full()
+_backup()
 {
-	if ! `findmnt -M "/mnt/${1}" >/dev/null`;
+	dest_mnt="${1}"
+	backup_level=${2}
+
+	if ! `findmnt -M "${dest_mnt}" >/dev/null`;
 	then
-		echo "/mnt/${1} is not mounted. Skipping."
+		echo "${dest_mnt} is not available."
 		return
 	fi
 
-	if ! `findmnt -M "/mnt/will-home" > /dev/null`;
+	# Level 1 - System configs
+	if [ ${backup_level} -ge 1 ];
 	then
-		echo "/mnt/will-home is not available. Skipping ${1}."
-		return
-	else
-		do_rsync /mnt/will-home/ "/mnt/${1}/willhaley-backup/"
+		mkdir -p "${dest_mnt}/system-backup"
+		cp /etc/fstab             "${dest_mnt}/system-backup"
+		cp /etc/crypttab          "${dest_mnt}/system-backup"
+		cp /etc/default/grub      "${dest_mnt}/system-backup"
+		cp /etc/mkinitcpio.conf   "${dest_mnt}/system-backup"
 	fi
 
-	mkdir -p "/mnt/${1}/system-backup"
-	do_rsync /etc/fstab "/mnt/${1}/system-backup"
-	do_rsync /etc/crypttab "/mnt/${1}/system-backup"
-	do_rsync /etc/default/grub "/mnt/${1}/system-backup"
-	do_rsync /etc/default/cryptdisk "/mnt/${1}/system-backup"
-	do_rsync /etc/mkinitcpio.conf "/mnt/${1}/system-backup"
-
-	if ! `findmnt -M "/mnt/data" > /dev/null`;
+	# Level 2 - Home (minimal)
+	if [ ${backup_level} -ge 2 ];
 	then
-		echo "/mnt/data is not available. Skipping ${1}."
-		return
-	else
-		do_rsync /mnt/data/ "/mnt/${1}/data/"
+		if ! `findmnt -M "/mnt/will-home" > /dev/null`;
+		then
+			echo "/mnt/will-home is not available."
+			return
+		fi
+
+		home_include_exclude="--include="Documents/***" --include="keys/***" --include=".electrum/***" --exclude="*""
+
+		# Level 3 - Home (full)
+		if [ ${backup_level} -ge 3 ];
+		then
+			home_include_exclude=''
+		fi
+
+		rsync -avr \
+			--delete --delete-excluded --delete-after \
+			${home_include_exclude} \
+			--exclude=node_modules --exclude=lost+found \
+			/mnt/will-home/ \
+			"${dest_mnt}/willhaley-backup/"
+	fi
+
+	# Level 4 - Data
+	if [ ${backup_level} -gt 4 ];
+	then
+		if ! `findmnt -M "/mnt/data" > /dev/null`;
+		then
+			echo "/mnt/data is not available."
+			return
+		else
+			do_rsync /mnt/data/ "${dest_mnt}/data/"
+		fi
 	fi
 }
 
-do_full backup-internal
-do_full backup-external-1
-do_full backup-external-2
+_backup "/mnt/horcrux-3" 2
+_backup "/mnt/backup-internal" 4
+_backup "/mnt/backup-external-1" 4
+_backup "/mnt/backup-external-2" 4
