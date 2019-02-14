@@ -3,3 +3,4 @@
 
 colorscheme cyan
 
+set output_plugin=alsa

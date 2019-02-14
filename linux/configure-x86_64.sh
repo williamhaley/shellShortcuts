@@ -86,25 +86,6 @@ _kvm()
 		qemu libvirt ovmf virt-manager \
 		ebtables dnsmasq
 
-# 	cat <<EOF > /etc/libvirt/qemu.conf
-# nvram = [
-# 	"/usr/share/ovmf/x64/OVMF_CODE.fd:/usr/share/ovmf/x64/OVMF_VARS.fd"
-# ]
-
-# # user = "will"
-# # group = "kvm"
-
-# # cgroup_device_acl = [
-# #     "/dev/kvm",
-# #     "/dev/input/by-id/KEYBOARD_NAME",
-# #     "/dev/input/by-id/MOUSE_NAME",
-# #     "/dev/null", "/dev/full", "/dev/zero",
-# #     "/dev/random", "/dev/urandom",
-# #     "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-# #     "/dev/rtc","/dev/hpet", "/dev/sev"
-# # ]
-# EOF
-
 	LC_ALL=C lscpu | grep -E 'VT-x|AMD-V' > /dev/null || {
 		echo "virtualization not supported"
 		return
@@ -174,9 +155,8 @@ _kvm()
 		return
 	fi
 
-	groups will | grep "libvirt" > /dev/null || usermod -a -G libvirt will
-	groups will | grep "kvm" > /dev/null || usermod -a -G kvm will
-	groups will | grep "input" > /dev/null || usermod -a -G input will
+	# /etc/modprobe.d/vfio.conf
+	# options vfio-pci ids=10de:1401,10de:0fba
 
 	echo "you may need to re-build grub, re-build initrams, log out and in, reboot, or some combo of these"
 }

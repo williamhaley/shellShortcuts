@@ -142,7 +142,7 @@ _bluetooth()
 	# https://wiki.archlinux.org/index.php/Bluetooth_headset#Headset_via_Bluez5.2Fbluez-alsa
 
 	pacman -Syy --needed --noconfirm \
-		pulseaudio pulseaudio-bluetooth pavucontrol bluez bluez-utils
+		bluez bluez-utils
 
 	systemctl start bluetooth
 	systemctl enable bluetooth

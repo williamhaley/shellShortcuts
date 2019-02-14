@@ -11,14 +11,19 @@ pci=() # IOMMU group addresses
 bios=/usr/share/ovmf/x64/OVMF_CODE.fd
 bios_vars=/usr/share/ovmf/x64/OVMF_VARS.fd
 cdrom=""
+options=""
+keyboard="/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse"
+mouse="/dev/input/event3"
 
-while getopts "m:d:n:p:c:" opt; do
+while getopts "m:d:n:p:c:v" opt; do
 	case $opt in
 		m) memory="${OPTARG}" ;;
 		d) disks+=("${OPTARG}") ;;
 		n) name="${OPTARG}" ;;
 		p) pci+=("${OPTARG}") ;;
 		c) cdrom="${OPTARG}" ;;
+		# Add a second, virtual, display besides passthrough GPU to help debug
+		v) options+=" -vga qxl"
 	esac
 done
 shift $((OPTIND -1))
@@ -49,9 +54,7 @@ sleep 2
 EOF
 
 chmod 750 /etc/qemu-ifup
-chown root:kvm /etc/qemu-ifup
 
-options=""
 for device in "${pci[@]}"
 do
 	vfiobind "0000:${device}"
@@ -77,27 +80,24 @@ do
 	index=$((index + 1))
 done
 
-# May seem odd to pass in both -va qxl and the PCI passthrough for the host GPU,
-# but it actually works really well. You can click in the emulated display to
-# capture keyboard and mouse, and it's helpful for troubleshooting or using
-# devices that can't output to the host GPU. No need to switch to the passthrough
-# GPU for something like booting to a live install iso.
+# https://www.reddit.com/r/VFIO/comments/5hmvlr/sharing_keyboardmouse_directly_with_spice/db1xztr/
+sleep 2
 
 qemu-system-x86_64 \
 	-name guest=${name},debug-threads=on \
 	-machine pc-q35-3.1,accel=kvm,usb=off,vmport=off,dump-guest-core=off \
 	-cpu EPYC,x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on,cmp_legacy=on,xop=on,fma4=on,tbm=on,perfctr_core=on,virt-ssbd=on,monitor=off,rdseed=off,adx=off,smap=off,clflushopt=off,sha-ni=off,xsavec=off,xgetbv1=off,hv_time,hv_relaxed,hv_vapic,hv_spinlocks=0x1fff,hv_vendor_id=whatever,kvm=off \
 	-m ${memory} \
-	-smp 2,sockets=2,cores=1,threads=1 \
+	-smp 2 \
 	-no-user-config \
 	-nodefaults \
 	-rtc base=localtime,driftfix=slew \
 	-global kvm-pit.lost_tick_policy=delay \
 	-no-hpet \
-	-no-shutdown \
 	-global ICH9-LPC.disable_s3=1 \
 	-global ICH9-LPC.disable_s4=1 \
-	-vga qxl \
+	-object input-linux,id=kbd1,evdev=${keyboard},grab_all=on,repeat=on \
+	-object input-linux,id=mouse1,evdev=${mouse} \
 	-serial none \
 	-parallel none \
 	$options \
@@ -105,4 +105,5 @@ qemu-system-x86_64 \
 	-drive file=/tmp/${name}.fd,if=pflash,format=raw,unit=1 \
 	-device virtio-scsi-pci,id=scsi \
 	-sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny \
-	-nic user
+	-nic user \
+	-monitor stdio
