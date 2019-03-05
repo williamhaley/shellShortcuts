@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-for APP in `ls $1`;
+for app in `ls $1`;
 	do (
-		if [ ! -d "${1}/${APP}" ];
+		if [ ! -d "${1}/${app}" ];
 		then
 			continue
 		fi
 
-		cd "$1/$APP"
+		cd "$1/$app"
 		if [ -d ".git" ];
 		then
 			git submodule update --init --recursive > /dev/null 2>&1
@@ -18,24 +18,24 @@ done
 
 wait
 
-for APP in `ls $1`;
+for app in `ls $1`;
 	do (
-		if [ ! -d "${1}/${APP}" ];
+		if [ ! -d "${1}/${app}" ];
 		then
 			continue
 		fi
 
-		cd "$1/$APP"
+		cd "$1/$app"
 		if [ -d ".git" ];
 		then
-			printf "${APP}: "
-			printfgreen "[$(git currentbranch)] "
-			git isdirty && printfred "dirty"
-			git hasstash && printfyellow "stash"
+			printf "${app}: "
+			git-status
+			git isdirty && printfred " dirty"
+			git hasstash && printfyellow " stash"
 
 			numbranches=$(git branch | wc -l | sed 's/^ *//;s/ *$//')
 			printf "\nbranches: "
-			if [ "$numbranches" -gt "1" ];
+			if [ "${numbranches}" -gt "1" ];
 			then
 				printfcyan "${numbranches}\n"
 			else

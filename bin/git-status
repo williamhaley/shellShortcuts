@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+local=$(git rev-parse @)
+
+printfcyan "$(git rev-parse --abbrev-ref HEAD)"
+
+if [ -z "${upstream}" ];
+then
+	printfyellow " Local only"
+	exit
+fi
+
+printfgreen ":${upstream}"
+
+REMOTE=$(git rev-parse "$upstream")
+BASE=$(git merge-base @ "$upstream")
+
+if [ $local = $REMOTE ]; then
+	printf ""
+elif [ $local = $BASE ]; then
+	printfred " Needs pull"
+elif [ $REMOTE = $BASE ]; then
+	printfred " Needs push"
+else
+	printfred " Diverged"
+fi
