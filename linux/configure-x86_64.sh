@@ -12,10 +12,13 @@ _video()
 		gnome-keyring \
 		openbox obconf \
 		tint2 \
-		thunar tumbler \
+		thunar tumbler ffmpegthumbnailer \
 		feh gpicview \
 		xscreensaver xbindkeys xdotool \
 		noto-fonts noto-fonts-emoji ttf-dejavu
+
+	yay -Syy --noconfirm \
+		thunar-thumbnailers
 }
 
 _nvidia()
@@ -61,6 +64,7 @@ _apps_platform()
 	systemctl start docker
 	systemctl enable docker
 
+	usermod -a -G docker will
 	groupadd vboxusers || true
 
 	su - aur-user -c "

@@ -4,9 +4,11 @@
 dir=$(mktemp -d)
 
 ffmpeg \
-	-i $1 \
-	-vf scale=320:-1:flags=lanczos,fps=10 \
-	$dir/ffout%03d.png
+	-i "${1}" \
+	-vf fps=15,scale=320:-1:flags=lanczos,palettegen \
+	"${dir}/palette.png"
 
-convert -loop 0 $dir/ffout*.png output.gif
-
+ffmpeg \
+	-i "${1}" -i "${dir}/palette.png" \
+	-filter_complex "fps=15,scale=400:-1:flags=lanczos[x];[x][1:v]paletteuse" \
+	output.gif

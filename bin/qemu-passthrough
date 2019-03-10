@@ -13,7 +13,7 @@ bios_vars=/usr/share/ovmf/x64/OVMF_VARS.fd
 cdrom=""
 options=""
 keyboard="/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse"
-mouse="/dev/input/event3"
+mouse="/dev/input/event4"
 
 while getopts "m:d:n:p:c:v" opt; do
 	case $opt in
@@ -88,7 +88,7 @@ qemu-system-x86_64 \
 	-machine pc-q35-3.1,accel=kvm,usb=off,vmport=off,dump-guest-core=off \
 	-cpu EPYC,x2apic=on,tsc-deadline=on,hypervisor=on,tsc_adjust=on,cmp_legacy=on,xop=on,fma4=on,tbm=on,perfctr_core=on,virt-ssbd=on,monitor=off,rdseed=off,adx=off,smap=off,clflushopt=off,sha-ni=off,xsavec=off,xgetbv1=off,hv_time,hv_relaxed,hv_vapic,hv_spinlocks=0x1fff,hv_vendor_id=whatever,kvm=off \
 	-m ${memory} \
-	-smp 2 \
+	-smp $(($(nproc) - 1)) \
 	-no-user-config \
 	-nodefaults \
 	-rtc base=localtime,driftfix=slew \
@@ -98,6 +98,8 @@ qemu-system-x86_64 \
 	-global ICH9-LPC.disable_s4=1 \
 	-object input-linux,id=kbd1,evdev=${keyboard},grab_all=on,repeat=on \
 	-object input-linux,id=mouse1,evdev=${mouse} \
+	-device virtio-mouse-pci \
+	-device virtio-keyboard-pci \
 	-serial none \
 	-parallel none \
 	$options \

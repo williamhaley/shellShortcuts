@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sudo qemu-passthrough -m 8192 -d "/dev/disk/by-id/wwn-0x5001b444a63ede57" -n "win10" -p "0e:00.0" -p "0e:00.1"
+

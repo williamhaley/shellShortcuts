@@ -13,10 +13,13 @@ _video()
 		gnome-keyring \
 		openbox obconf \
 		tint2 \
-		thunar tumbler \
+		thunar tumbler ffmpegthumbnailer \
 		feh gpicview \
 		xscreensaver xbindkeys xdotool \
 		noto-fonts noto-fonts-emoji ttf-dejavu
+
+	yay -Syy --noconfirm \
+		thunar-thumbnailers
 
 	sed -i '/gpu_mem=/d' /boot/config.txt
 	echo "gpu_mem=128" | tee -a /boot/config.txt
