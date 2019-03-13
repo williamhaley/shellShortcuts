@@ -13,7 +13,7 @@ bios_vars=/usr/share/ovmf/x64/OVMF_VARS.fd
 cdrom=""
 options=""
 keyboard="/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse"
-mouse="/dev/input/event4"
+mouse="/dev/input/event3"
 
 while getopts "m:d:n:p:c:v" opt; do
 	case $opt in

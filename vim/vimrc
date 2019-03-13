@@ -38,3 +38,6 @@ hi SpellBad cterm=underline,bold
 " Whitespace characters
 set list
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<
+
+" Force a tab character with Shift + Tab when needed
+inoremap <S-Tab> <C-V><Tab>
