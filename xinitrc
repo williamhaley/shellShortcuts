@@ -9,10 +9,14 @@ xmodmap ~/.Xmodmap
 xbindkeys -p &
 tint2 &
 
-# Dual monitor setup. [DVI][VGA]
+# Dual monitor setup. I typically have one VGA and one DVI
+# Run xrandr (no args) to see monitor ids. They may change!
+dvi=$(xrandr | grep -i dvi | awk '{print $1}')
+vga=$(xrandr | grep -i vga | awk '{print $1}')
+# Arrangement is typically: [VGA][DVI]
 xrandr \
-	--output DVI-D-0 --auto --primary \
-	--output VGA-0 --auto --right-of DVI-D-0 &
+	--output ${dvi} --auto --primary \
+	--output ${vga} --auto --left-of ${dvi} &
 
 numlockx &
 
