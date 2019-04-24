@@ -12,11 +12,15 @@ trap interrupt INT
 
 do_rsync()
 {
-	rsync_opts="--delete-excluded --delete-after --exclude=node_modules --exclude=lost+found $3"
+	rsync_opts="--itemize-changes --archive --recursive --verbose --progress --delete-excluded --delete-after"
+	rsync_opts="${rsync_opts} --exclude=".localized" --exclude=".DS_Store" --exclude=node_modules --exclude=lost+found"
+
+	#set -x
+	#rsync_opts="${rsync_opts} --dry-run"
 
 	echo "rsync: $1 ==> $2"
 	echo ""
-	wrsync ${rsync_opts} "$1" "$2"
+	rsync ${rsync_opts} "${@:3}" "$1" "$2"
 	echo ""
 }
 
@@ -50,36 +54,40 @@ _backup()
 			return
 		fi
 
-		home_include_exclude="--include="Documents/***" --include="keys/***" --include=".electrum/***" --exclude="*""
+		extra_opts="--exclude=Audio --exclude=dev --exclude=Downloads --exclude=Software --exclude=Photographs --exclude=VMs"
 
 		# Level 3 - Home (full)
 		if [ ${backup_level} -ge 3 ];
 		then
-			home_include_exclude=''
+			extra_opts=''
 		fi
 
-		rsync -avr \
-			--delete --delete-excluded --delete-after \
-			${home_include_exclude} \
-			--exclude=node_modules --exclude=lost+found \
-			/mnt/will-home/ \
-			"${dest_mnt}/willhaley-backup/"
+		do_rsync /mnt/will-home/ "${dest_mnt}/willhaley-backup/" ${extra_opts}
 	fi
 
 	# Level 4 - Data
-	if [ ${backup_level} -gt 4 ];
+	if [ ${backup_level} -ge 4 ];
 	then
 		if ! `findmnt -M "/mnt/data" > /dev/null`;
 		then
 			echo "/mnt/data is not available."
 			return
 		else
-			do_rsync /mnt/data/ "${dest_mnt}/data/"
+			extra_opts="--exclude=Videos/Renders"
+
+			# Level 5 - Data (full)
+			if [ ${backup_level} -ge 5 ];
+			then
+				extra_opts=''
+			fi
+
+			do_rsync /mnt/data/ "${dest_mnt}/data/" ${extra_opts}
 		fi
 	fi
 }
 
 _backup "/mnt/horcrux-3" 2
-_backup "/mnt/backup-internal" 4
+_backup "/mnt/backup-internal" 5
 _backup "/mnt/backup-external-1" 4
 _backup "/mnt/backup-external-2" 4
+
