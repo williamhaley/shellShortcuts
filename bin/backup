@@ -86,6 +86,8 @@ _backup()
 	fi
 }
 
+_backup "/mnt/horcrux-1" 2
+_backup "/mnt/horcrux-2" 2
 _backup "/mnt/horcrux-3" 2
 _backup "/mnt/backup-internal" 5
 _backup "/mnt/backup-external-1" 4
