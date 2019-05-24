@@ -6,6 +6,12 @@ set t_Co=256
 set background=dark
 colorscheme PaperColor
 
+" Allow for transparency
+hi Normal guibg=NONE ctermbg=NONE
+
+" Transparent background behind line number column
+highlight clear LineNr
+
 " Show line numbers
 set number
 
@@ -41,3 +47,4 @@ set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<
 
 " Force a tab character with Shift + Tab when needed
 inoremap <S-Tab> <C-V><Tab>
+

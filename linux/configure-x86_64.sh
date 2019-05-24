@@ -5,20 +5,22 @@ _init()
 
 _video()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		xorg xorg-server xorg-xinit \
 		xterm lxterminal \
 		numlockx \
 		gnome-keyring \
-		openbox obconf \
+		openbox obconf xcompmgr \
 		tint2 \
 		thunar tumbler ffmpegthumbnailer \
 		feh gpicview \
 		xscreensaver xbindkeys xdotool \
 		noto-fonts noto-fonts-emoji ttf-dejavu
 
-	yay -Syy --noconfirm \
-		thunar-thumbnailers
+	su - aur-user -c "
+		yay -Syyu --noconfirm \
+			thunar-thumbnailers
+	"
 }
 
 _nvidia()
@@ -39,25 +41,26 @@ When=PostTransaction
 Exec=/usr/bin/mkinitcpio -p linux
 EOF
 
-	pacman -Sy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		nvidia nvidia-libgl
 }
 
 _wifi()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		wpa_supplicant linux-headers broadcom-wl-dkms
 }
 
 _audio()
 {
-	pacman -Sy --noconfirm --needed \
-		alsa-firmware alsa-plugins alsaplayer
+	pacman -Syyu --noconfirm --needed \
+		alsa-firmware alsa-plugins
 }
 
 _apps_platform()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
+		obs-studio \
 		virtualbox \
 		docker docker-compose \
 
@@ -67,8 +70,15 @@ _apps_platform()
 	usermod -a -G docker will
 	groupadd vboxusers || true
 
+	# Needed for Dropbox for the time being
 	su - aur-user -c "
-		yay -Syy --noconfirm --needed \
+		cd /tmp
+		curl -O https://linux.dropbox.com/fedora/rpm-public-key.asc
+		gpg --import /tmp/rpm-public-key.asc
+	"
+
+	su - aur-user -c "
+		yay -Syyu --noconfirm --needed \
 			google-chrome \
 			visual-studio-code-bin \
 			dropbox \
@@ -86,7 +96,7 @@ _kvm()
 	# https://taxes.moe/2017/07/08/linux-and-windows-running-simultaneously-with-gpu-passthrough/
 	# https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Setting_up_the_guest_OS
 
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		qemu libvirt ovmf virt-manager \
 		ebtables dnsmasq
 

@@ -6,7 +6,7 @@ _init()
 
 _video()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		xorg xorg-server xorg-xinit xf86-video-fbdev \
 		xterm lxterminal \
 		numlockx \
@@ -18,7 +18,7 @@ _video()
 		xscreensaver xbindkeys xdotool \
 		noto-fonts noto-fonts-emoji ttf-dejavu
 
-	yay -Syy --noconfirm \
+	yay -Syyu --noconfirm \
 		thunar-thumbnailers
 
 	sed -i '/gpu_mem=/d' /boot/config.txt
@@ -32,13 +32,13 @@ _nvidia()
 
 _wifi()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		wpa_supplicant
 }
 
 _audio()
 {
-	pacman -Sy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		alsa-firmware alsa-plugins alsaplayer
 
 	sed -i '/dtparam=/d' /boot/config.txt
@@ -66,7 +66,7 @@ EOF
 		https://github.com/dropbox/dbxcli/releases/download/v2.1.2/dbxcli-linux-arm && \
 	chmod +x /usr/local/bin/dbxcli
 
-	yay -Syy --noconfirm --needed \
+	yay -Syyu --noconfirm --needed \
 		hangups
 }
 

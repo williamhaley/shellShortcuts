@@ -1,2 +1,4 @@
 feh --bg-max $CONFIGS_DIR/img/south.jpg --image-bg black
 
+xcompmgr &
+

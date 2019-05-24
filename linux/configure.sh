@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
+set -e
+
 [ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
+
+interrupt()
+{
+	echo "Script interrupted."
+	exit 1
+}
+
+trap interrupt INT
 
 if uname -a | grep -i 'x86_64' > /dev/null;
 then
@@ -15,7 +25,7 @@ _noop()
 
 _sudo()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		sudo
 
 	cat <<'EOF' > /etc/sudoers
@@ -27,7 +37,7 @@ EOF
 
 	chmod 440 /etc/sudoers
 	chown root:root /etc/sudoers
-	groupadd sudo
+	groupadd sudo || true
 }
 
 _locale()
@@ -61,7 +71,7 @@ _firewall()
 _aur()
 {
 	# makepkg requires sudo
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		base-devel wget sudo git
 
 	# Create a special user for running makepkg and install AUR depedencies without
@@ -69,7 +79,7 @@ _aur()
 	#
 	# Running as root is forbidden.
 	# https://wiki.archlinux.org/index.php/makepkg#Usage
-	useradd -m aur-user
+	useradd -m aur-user || true
 
 	cat <<'EOF' >/etc/sudoers.d/aur-user
 aur-user ALL = (ALL) ALL
@@ -141,7 +151,7 @@ _bluetooth()
 {
 	# https://wiki.archlinux.org/index.php/Bluetooth_headset#Headset_via_Bluez5.2Fbluez-alsa
 
-	pacman -Syy --needed --noconfirm \
+	pacman -Syyu --needed --noconfirm \
 		bluez bluez-utils
 
 	systemctl start bluetooth
@@ -150,7 +160,7 @@ _bluetooth()
 
 _apps()
 {
-	pacman -Syy --noconfirm --needed \
+	pacman -Syyu --noconfirm --needed \
 		sudo openssh \
 		smartmontools \
 		firefox chromium \
@@ -158,7 +168,7 @@ _apps()
 		ntfs-3g exfat-utils mtools gparted \
 		base-devel git linux-headers go jdk8-openjdk \
 		alacritty tmux screen \
-		keepassx2 \
+		keepassxc \
 		aria2 \
 		rsync unzip \
 		aws-cli \
@@ -185,7 +195,10 @@ _apps()
 	fi
 }
 
-commands=( _apps _audio _aur _bluetooth _firewall _init _kvm _locale _nvidia _sshd _sudo _video _virtualbox _wifi )
+# commands are ordered so that vital systems run first
+# aur is often needed by others, so run that first. Same for
+# video being before nvidia, etc.
+commands=( _sudo _locale _init _aur _apps _audio _bluetooth _firewall _kvm _video _nvidia _sshd _wifi )
 for command in "${commands[@]}"
 do
 	for arg in "$@"
