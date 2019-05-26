@@ -77,7 +77,7 @@
   </item>
   <item label="Passwords">
     <action name="Execute">
-      <command>keepassx2</command>
+      <command>keepassxc</command>
     </action>
   </item>
   <item label="Terminal">
