@@ -51,12 +51,6 @@ _wifi()
 		wpa_supplicant linux-headers broadcom-wl-dkms
 }
 
-_audio()
-{
-	pacman -Syyu --noconfirm --needed \
-		alsa-firmware alsa-plugins
-}
-
 _apps_platform()
 {
 	pacman -Syyu --noconfirm --needed \

@@ -158,6 +158,17 @@ _bluetooth()
 	systemctl enable bluetooth
 }
 
+_audio()
+{
+	pacman -Syyu --noconfirm --needed \
+		alsa-firmware alsa-plugins alsaplayer alsa-utils pulseaudio pavucontrol
+
+	if type _audio_platform | grep 'is a function' >/dev/null;
+	then
+		_audio_platform
+	fi
+}
+
 _apps()
 {
 	pacman -Syyu --noconfirm --needed \
@@ -179,7 +190,6 @@ _apps()
 		jq \
 		handbrake handbrake-cli \
 		vagrant intel-ucode memtest86+ rclone syslinux \
-		alsa-utils pulseaudio pavucontrol \
 		qemu qemu-arch-extra virt-viewer \
 		libdvdcss dvdbackup cdrkit \
 		vlc cmus mplayer sound-juicer \

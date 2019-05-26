@@ -36,11 +36,8 @@ _wifi()
 		wpa_supplicant
 }
 
-_audio()
+_audio_platform()
 {
-	pacman -Syyu --noconfirm --needed \
-		alsa-firmware alsa-plugins alsaplayer
-
 	sed -i '/dtparam=/d' /boot/config.txt
 	echo "dtparam=audio=on" | tee -a /boot/config.txt
 
