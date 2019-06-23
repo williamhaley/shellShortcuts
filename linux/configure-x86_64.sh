@@ -55,6 +55,7 @@ _apps_platform()
 {
 	pacman -Syyu --noconfirm --needed \
 		obs-studio \
+		perl-image-exiftool \
 		virtualbox \
 		docker docker-compose \
 
@@ -74,6 +75,7 @@ _apps_platform()
 	su - aur-user -c "
 		yay -Syyu --noconfirm --needed \
 			google-chrome \
+			google-musicmanager \
 			visual-studio-code-bin \
 			dropbox \
 			git-lfs

@@ -42,7 +42,7 @@ else
     vf="scale=${width}:${height}"
 fi
 
-filename="$(basename ${file})"
+filename=$(basename "${file}")
 extension="${filename##*.}"
 tmp_dir=$(mktemp -d)
 mkdir -p "${tmp_dir}"
@@ -51,8 +51,8 @@ tmp_file="${tmp_dir}/file.${extension}"
 # We could auto-rotate, but that seems beyond the scope of this script
 orientation="$(exiftool -Orientation -b "${file}")"
 
-set -x
 ffmpeg \
+	-loglevel panic \
 	-noautorotate \
 	-i "${file}" \
 	-qscale:v "${compression}" \
