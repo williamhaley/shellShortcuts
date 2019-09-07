@@ -56,8 +56,11 @@ _apps_platform()
 	pacman -Syyu --noconfirm --needed \
 		obs-studio \
 		perl-image-exiftool \
-		virtualbox \
+		virtualbox vagrant \
 		docker docker-compose \
+		handbrake handbrake-cli \
+		intel-ucode memtest86+ \
+		syslinux
 
 	systemctl start docker
 	systemctl enable docker

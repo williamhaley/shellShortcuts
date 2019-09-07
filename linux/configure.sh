@@ -16,7 +16,10 @@ if uname -a | grep -i 'x86_64' > /dev/null;
 then
 	source ./configure-x86_64.sh
 fi
-#source ./configure-raspberry-pi.sh
+if uname -a | grep -i 'armv7l' > /dev/null;
+then
+	source ./configure-raspberry-pi4.sh
+fi
 
 _noop()
 {
@@ -171,6 +174,13 @@ _audio()
 
 _apps()
 {
+	# Call this first in case platform-specific choices for packages like linux-headers
+	# should be chosen
+	if type _apps_platform | grep 'is a function' >/dev/null;
+	then
+		_apps_platform
+	fi
+
 	pacman -Syyu --noconfirm --needed \
 		sudo openssh \
 		smartmontools \
@@ -184,12 +194,12 @@ _apps()
 		rsync unzip \
 		aws-cli \
 		wget curl \
-		net-tools tcpdump wireshark-cli \
+		net-tools tcpdump wireshark-cli nmap \
+		transmission-cli \
 		hugo \
 		gimp \
 		jq \
-		handbrake handbrake-cli \
-		vagrant intel-ucode memtest86+ rclone syslinux \
+		rclone \
 		qemu qemu-arch-extra virt-viewer \
 		libdvdcss dvdbackup cdrkit \
 		vlc cmus mplayer sound-juicer \
@@ -199,10 +209,8 @@ _apps()
 		ack \
 		vim gedit
 
-	if type _apps_platform | grep 'is a function' >/dev/null;
-	then
-		_apps_platform
-	fi
+	# http://localhost:9091
+	systemctl enable transmission
 }
 
 # commands are ordered so that vital systems run first
@@ -221,9 +229,5 @@ do
 	done
 done
 
-# apps-pi
-# apps-x86_64
-
 # useradd -m -s /bin/bash -G sshusers,docker,sudo,vboxusers will || true
 # usermod -a -G sshusers,docker,sudo,vboxusers || true
-# passwd will
