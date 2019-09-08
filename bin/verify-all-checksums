@@ -10,9 +10,16 @@ do
 	(
 		cd `dirname "$sum_file"`
 
+		source_file=$(basename "${sum_file%.sha512}")
+
+		if [ ! -f "${source_file}" ];
+		then
+			rm "$(basename ${sum_file})"
+			exit
+		fi
+
 		# Only report failures
 		sha512sum --check --quiet "$(basename ${sum_file})" || (
-			source_file=$(basename "${sum_file%.sha512}")
 			echo "Source file: ${source_file}"
 
 			ls | grep -i "${source_file}"
