@@ -11,4 +11,3 @@ fi
 . $CONFIGS_DIR/shell/common.bash
 
 export EDITOR=vim
-
