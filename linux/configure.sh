@@ -207,7 +207,13 @@ _apps()
 		fbida ranger w3m \
 		expect \
 		ack \
-		vim gedit
+		vim gedit \
+		docker docker-compose
+
+	usermod -a -G docker will || true
+
+	systemctl start docker
+	systemctl enable docker
 
 	# http://localhost:9091
 	systemctl enable transmission

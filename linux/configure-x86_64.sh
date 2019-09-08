@@ -57,15 +57,10 @@ _apps_platform()
 		obs-studio \
 		perl-image-exiftool \
 		virtualbox vagrant \
-		docker docker-compose \
 		handbrake handbrake-cli \
 		intel-ucode memtest86+ \
 		syslinux
 
-	systemctl start docker
-	systemctl enable docker
-
-	usermod -a -G docker will
 	groupadd vboxusers || true
 
 	# Needed for Dropbox for the time being
