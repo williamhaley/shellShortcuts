@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+gateway=$(ip route | grep default | awk '{print $3}')
+nmap -sP ${gateway}/24
+

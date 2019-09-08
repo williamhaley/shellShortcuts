@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+random()
+{
+	files=($HOME/Photographs/**/*.jpg)
+
+	img=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
+
+	echo "${img}" > /tmp/background.log
+	cp "${img}" /tmp/background.jpg
+
+	orientation=$(identify -format '%[EXIF:Orientation]' "/tmp/background.jpg")
+	if [ "${orientation}" -ne "1" ];
+	then
+		echo "orientation must be changed: ${orientation}"
+		mogrify -auto-orient /tmp/background.jpg
+		orientation=$(identify -format '%[EXIF:Orientation]' "/tmp/background.jpg")
+	fi
+
+	# Label the image
+	# Note the updated file name!
+	#montage \
+	#    -label "${img}" \
+	#    /tmp/background.jpg \
+	#    -font Arial \
+	#    -pointsize 40 \
+	#    -frame 5 \
+	#    -geometry +0+0 \
+	#    /tmp/background2.jpg
+
+	feh --bg-max /tmp/background.jpg --image-bg black
+}
+
+delete()
+{
+	file=$(cat /tmp/background.log)
+
+	if [ -f "${file}" ];
+	then
+		read -p "Delete ${file}? [y]" -n 1 -r
+		echo
+		if [[ $REPLY =~ ^[Yy]$ ]]
+		then
+			echo "deleting ${file}"
+			rm "${file}"
+			rm -f "${file}.sha512"
+			random
+		fi
+	fi
+}
+
+while getopts ":lrdf:" opt; do
+	case ${opt} in
+	f )
+		feh --bg-max "${OPTARG}" --image-bg black
+		exit
+		;;
+	l )
+		while true; do random; sleep 30; done
+		exit
+		;;
+	r )
+		random
+		exit
+		;;
+	d )
+		delete
+		exit
+		;;
+	\? ) echo "Usage: background [-l] [-r] [-d] [-f <path>]"
+		exit 255
+		;;
+	esac
+done
+
