@@ -13,15 +13,18 @@ fi
 
 printfgreen ":${upstream}"
 
-REMOTE=$(git rev-parse "$upstream")
-BASE=$(git merge-base @ "$upstream")
+REMOTE=$(git rev-parse "$upstream" 2> /dev/null)
+BASE=$(git merge-base @ "$upstream" 2> /dev/null)
 
-if [ $local = $REMOTE ]; then
+if [ "${local}" = "${REMOTE}" ];
+then
 	printf ""
-elif [ $local = $BASE ]; then
+elif [ "${local}" = "${BASE}" ];
+then
 	printfred " Needs pull"
-elif [ $REMOTE = $BASE ]; then
+elif [ "${REMOTE}" = "${BASE}" ];
+then
 	printfred " Needs push"
 else
-	printfred " Diverged"
+	printfred " Diverged. Orphaned local?"
 fi

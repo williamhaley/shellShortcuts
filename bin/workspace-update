@@ -10,6 +10,12 @@ for app in `ls $1`;
 		cd "$1/$app"
 		if [ -d ".git" ];
 		then
+			# Updates from go modules. Always do a reset unless there are other changed files
+			if [[ `git diff --stat --name-only | grep -v "go.mod" | grep -v "go.sum" | wc -l` -eq 0 ]];
+			then
+				git reset --hard
+			fi
+
 			git submodule update --init --recursive > /dev/null 2>&1
 			git pull --rebase > /dev/null 2>&1
 		fi
