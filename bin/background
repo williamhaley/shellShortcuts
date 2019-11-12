@@ -49,7 +49,7 @@ delete()
 	fi
 }
 
-while getopts ":lrdf:" opt; do
+while getopts ":lirdf:" opt; do
 	case ${opt} in
 	f )
 		feh --bg-max "${OPTARG}" --image-bg black
@@ -67,7 +67,18 @@ while getopts ":lrdf:" opt; do
 		delete
 		exit
 		;;
+	i )
+		cat /tmp/background.log
+		exit
+		;;
 	\? ) echo "Usage: background [-l] [-r] [-d] [-f <path>]"
+		echo ""
+		echo "	-l loop and repeatedly set a random background"
+		echo "	-r set a random background"
+		echo "	-d delete the currently displayed background"
+		echo "	-f specify a file path to set a background"
+		echo "	-i get info on the current background"
+		echo ""
 		exit 255
 		;;
 	esac
