@@ -13,7 +13,7 @@ _video()
 		openbox obconf xcompmgr \
 		tint2 \
 		thunar tumbler ffmpegthumbnailer \
-		feh gpicview \
+		feh gpicview gthumb \
 		xscreensaver xbindkeys xdotool \
 		noto-fonts noto-fonts-emoji ttf-dejavu
 
