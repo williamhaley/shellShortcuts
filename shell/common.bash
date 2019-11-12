@@ -32,8 +32,6 @@ if [ "$(uname)" != "Darwin" ]; then
 	alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 	# alias battery="upower -i $(upower -e | grep BAT) | grep --color=never -E percentage|xargs|cut -d' ' -f2|sed s/%//"
 
-	complete -cf sudo
-
 	export IS_LINUX=true
 else
 	# Enable colors.
