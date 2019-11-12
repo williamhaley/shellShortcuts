@@ -1,10 +1,6 @@
 # Images
 
-## Pixabay Images
-
-* [winter.jpg](https://pixabay.com/en/woods-snowy-trees-winter-wintry-690257/)
-  * User: [Free-Photos](https://pixabay.com/en/users/Free-Photos-242387/)
-  * License: `CC0 Creative Commons`
+* [winter.jpg](https://nature.desktopnexus.com/wallpaper/1422063/)
 
 ## NASA Images
 
