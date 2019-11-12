@@ -28,5 +28,6 @@
         "javascriptreact",
         "typescript",
         "typescriptreact"
-    ]
+    ],
+    "workbench.colorTheme": "Tomorrow Night Blue"
 }

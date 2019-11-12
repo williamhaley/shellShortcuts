@@ -1,19 +1,8 @@
-# Set up workspace
-
-mkdir -p $HOME/dev
-
 # Append system paths to end of $PATH
-PATH=$PATH:/opt/bin
-PATH=$PATH:/opt/local/bin
-PATH=$PATH:/opt/local/sbin
-PATH=$PATH:/sbin
-PATH=$PATH:/usr/local/bin
+PATH=$PATH:/opt/bin:/opt/local/bin:/opt/local/sbin:/sbin:/usr/local/bin
 
 # Prepend user paths to start of $PATH
-PATH=$HOME/bin:$PATH
-PATH=$HOME/.local/bin:$PATH
-PATH=$HOME/.yarn/bin:$PATH
-PATH=$CONFIGS_DIR/bin:$PATH
+PATH=$HOME/bin:$HOME/.local/bin:$HOME/.yarn/bin:$CONFIGS_DIR/bin:$PATH
 
 # RVM
 PATH=$PATH:$HOME/.rvm/bin
@@ -22,8 +11,7 @@ PATH=$PATH:$HOME/.rvm/bin
 NVM_DIR=$HOME/.nvm
 
 # PYENV
-PATH=$HOME/.pyenv/shims:$PATH
-PATH=$HOME/.pyenv/bin:$PATH
+PATH=$HOME/.pyenv/shims:$HOME/.pyenv/bin:$PATH
 PYENV_ROOT=$HOME/.pyenv
 
 # GOLANG

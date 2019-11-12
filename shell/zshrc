@@ -1,0 +1,4 @@
+. $CONFIGS_DIR/shell/common.bash
+. $CONFIGS_DIR/shell/oh-my-zsh.zsh
+
+export EDITOR=vim

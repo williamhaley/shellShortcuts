@@ -1,32 +1,26 @@
 # Overview
 
-This repo contains my config files, aliases, bash helpers, etc.
+This repo contains my config files, aliases, zsh/bash/shell helpers, etc.
 
 Various application config files can be copied manually as needed.
 
 # Install
 
-Clone the repo to `$HOME` using the SSH clone URL. Clobber `.bash_profile` with this.
+Clone the repo to `$HOME` using the SSH clone URL. Clobber `.zshrc` with this.
 
 ```
 #
-# ~/.bash_profile
+# ~/.zshrc
 #
-# Loaded only for login bash sessions (new TTY/SSH).
-
-[[ -f ~/.bashrc ]] && . ~/.bashrc
-```
-
-Append this to `.bashrc`.
-
-```
-#
-# ~/.bashrc
-#
-# Loaded for non-login bash sessions (new tab) and sourced by bash_profile.
 
 export CONFIGS_DIR=$HOME/configs
-source $CONFIGS_DIR/shell/bashrc
+source $CONFIGS_DIR/shell/zshrc
+```
+
+Install `oh-my-zsh`
+
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
 Close and re-open the terminal so that those changes take effect.

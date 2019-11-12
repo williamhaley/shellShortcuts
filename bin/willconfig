@@ -2,6 +2,8 @@
 
 echo "Setting up configs."
 
+mkdir -p $HOME/dev
+
 mkdir -p $HOME/.ssh
 touch $HOME/.ssh/authorized_keys
 chmod 600 $HOME/.ssh/authorized_keys
