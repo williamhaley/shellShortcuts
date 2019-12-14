@@ -93,5 +93,3 @@ _backup "/mnt/backup-internal" 5
 _backup "/mnt/backup-external-1" 4
 _backup "/mnt/backup-external-2" 4
 
-echo "back up photos"
-rsync -zavr --include "*/" --include="*.jpg" --exclude "*" /mnt/will-home/Photographs/ /mnt/photos/Photographs/
