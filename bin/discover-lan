@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
-gateway=$(ip route | grep default | awk '{print $3}')
+if command -v ip > /dev/null;
+then
+	gateway=$(ip route | grep default | awk '{print $3}')
+else
+	gateway=$(route -n get default | grep gateway | awk '{print $2}')
+fi
+
 nmap -sP ${gateway}/24
 
