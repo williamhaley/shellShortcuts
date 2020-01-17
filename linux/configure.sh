@@ -12,24 +12,9 @@ interrupt()
 
 trap interrupt INT
 
-if uname -a | grep -i 'x86_64' > /dev/null;
-then
-	source ./configure-x86_64.sh
-fi
-if uname -a | grep -i 'armv7l' > /dev/null;
-then
-	source ./configure-raspberry-pi4.sh
-fi
-
-_noop()
-{
-	echo "not implemented"
-}
-
 _sudo()
 {
-	pacman -Syyu --noconfirm --needed \
-		sudo
+	pacman -Syyu --noconfirm --needed sudo
 
 	cat <<'EOF' > /etc/sudoers
 root	ALL=(ALL) ALL
@@ -59,8 +44,7 @@ EOF
 
 _firewall()
 {
-	pacman -S --noconfirm --needed \
-		ufw
+	pacman -S --noconfirm --needed ufw
 
 	# ufw
 	ufw --force disable
@@ -161,63 +145,93 @@ _bluetooth()
 	systemctl enable bluetooth
 }
 
-_audio()
-{
-	pacman -Syyu --noconfirm --needed \
-		alsa-firmware alsa-plugins alsaplayer alsa-utils pulseaudio pavucontrol
-
-	if type _audio_platform | grep 'is a function' >/dev/null;
-	then
-		_audio_platform
-	fi
-}
-
 _apps()
 {
-	# Call this first in case platform-specific choices for packages like linux-headers
-	# should be chosen
-	if type _apps_platform | grep 'is a function' >/dev/null;
-	then
-		_apps_platform
-	fi
-
 	pacman -Syyu --noconfirm --needed \
 		sudo openssh \
-		smartmontools \
-		firefox chromium \
-		sane \
-		ntfs-3g exfat-utils mtools gparted \
-		base-devel git linux-headers go jdk8-openjdk \
-		alacritty tmux screen \
+		firefox \
+		ntfs-3g exfat-utils mtools syslinux \
+		vim gedit base-devel git linux-headers go docker docker-compose \
 		keepassxc \
-		aria2 \
-		rsync unzip \
-		aws-cli \
-		wget curl \
+		wget curl rclone rsync unzip \
 		net-tools tcpdump wireshark-cli nmap \
 		transmission-cli \
-		hugo \
-		gimp \
-		jq \
-		rclone \
-		qemu qemu-arch-extra virt-viewer \
-		libdvdcss dvdbackup cdrkit \
-		vlc cmus mplayer sound-juicer \
-		xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
-		fbida ranger w3m \
-		expect \
-		ack \
-		vim gedit \
-		docker docker-compose
+		qemu qemu-arch-extra \
+		handbrake handbrake-cli libdvdcss dvdbackup cdrkit \
+		vlc cmus mplayer xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
+		jq expect ack alacritty tmux screen \
+		alsa-firmware alsa-plugins alsa-utils pulseaudio pavucontrol \
+		memtest86+ \
+		xorg xorg-server xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu \
+		wpa_supplicant linux-headers netctl
 
-	usermod -a -G docker will || true
+	# For hardware WiFi card
+	# broadcom-wl-dkms
+
+	# Needed for Dropbox for the time being
+	su - aur-user -c "
+		cd /tmp
+		curl -O https://linux.dropbox.com/fedora/rpm-public-key.asc
+		gpg --import /tmp/rpm-public-key.asc
+	"
+
+	su - aur-user -c "
+		yay -Syyu --noconfirm --needed \
+			google-chrome \
+			google-musicmanager \
+			visual-studio-code-bin \
+			dropbox \
+			git-lfs
+	"
 
 	systemctl start docker
 	systemctl enable docker
 
 	# http://localhost:9091
 	systemctl enable transmission
+
+	su - aur-user -c "
+		yay -Syyu --noconfirm \
+			thunar-thumbnailers
+	"
 }
+
+_user()
+{
+	useradd -m -s /bin/bash $1 || true
+	usermod -a -G sshusers $1 || true
+	usermod -a -G sudo $1 || true
+	usermod -a -G vboxusers $1 || true
+	usermod -a -G docker $1 || true
+}
+
+_nvidia()
+{
+	mkdir -p /etc/pacman.d/hooks
+
+cat <<EOF > /etc/pacman.d/hooks/nvidia.hook
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia
+
+[Action]
+Depends=mkinitcpio
+When=PostTransaction
+Exec=/usr/bin/mkinitcpio -p linux
+EOF
+
+	pacman -Syyu --noconfirm --needed nvidia nvidia-libgl
+}
+
+_sudo
+_locale
+_firewall
+_aur
+_apps
+_user "${1}"
 
 # commands are ordered so that vital systems run first
 # aur is often needed by others, so run that first. Same for
@@ -234,6 +248,3 @@ do
 		fi
 	done
 done
-
-# useradd -m -s /bin/bash -G sshusers,docker,sudo,vboxusers will || true
-# usermod -a -G sshusers,docker,sudo,vboxusers || true

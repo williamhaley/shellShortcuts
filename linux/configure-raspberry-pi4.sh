@@ -24,15 +24,9 @@ _video()
 	"
 }
 
-_nvidia()
-{
-	_noop
-}
-
 _wifi()
 {
-	pacman -Syyu --noconfirm --needed \
-		wpa_supplicant
+	pacman -Syyu --noconfirm --needed wpa_supplicant
 }
 
 _audio_platform()
@@ -55,9 +49,4 @@ _apps_platform()
 		-o /usr/local/bin/dbxcli \
 		https://github.com/dropbox/dbxcli/releases/download/v2.1.2/dbxcli-linux-arm && \
 	chmod +x /usr/local/bin/dbxcli
-}
-
-_kvm()
-{
-	_noop
 }

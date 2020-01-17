@@ -15,19 +15,8 @@ Reboot your machine and eject the live media.
 
 Clone this repo to the machine.
 
-### Arch (as root)
-
-This is most likely what you want. You can re-run these commands individually or add more.
+### Configure Arch (as root)
 
 ```
-./configure.sh apps audio aur firewall init locale sudo video
+./configure.sh "will" # Or whatever user name
 ```
-
-Other commands not listed above include `bluetooth`, `kvm`, `nvidia`, `sshd`. See `configure.sh` for all possible commands.
-
-Add the user to groups as needed. For example.
-
-```
-usermod -a -G sshusers,docker,sudo,vboxusers will
-```
-

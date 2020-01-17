@@ -6,7 +6,7 @@ IFS=$'\n\t'
 locale_gen="en_US.UTF-8 UTF-8"
 locale_conf="LANG=en_US.UTF-8"
 timezone="/usr/share/zoneinfo/US/Central"
-applications="bash-completion git iw wpa_supplicant openssh memtest86+"
+applications="bash-completion git iw wpa_supplicant openssh memtest86+ dhcpcd netctl nano"
 mirror='http://mirror.us.leaseweb.net/archlinux/$repo/os/$arch'
 arch_hostname="archlinux"
 root_format="ext4"
@@ -219,7 +219,7 @@ mount ${boot_part} /mnt/boot
 echo "Server = ${mirror}" > /etc/pacman.d/mirrorlist
 
 # Install system.
-pacstrap /mnt base
+pacstrap /mnt base linux linux-firmware
 
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
@@ -231,14 +231,14 @@ sed -i -e "s|^MODULES=.*|MODULES=\(${modules}\)|" /mnt/etc/mkinitcpio.conf
 # Hostname.
 arch-chroot /mnt /bin/bash -c "echo '$arch_hostname' > /etc/hostname"
 
-# Enable DHCP.
-arch-chroot /mnt systemctl enable dhcpcd
-
-# timezone.
+# Timezone.
 arch-chroot /mnt ln -sf ${timezone} /etc/localtime
 
 # Apps to install.
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm ${applications}"
+
+# Enable DHCP.
+arch-chroot /mnt systemctl enable dhcpcd
 
 # Locale.
 echo "${locale_gen}" > /mnt/etc/locale.gen
