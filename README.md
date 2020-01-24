@@ -6,7 +6,9 @@ Various application config files can be copied manually as needed.
 
 # Install
 
-Clone the repo to `$HOME` using the SSH clone URL. Clobber `.zshrc` with this.
+Clone the repo to `$HOME` using the SSH clone URL. Be sure to use the `--recursive` flag and also run `git lfs pull`.
+
+Clobber `.zshrc` with this.
 
 ```
 #
@@ -16,14 +18,6 @@ Clone the repo to `$HOME` using the SSH clone URL. Clobber `.zshrc` with this.
 export CONFIGS_DIR=$HOME/configs
 source $CONFIGS_DIR/shell/zshrc
 ```
-
-Install `oh-my-zsh`
-
-```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-```
-
-Close and re-open the terminal so that those changes take effect.
 
 Run this to set up aliases, symlinks, copy config files into place, etc.
 
