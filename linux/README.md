@@ -11,6 +11,23 @@ bash arch-bootstrap.sh --disk=/dev/sda --name=will
 
 Reboot your machine and eject the live media.
 
+### Troubleshooting
+
+If the live environment for bootstrapping Arch has a misaligned clock or other issues, there may be problems with signatures and package validity. Check and try some of the following if necessary.
+
+```
+# Checking/setting the clock
+date
+date --set="<valid format>"
+
+# See if you can install a package without problems
+pacman -S ffmpeg
+
+# Try fixing the keys in the live environment
+pacman-key --populate archlinux
+pacman -Sy archlinux-keyring
+pacman-key --refresh-keys
+
 ## Configure
 
 Clone this repo to the machine.

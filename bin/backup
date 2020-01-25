@@ -99,10 +99,9 @@ _backup()
 	fi
 }
 
-_backup "/mnt/horcrux-1" 2
-_backup "/mnt/horcrux-2" 2
-_backup "/mnt/horcrux-3" 2
-_backup "/mnt/horcrux-4" 3
+_backup "/mnt/horcrux-1" 3
+_backup "/mnt/horcrux-2" 3
+_backup "/mnt/horcrux-3" 4
 _backup "/mnt/backup-internal" 7
 _backup "/mnt/backup-external-1" 6
 _backup "/mnt/backup-external-2" 6
