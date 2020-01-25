@@ -55,6 +55,18 @@ _firewall()
 	ufw --force enable
 }
 
+_touchpad()
+{
+	cat <<'EOF' >/etc/X11/xorg.conf.d/30-touchpad.conf
+Section "InputClass"
+    Identifier "devname"
+    Driver "libinput"
+    Option "Tapping" "on"
+    Option "NaturalScrolling" "true"
+EndSection
+EOF
+}
+
 _acpi()
 {
 	pacman -Syyu --noconfirm --needed acpid
