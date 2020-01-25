@@ -55,6 +55,36 @@ _firewall()
 	ufw --force enable
 }
 
+_acpi()
+{
+	pacman -Syyu --noconfirm --needed acpid
+
+	cat <<'EOF' >/etc/acpi/handler.sh
+#!/bin/bash
+case "$1" in
+    button/lid)
+        case "$3" in
+            close)
+                echo -n "freeze" > /sys/power/state
+                logger 'LID closed. Freezing system.'
+                ;;
+        esac
+        ;;
+esac
+EOF
+
+	chmod +x /etc/acpi/handler.sh
+
+	systemctl start acpid
+	systemctl enable acpid
+
+	cat <<'EOF' >/etc/systemd/logind.conf
+[Login]
+HandlePowerKey=hibernate
+HandleLidSwitch=ignore
+EOF
+}
+
 _aur()
 {
 	# makepkg requires sudo
