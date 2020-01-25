@@ -6,7 +6,13 @@ Various application config files can be copied manually as needed.
 
 # Install
 
-Clone the repo to `$HOME` using the SSH clone URL. Be sure to use the `--recursive` flag and also run `git lfs pull`.
+Clone the repo to `$HOME` using the SSH clone URL.
+
+Clone all submodules as well.
+
+```
+git submodule update --init --recursive
+```
 
 Clobber `.zshrc` with this.
 

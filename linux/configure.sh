@@ -151,7 +151,7 @@ _apps()
 		sudo openssh \
 		firefox \
 		ntfs-3g exfat-utils mtools syslinux \
-		vim gedit base-devel git linux-headers go docker docker-compose \
+		zsh vim gedit base-devel git linux-headers go docker docker-compose \
 		keepassxc \
 		wget curl rclone rsync unzip \
 		net-tools tcpdump wireshark-cli nmap \
@@ -163,7 +163,7 @@ _apps()
 		alsa-firmware alsa-plugins alsa-utils pulseaudio pavucontrol \
 		memtest86+ \
 		xorg xorg-server xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu \
-		wpa_supplicant linux-headers netctl
+		wpa_supplicant linux-headers dialog netctl
 
 	# For hardware WiFi card
 	# broadcom-wl-dkms
@@ -189,11 +189,6 @@ _apps()
 
 	# http://localhost:9091
 	systemctl enable transmission
-
-	su - aur-user -c "
-		yay -Syyu --noconfirm \
-			thunar-thumbnailers
-	"
 }
 
 _user()
@@ -226,11 +221,11 @@ EOF
 	pacman -Syyu --noconfirm --needed nvidia nvidia-libgl
 }
 
-_sudo
-_locale
-_firewall
-_aur
-_apps
+#_sudo
+#_locale
+#_firewall
+#_aur
+#_apps
 _user "${1}"
 
 # commands are ordered so that vital systems run first
