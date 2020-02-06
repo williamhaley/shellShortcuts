@@ -12,12 +12,12 @@
       </startupnotify>
     </action>
   </item>
-  <item label="Chrome">
+  <item label="Chromium">
     <action name="Execute">
-      <command>google-chrome-stable</command>
+      <command>chromium</command>
       <startupnotify>
         <enabled>yes</enabled>
-        <wmclass>Chrome</wmclass>
+        <wmclass>Chromium</wmclass>
       </startupnotify>
     </action>
   </item>

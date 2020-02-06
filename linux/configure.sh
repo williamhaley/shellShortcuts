@@ -191,7 +191,7 @@ _apps()
 {
 	pacman -Syyu --noconfirm --needed \
 		sudo openssh \
-		firefox \
+		firefox chromium \
 		ntfs-3g exfat-utils mtools syslinux \
 		zsh vim gedit base-devel git linux-headers go docker docker-compose \
 		keepassxc \
@@ -219,7 +219,6 @@ _apps()
 
 	su - aur-user -c "
 		yay -Syyu --noconfirm --needed \
-			google-chrome \
 			google-musicmanager \
 			visual-studio-code-bin \
 			dropbox \
