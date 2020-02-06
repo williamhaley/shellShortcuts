@@ -135,7 +135,10 @@ fi
 ############
 
 # Crude method for wiping out partition tables.
-dd if=/dev/zero of=${disk} bs=1M count=100
+# dd if=/dev/zero of=${disk} bs=1M count=100
+wipefs -a ${disk}
+echo "o\nw\n" | sudo fdisk ${disk}
+
 parted --script ${disk} mklabel msdos
 
 # Create boot partition 1GB large.

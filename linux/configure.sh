@@ -204,7 +204,7 @@ _apps()
 		jq expect ack alacritty tmux screen \
 		alsa-firmware alsa-plugins alsa-utils pulseaudio pavucontrol \
 		memtest86+ \
-		xorg xorg-server xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu \
+		xorg xorg-server xf86-video-intel xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu \
 		wpa_supplicant linux-headers dialog netctl
 
 	# For hardware WiFi card
@@ -263,11 +263,11 @@ EOF
 	pacman -Syyu --noconfirm --needed nvidia nvidia-libgl
 }
 
-#_sudo
-#_locale
-#_firewall
-#_aur
-#_apps
+_sudo
+_locale
+_firewall
+_aur
+_apps
 _user "${1}"
 
 # commands are ordered so that vital systems run first

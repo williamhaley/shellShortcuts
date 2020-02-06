@@ -17,11 +17,6 @@ _video()
 		feh gpicview gthumb \
 		xscreensaver xbindkeys xdotool \
 		noto-fonts noto-fonts-emoji ttf-dejavu
-
-	su - aur-user -c "
-		yay -Syyu --noconfirm \
-			thunar-thumbnailers
-	"
 }
 
 _wifi()
