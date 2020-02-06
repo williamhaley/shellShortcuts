@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+docker run \
+    -d \
+    --name plex \
+    --network=host \
+    -e TZ="America/Chicago" \
+    -v $HOME/plexconfig:/config \
+    -v $HOME/plextranscode:/transcode \
+    -v /mnt/data/Videos:/data \
+    plexinc/pms-docker
+
