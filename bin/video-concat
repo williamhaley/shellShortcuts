@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+tmp=`mktemp`
+
+name=""
+
+# The paths must be absolute for the videos we combine
+for file in "$@"
+do
+    fullpath=`realpath ${file}`
+    filename_with_extension=$(basename -- "$fullpath")
+    filename="${filename_with_extension%.*}"
+    if [ -z "${name}" ];
+    then
+        name+="${filename}"
+    else
+        name+="-${filename}"
+    fi
+    echo "file '${fullpath}'" >> ${tmp}
+done
+
+ffmpeg -f concat -safe 0 -i ${tmp} -c copy "${name}.mp4"

@@ -2,9 +2,10 @@
 
 set -e
 
-FORMAT="mp3"
+file_format="mp3"
 
-FILENAME=$(youtube-dl "$1" -o "%(title)s" --get-filename)
-SANITIZED=$(echo $FILENAME | tr -d "\"" | tr -d "'")
-youtube-dl --extract-audio --audio-format ${FORMAT} --output "${SANITIZED}.%(ext)s" $1
-kid3-cli -c "set title '${SANITIZED}'" "${SANITIZED}.${FORMAT}"
+filename=$(youtube-dl "$1" -o "%(title)s" --get-filename)
+echo "filename: ${filename}"
+filename=$(echo $filename | sed "s/_/|/g" | sed "s/[^ a-zA-Z0-9•|&\",:\'-]//g" | tr -s ' ')
+echo "sanitized filename: ${filename}"
+youtube-dl --extract-audio --audio-format ${file_format} --output "${filename}.%(ext)s" $1

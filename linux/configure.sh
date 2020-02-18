@@ -204,11 +204,7 @@ _apps()
 		jq expect ack alacritty tmux screen \
 		alsa-firmware alsa-plugins alsa-utils pulseaudio pavucontrol \
 		memtest86+ \
-		xorg xorg-server xf86-video-intel xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu \
-		wpa_supplicant linux-headers dialog netctl
-
-	# For hardware WiFi card
-	# broadcom-wl-dkms
+		xorg xorg-server xf86-video-intel xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar thunar-archive-plugin file-roller tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu
 
 	# Needed for Dropbox for the time being
 	su - aur-user -c "
@@ -230,6 +226,16 @@ _apps()
 
 	# http://localhost:9091
 	systemctl enable transmission
+}
+
+_wifi()
+{
+	# For hardware internal PCI WiFi cards that I buy
+	pacman -Syyu --noconfirm --needed \
+		broadcom-wl-dkms linux-headers
+
+	pacman -Sy --noconfirm --needed \
+		wpa_supplicant dialog netctl
 }
 
 _user()
@@ -268,6 +274,7 @@ _firewall
 _aur
 _apps
 _user "${1}"
+_wifi
 
 # commands are ordered so that vital systems run first
 # aur is often needed by others, so run that first. Same for
@@ -284,3 +291,4 @@ do
 		fi
 	done
 done
+
