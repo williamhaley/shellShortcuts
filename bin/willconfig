@@ -9,6 +9,8 @@ touch $HOME/.ssh/authorized_keys
 chmod 600 $HOME/.ssh/authorized_keys
 ln -sf $CONFIGS_DIR/sshconfig $HOME/.ssh/config
 
+ln -sf $CONFIGS_DIR/Xresources $HOME/.Xresources
+
 ln -sf $CONFIGS_DIR/gitconfig $HOME/.gitconfig
 ln -sf $CONFIGS_DIR/gitconfig.personal $HOME/.gitconfig.personal
 

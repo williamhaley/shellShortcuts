@@ -93,6 +93,14 @@
       </startupnotify>
     </action>
   </item>
+  <item label="xterm">
+    <action name="Execute">
+      <command>xterm</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
   <item label="VirtualBox">
     <action name="Execute">
       <command>VirtualBox</command>

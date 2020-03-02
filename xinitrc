@@ -24,4 +24,7 @@ numlockx &
 eval $(ssh-agent)
 
 xscreensaver -no-splash &
+
+xrdb ~/.Xresources
+
 exec openbox-session

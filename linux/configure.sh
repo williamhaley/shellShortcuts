@@ -234,6 +234,7 @@ _wifi()
 	pacman -Syyu --noconfirm --needed \
 		broadcom-wl-dkms linux-headers
 
+	# If using netctl you should disable dhcpcd service!
 	pacman -Sy --noconfirm --needed \
 		wpa_supplicant dialog netctl
 }
@@ -245,6 +246,7 @@ _user()
 	usermod -a -G sudo $1 || true
 	usermod -a -G vboxusers $1 || true
 	usermod -a -G docker $1 || true
+	usermod -a -G transmission $1 || true
 }
 
 _nvidia()
