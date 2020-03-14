@@ -9,8 +9,6 @@ touch $HOME/.ssh/authorized_keys
 chmod 600 $HOME/.ssh/authorized_keys
 ln -sf $CONFIGS_DIR/sshconfig $HOME/.ssh/config
 
-ln -sf $CONFIGS_DIR/Xresources $HOME/.Xresources
-
 ln -sf $CONFIGS_DIR/gitconfig $HOME/.gitconfig
 ln -sf $CONFIGS_DIR/gitconfig.personal $HOME/.gitconfig.personal
 
@@ -59,10 +57,11 @@ then
 	mkdir -p $HOME/.config/Code/User
 	ln -sf $CONFIGS_DIR/vscode/settings.json "$HOME/.config/Code/User/settings.json"
 
-	ln -sf $CONFIGS_DIR/xscreensaver "${HOME}/.xscreensaver"
-	ln -sf $CONFIGS_DIR/xbindkeysrc "${HOME}/.xbindkeysrc"
-	ln -sf $CONFIGS_DIR/Xmodmap "${HOME}/.Xmodmap"
-	ln -sf $CONFIGS_DIR/xinitrc "${HOME}/.xinitrc"
+	ln -sf $CONFIGS_DIR/X/xscreensaver "${HOME}/.xscreensaver"
+	ln -sf $CONFIGS_DIR/X/xbindkeysrc "${HOME}/.xbindkeysrc"
+	ln -sf $CONFIGS_DIR/X/Xmodmap "${HOME}/.Xmodmap"
+	ln -sf $CONFIGS_DIR/X/xinitrc "${HOME}/.xinitrc"
+	ln -sf $CONFIGS_DIR/X/Xresources $HOME/.Xresources
 
 	mkdir -p $HOME/.config/tint2
 	ln -sf $CONFIGS_DIR/tint2rc "${HOME}/.config/tint2/tint2rc"

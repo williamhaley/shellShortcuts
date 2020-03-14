@@ -22,9 +22,6 @@ then
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
-# Xterm/Linux transparency
-[ -n "$XTERM_VERSION" ] && transset-df --id "$WINDOWID" >/dev/null
-
 # Could also wrap this up into a function if that makes more sense.
 if [ "$(uname)" != "Darwin" ]; then
 	case "$TERM" in

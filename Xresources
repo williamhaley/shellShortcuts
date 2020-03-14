@@ -1,8 +1,0 @@
-! Source ith xrdb ~/ThisFile
-
-xterm*background: black
-xterm*foreground: lightgray
-
-!xterm*faceName: monospace:pixelsize=16
-xterm*faceName: incoslata:pixelsize=16
-

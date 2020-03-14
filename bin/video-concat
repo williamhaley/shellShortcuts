@@ -7,7 +7,7 @@ name=""
 # The paths must be absolute for the videos we combine
 for file in "$@"
 do
-    fullpath=`realpath ${file}`
+    fullpath=`realpath "${file}"`
     filename_with_extension=$(basename -- "$fullpath")
     filename="${filename_with_extension%.*}"
     if [ -z "${name}" ];

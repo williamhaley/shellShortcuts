@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+filename=$(basename -- "${1}")
+extension="${filename##*.}"
+filename="${filename%.*}"
+
+ffmpeg \
+    -i "${1}" \
+    -c:v libx264 -crf 20 -preset slow \
+    "./${filename}.1080p.${extension}"
+
