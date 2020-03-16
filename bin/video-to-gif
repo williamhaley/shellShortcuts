@@ -5,10 +5,16 @@ dir=$(mktemp -d)
 
 ffmpeg \
 	-i "${1}" \
-	-vf fps=15,scale=320:-1:flags=lanczos,palettegen \
+	-vf fps=15,scale=1024:-1:flags=lanczos,palettegen \
 	"${dir}/palette.png"
+
+source="${1}"
+filename=$(basename -- "${source}")
+extension="${filename##*.}"
+filename="${filename%.*}"
 
 ffmpeg \
 	-i "${1}" -i "${dir}/palette.png" \
-	-filter_complex "fps=15,scale=400:-1:flags=lanczos[x];[x][1:v]paletteuse" \
-	output.gif
+	-filter_complex "fps=15,scale=1024:-1:flags=lanczos[x];[x][1:v]paletteuse" \
+	"${filename}.gif"
+

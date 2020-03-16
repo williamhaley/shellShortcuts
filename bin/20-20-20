@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+message="Take a walk. Rest your eyes and body"
+
 if [ "${IS_MAC}" = "true" ];
 then
-	osascript -e 'display dialog "Rest your eyes"'
+	osascript -e "display dialog \"${message}\""
 fi
 
 if [ "${IS_LINUX}" = "true" ];
 then
-	notify-send --expire-time=20000 "Rest your eyes"
+	notify-send --expire-time=20000 "${message}"
 fi
+

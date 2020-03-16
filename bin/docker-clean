@@ -4,12 +4,13 @@ CONTAINERS=$(docker ps -a --format "{{.ID}}")
 
 for C in "$CONTAINERS"
 do
-	docker rm $C
+	docker rm -f $C
 done
 
-IMAGES=$(docker images --format "{{.ID}}")
+#IMAGES=$(docker images --format "{{.ID}}")
+#
+#for I in "$IMAGES"
+#do
+#	docker rmi $I
+#done
 
-for I in "$IMAGES"
-do
-	docker rmi $I
-done

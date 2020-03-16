@@ -21,7 +21,6 @@ brew install \
 
 brew cask install \
     1password \
-	alacritty \
     caffeine \
     firefox \
     gimp \
