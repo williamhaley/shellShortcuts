@@ -10,11 +10,13 @@ user=will
 
 useradd -m -s /bin/bash $user || true
 
-apt update && apt install --no-install-recommends -y \
+export DEBIAN_FRONTEND=noninteractive
+
+apt update && apt install --no-install-recommends -yq \
     xinit xserver-xorg firefox lightdm openbox ufw \
     nginx vlc
 
-apt install pulseaudio -y
+apt install pulseaudio -yq
 
 (
 	cd /tmp
