@@ -9,3 +9,5 @@ fi
 
 nmap -sP ${gateway}/24
 
+arp -a
+

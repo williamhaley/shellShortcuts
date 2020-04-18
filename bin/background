@@ -2,7 +2,7 @@
 
 random()
 {
-	files=($HOME/Photographs/**/*.jpg)
+	files=($HOME/Dropbox/Photographs/**/*.jpg)
 
 	img=$(printf "%s\n" "${files[RANDOM % ${#files[@]}]}")
 

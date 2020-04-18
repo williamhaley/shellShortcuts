@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+[ $EUID -ne 0 ] && echo "run as root" >&2 && exit 1
+
+disk=$1
+
+sudo dd if=/dev/zero of=${disk} bs=512 count=1
+wipefs -a ${disk}
+echo "o\nw\n" | sudo fdisk ${disk}
+echo "n\np\n\n\n\nw\n" | sudo fdisk ${disk}
+mkfs.ntfs ${disk}

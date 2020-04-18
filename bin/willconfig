@@ -50,6 +50,9 @@ then
 	mkdir -p $HOME/.config/openbox
 	ln -sf $CONFIGS_DIR/openbox/menu.xml $HOME/.config/openbox/menu.xml
 	ln -sf $CONFIGS_DIR/openbox/autostart $HOME/.config/openbox/autostart
+	ln -sf $CONFIGS_DIR/openbox/rc.xml $HOME/.config/openbox/rc.xml
+	mkdir -p $HOME/.themes
+	ln -sfn $CONFIGS_DIR/openbox/Custom $HOME/.themes/Custom
 
 	mkdir -p $HOME/.config/Code/User
 	ln -sf $CONFIGS_DIR/vscode/settings.json "$HOME/.config/Code/User/settings.json"

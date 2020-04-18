@@ -44,7 +44,6 @@ code \
 	--install-extension ms-vscode.Go \
 	--install-extension CoenraadS.bracket-pair-colorizer \
 	--install-extension oderwat.indent-rainbow \
-	--install-extension vsmobile.vscode-react-native \
 	--install-extension dbaeumer.vscode-eslint \
 	--install-extension editorconfig.editorconfig \
 	--install-extension esbenp.prettier-vscode

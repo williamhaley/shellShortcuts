@@ -13,6 +13,7 @@
         80,
         120
     ],
+    "typescript.validate.enable": true,
     "go.formatTool": "gofmt",
     "go.lintOnSave": "package",
     "extensions.ignoreRecommendations": true,
