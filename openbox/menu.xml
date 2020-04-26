@@ -69,7 +69,7 @@
   </item>
   <item label="Text">
     <action name="Execute">
-      <command>gedit</command>
+      <command>geany</command>
     </action>
   </item>
   <item label="Files">
