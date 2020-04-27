@@ -7,6 +7,9 @@ do
 	docker rm -f $C
 done
 
+# Prune all volumes not used in at least one image.
+docker volume prune -f
+
 #IMAGES=$(docker images --format "{{.ID}}")
 #
 #for I in "$IMAGES"

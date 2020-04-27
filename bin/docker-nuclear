@@ -4,14 +4,5 @@ docker stop $(docker ps -aq)
 
 docker system prune -a -f
 
-if [ "$IS_MAC" = "true" ];
-then
-	if [ -f "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2" ];
-	then
-		rm "$HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2"
-
-	fi
-
-	killall Docker ; open /Applications/Docker.app
-fi
-
+# Now that all images should be gone we can delete all volumes.
+docker volume prune -f
