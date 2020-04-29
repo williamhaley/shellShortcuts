@@ -197,6 +197,7 @@ _apps()
 		keepassxc \
 		wget curl rclone rsync unzip \
 		net-tools tcpdump wireshark-cli nmap \
+		scrot \
 		transmission-cli \
 		qemu qemu-arch-extra \
 		handbrake handbrake-cli libdvdcss dvdbackup cdrkit \
@@ -204,7 +205,7 @@ _apps()
 		jq expect ack tmux screen \
 		alsa-firmware alsa-plugins alsa-utils pulseaudio pavucontrol \
 		memtest86+ \
-		xorg xorg-server xf86-video-intel xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar thunar-archive-plugin file-roller tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu
+		xorg xorg-server xf86-video-intel xorg-xinit xterm lxterminal numlockx gnome-keyring openbox obconf xcompmgr tint2 thunar thunar-archive-plugin file-roller tumbler ffmpegthumbnailer feh gpicview gthumb xscreensaver xbindkeys xdotool noto-fonts noto-fonts-emoji ttf-dejavu i3 dmenu xautolock
 
 	# Needed for Dropbox for the time being
 	su - aur-user -c "

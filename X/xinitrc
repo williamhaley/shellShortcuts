@@ -17,14 +17,16 @@ xrandr \
 	--output ${dvi} --auto --primary \
 	--output ${vga} --auto --left-of ${dvi} &
 
-tint2 &
+# tint2 &
 
 numlockx &
 
 eval $(ssh-agent)
 
-xscreensaver -no-splash &
+# xscreensaver -no-splash &
 
 xrdb ~/.Xresources
 
-exec openbox-session
+#exec openbox-session
+
+i3

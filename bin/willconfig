@@ -65,6 +65,9 @@ then
 
 	mkdir -p $HOME/.config/tint2
 	ln -sf $CONFIGS_DIR/tint2rc "${HOME}/.config/tint2/tint2rc"
+
+	mkdir -p $HOME/.config
+	ln -sf $CONFIGS_DIR/i3 "${HOME}/.config/i3"
 fi
 
 echo "Done."
