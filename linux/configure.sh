@@ -193,7 +193,7 @@ _apps()
 		sudo openssh \
 		firefox chromium \
 		ntfs-3g exfat-utils mtools syslinux \
-		zsh vim geany base-devel git linux-headers go docker docker-compose \
+		zsh gvim geany base-devel git linux-headers go docker docker-compose \
 		keepassxc \
 		wget curl rclone rsync unzip \
 		net-tools tcpdump wireshark-cli nmap \
