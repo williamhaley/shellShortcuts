@@ -2,13 +2,22 @@
 
 message="Take a walk. Rest your eyes and body"
 
-if [ "${IS_MAC}" = "true" ];
-then
-	osascript -e "display dialog \"${message}\""
-fi
+show_notification()
+{
+	if [ "${IS_MAC}" = "true" ];
+	then
+		osascript -e "display dialog \"${message}\""
+	fi
 
-if [ "${IS_LINUX}" = "true" ];
-then
-	notify-send --expire-time=20000 "${message}"
-fi
+	if [ "${IS_LINUX}" = "true" ];
+	then
+		notify-send --expire-time=20000 "${message}"
+	fi
+}
+
+while true;
+do
+	sleep 1200
+	show_notification
+done
 
