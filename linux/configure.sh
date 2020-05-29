@@ -192,13 +192,13 @@ _apps()
 	pacman -Syyu --noconfirm --needed \
 		sudo openssh \
 		firefox chromium \
-		ntfs-3g exfat-utils mtools syslinux \
+		ntfs-3g exfat-utils mtools syslinux dosfstools \
 		zsh gvim geany base-devel git linux-headers go docker docker-compose \
 		keepassxc \
 		wget curl rclone rsync unzip \
 		net-tools tcpdump wireshark-cli nmap \
 		scrot \
-		transmission-cli \
+		transmission-cli transmission-gtk \
 		qemu qemu-arch-extra \
 		handbrake handbrake-cli libdvdcss dvdbackup cdrkit \
 		vlc cmus mplayer xfburn gst-plugins-good gst-plugins-base gst-plugins-bad gst-plugins-ugly \
@@ -224,9 +224,6 @@ _apps()
 
 	systemctl start docker
 	systemctl enable docker
-
-	# http://localhost:9091
-	systemctl enable transmission
 }
 
 _wifi()
