@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+
+import os
+import re
+import pathlib
+import argparse
+from mutagen.mp4 import MP4
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, USLT, TCOM, TCON, TDRC, TRCK, TPOS
+from mutagen.mp3 import MP3
+
+current_directory = pathlib.Path('.')
+print(current_directory.absolute())
+
+def process_album(abs_path_to_album, artist_name):
+	if not os.path.isdir(abs_path_to_album):
+		print(f'Not a dir {abs_path_to_album}')
+		return
+
+	album_dir_name = os.path.basename(abs_path_to_album)
+	album_name, year = parse_album_dir_name(album_dir_name)
+	log(album_name, year)
+
+	track_file_names = os.listdir(abs_path_to_album)
+	for track_file_name in track_file_names:
+		try:
+			disk_number, track_number, title, extension = parse_file_name(track_file_name)
+			abs_path_to_track = os.path.abspath(os.path.join(abs_path_to_album, track_file_name))
+			tag_file(abs_path_to_track, artist_name, album_name, year, disk_number, track_number, title, extension)
+		except IgnoredFileException:
+			continue
+		except Exception as err:
+			raise err
+
+def parse_artist_dir_name(artist_dir_name):
+	return artist_dir_name
+
+def parse_album_dir_name(album_dir_name):
+	m = re.search('^(?P<album>.*?)?\ *?(?:\((?P<year>\d{4})\))?$', album_dir_name)
+	if not m:
+		raise Exception(f'{album_dir_name} did not match regex')
+
+	d = m.groupdict()
+
+	DEFAULT_ALBUM='Unknown Album'
+	DEFAULT_YEAR=''
+
+	album_name = d.get('album') if d.get('album') else DEFAULT_ALBUM
+	year = d.get('year')  if d.get('year')  else DEFAULT_YEAR
+
+	return album_name, year
+
+def parse_file_name(track_file_name):
+	m2 = re.search('^(?:(?P<disk_number>\d+)-)?(?:(?P<track_number>\d+) )?(?P<title>.*)\.(?P<extension>.*)?$', track_file_name)
+	if not m2:
+		raise Exception(f'{track_file_name} did not match regex')
+
+	d2 = m2.groupdict()
+
+	DEFAULT_DISK=0
+	DEFAULT_TRACK=0
+
+	disk_number = d2.get('disk_number') if d2.get('disk_number') else DEFAULT_DISK
+	track_number = d2.get('track_number').lstrip('0') if d2.get('track_number') else DEFAULT_TRACK
+	title = d2.get('title')
+	extension = d2.get('extension')
+
+	if extension not in ['m4a', 'mp3']:
+		raise IgnoredFileException(f'{extension} is not a valid audio extension')
+
+	return disk_number, track_number, title, extension
+
+def tag_file(abs_path_to_track, artist_name, album_name, year, disk_number, track_number, title, extension):
+	if extension == 'm4a':
+		log("m4a tag:", abs_path_to_track, disk_number, track_number, artist_name, album_name, title)
+		meta = MP4(abs_path_to_track)
+		meta.clear()
+		meta['\xa9alb'] = album_name
+		meta['\xa9nam'] = title
+		meta['\xa9ART'] = artist_name
+		meta['\xa9gen'] = ''
+		meta['\xa9day'] = year
+		meta['trkn'] = [(int(track_number), 0)]
+		if not disk_number == 0:
+			meta['disk'] = [(int(disk_number),  0)]
+
+	if extension == 'mp3':
+		log("mp3 tag:", abs_path_to_track, disk_number, track_number, artist_name, album_name, title)
+		meta = MP3(abs_path_to_track)
+		meta.clear()
+		meta["TALB"] = TALB(encoding=3, text=album_name)
+		meta["TIT2"] = TIT2(encoding=3, text=title)
+		meta["TPE1"] = TPE1(encoding=3, text=artist_name)
+		meta["TCON"] = TCON(encoding=3, text=u'')
+		meta["TDRC"] = TDRC(encoding=3, text=year)
+		if not track_number == 0:
+			meta["TRCK"] = TRCK(encoding=3, text=track_number)
+		if not disk_number == 0:
+			meta["TPOS"] = TPOS(encoding=3, text=str(disk_number))
+
+	meta.save()
+
+def log(*s):
+	if args.verbose:
+		print(" ".join(map(str,s)))
+
+root_dir = args.directory
+if args.album_dir_name: # Process a specific album for the given artist
+	abs_path_to_album = pathlib.Path(os.path.join(root_dir, args.artist_dir_name, args.album_dir_name))
+	artist_dir_name = args.artist_dir_name
+	artist_name = parse_artist_dir_name(artist_dir_name)
+	process_album(str(abs_path_to_album.resolve()), artist_name)
+else: # Process all albums for the given artist
+	arist_path = pathlib.Path(os.path.join(root_dir, args.artist_dir_name))
+	process_artist(str(arist_path.resolve()))

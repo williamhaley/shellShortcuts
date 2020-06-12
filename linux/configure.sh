@@ -226,6 +226,21 @@ _apps()
 	systemctl enable docker
 }
 
+# AKA Synergy
+_barrier()
+{
+	pacman -Syyu --noconfirm --needed \
+		barrier
+
+	# Barrier/Synergy
+	ufw allow 24800
+
+	mkdir -p /home/will/.barrier/SSL/Fingerprints
+	openssl req -x509 -nodes -days 365 -subj /CN=Barrier -newkey rsa:4096 -keyout /home/will/.barrier/SSL/Barrier.pem -out /home/will/.barrier/SSL/Barrier.pem
+	openssl x509 -fingerprint -sha1 -noout -in /home/will/.barrier/SSL/Barrier.pem > /home/will/.barrier/SSL/Fingerprints/Local.txt
+	sed -e "s/.*=//" -i /home/will/.barrier/SSL/Fingerprints/Local.txt
+}
+
 _wifi()
 {
 	# For hardware internal PCI WiFi cards that I buy
@@ -268,18 +283,18 @@ EOF
 	pacman -Syyu --noconfirm --needed nvidia nvidia-libgl
 }
 
-_sudo
-_locale
-_firewall
-_aur
-_apps
-_user "${1}"
-_wifi
+#_sudo
+#_locale
+#_firewall
+#_aur
+#_apps
+#_user "${1}"
+#_wifi
 
 # commands are ordered so that vital systems run first
 # aur is often needed by others, so run that first. Same for
 # video being before nvidia, etc.
-commands=( _sudo _locale _init _aur _apps _audio _bluetooth _firewall _kvm _video _nvidia _sshd _wifi )
+commands=( _sudo _locale _init _aur _apps _audio _bluetooth _firewall _kvm _video _nvidia _sshd _wifi _barrier)
 for command in "${commands[@]}"
 do
 	for arg in "$@"
@@ -291,4 +306,3 @@ do
 		fi
 	done
 done
-

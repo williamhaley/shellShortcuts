@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-curl "wttr.in/Chicago?format=1"
+curl -s "wttr.in/Chicago?format=1"
 

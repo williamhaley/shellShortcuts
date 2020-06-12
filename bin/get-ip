@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-printf $(ip route get 8.8.8.8 | tr -s ' ' | cut -d' ' -f7)
+printf "$(ip route get 8.8.8.8 | tr -s ' ' | cut -d' ' -f7)"
+
