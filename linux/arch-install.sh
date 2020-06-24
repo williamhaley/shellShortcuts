@@ -159,6 +159,7 @@ sleep 3
 # Make boot partition bootable.
 echo -e "a\n1\nw" | fdisk ${disk}
 sleep 3
+parted -s -a none ${disk} set 1 boot on
 
 # Format boot partition.
 mkfs.${root_format} -F ${boot_part}
@@ -272,14 +273,13 @@ mkdir -p /mnt/etc/ufw
 echo "ENABLED=yes" > /mnt/etc/ufw/ufw.conf
 echo "LOGLEVEL=low" >> /mnt/etc/ufw/ufw.conf
 
-############
-# 5. Grub  #
-############
+##################
+# 5. Boot Loader #
+##################
 
 if [ "${encrypt_with_key}" = true ];
 then
 	arch-chroot /mnt mkinitcpio -p linux
-	arch-chroot /mnt pacman -S --noconfirm grub
 
 	root_part_uuid="$(blkid -s UUID -o value ${root_part})"
 	key_mount=$(stat -c %m -- "${key_path}")
@@ -287,32 +287,44 @@ then
 	key_part_dev=$(df -P "${key_mount}" | tail -1 | cut -d' ' -f 1)
 	key_part_uuid=$(blkid -s UUID -o value ${key_part_dev})
 
-	grub_cmdline_linux="cryptdevice=UUID=${root_part_uuid}:cryptroot"
-	grub_cmdline_linux+=" root=/dev/mapper/cryptroot"
-	grub_cmdline_linux+=" cryptkey=UUID=${key_part_uuid}:${key_format}:${key_relative_path}"
-	sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${grub_cmdline_linux}\"|" /mnt/etc/default/grub
-
-	arch-chroot /mnt grub-install --target=i386-pc --recheck --debug ${disk}
-	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+	# TODO WFH Not supporting keys at the moment.
+	# grub_cmdline_linux+=" cryptkey=UUID=${key_part_uuid}:${key_format}:${key_relative_path}"
 else
 	arch-chroot /mnt mkinitcpio -p linux
-	arch-chroot /mnt pacman -S --noconfirm grub
 
 	root_part_uuid="$(blkid -s UUID -o value ${root_part})"
-
-	grub_cmdline_linux="cryptdevice=UUID=${root_part_uuid}:cryptroot"
-	grub_cmdline_linux+=" root=/dev/mapper/cryptroot"
-	sed -i -e "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"${grub_cmdline_linux}\"|" /mnt/etc/default/grub
-
-	arch-chroot /mnt grub-install --target=i386-pc --recheck --debug ${disk}
-	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
-clear
+mkdir /mnt/boot/extlinux
+extlinux --install /mnt/boot/extlinux
+cp /usr/lib/syslinux/bios/* /mnt/boot/extlinux/
+
+cat <<EOF> /mnt/boot/extlinux/extlinux.conf
+UI menu.c32
+
+DEFAULT arch
+PROMPT 0
+MENU TITLE Boot Menu
+TIMEOUT 50
+
+LABEL arch
+	MENU LABEL Arch Linux
+	LINUX ../vmlinuz-linux
+	APPEND root=/dev/mapper/cryptroot cryptdevice=UUID=${root_part_uuid}:cryptroot rw
+	INITRD ../initramfs-linux.img
+
+LABEL archfallback
+	MENU LABEL Arch Linux Fallback
+	LINUX ../vmlinuz-linux
+	APPEND root=/dev/mapper/cryptroot cryptdevice=UUID=${root_part_uuid}:cryptroot rw
+	INITRD ../initramfs-linux-fallback.img
+EOF
 
 ########################
 # 5. Set user password #
 ########################
+
+clear
 
 echo
 echo "************************************************"
