@@ -5,8 +5,8 @@
 Boot from the live installation media.
 
 ```
-curl -O https://raw.githubusercontent.com/williamhaley/configs/master/linux/arch-bootstrap.sh
-bash arch-bootstrap.sh --disk=/dev/sda --name=will
+curl -O https://gh.willhy.com/f/arch-install.sh
+bash arch-install.sh --disk=/dev/sda --name=will
 ```
 
 Reboot your machine and eject the live media.
@@ -27,6 +27,7 @@ pacman -S ffmpeg
 pacman-key --populate archlinux
 pacman -Sy archlinux-keyring
 pacman-key --refresh-keys
+```
 
 ## Configure
 
@@ -37,3 +38,4 @@ Clone this repo to the machine.
 ```
 ./configure.sh "will" # Or whatever user name
 ```
+
