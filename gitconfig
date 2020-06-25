@@ -46,6 +46,7 @@
 [pull]
 	default = current
 	prune = true
+	rebase = true
 
 [fetch]
 	prune = true

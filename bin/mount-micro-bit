@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sudo mkdir -p /mnt/MICROBIT
+sudo mount $1 /mnt/MICROBIT -o rw,umask=0000
+

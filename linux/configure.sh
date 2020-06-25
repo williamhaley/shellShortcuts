@@ -216,7 +216,6 @@ _apps()
 
 	su - aur-user -c "
 		yay -Syyu --noconfirm --needed \
-			google-musicmanager \
 			visual-studio-code-bin \
 			dropbox \
 			git-lfs
