@@ -1,6 +1,8 @@
 # Linux
 
-## Bootstrap Arch
+## Arch
+
+### Install
 
 Boot from the live installation media.
 
@@ -11,7 +13,15 @@ bash arch-install.sh --disk=/dev/sda --name=will
 
 Reboot your machine and eject the live media.
 
-### Troubleshooting
+### Configure
+
+Clone this repo to the machine.
+
+```
+./configure.sh "will" # Or whatever user name
+```
+
+### Troubleshooting Arch
 
 If the live environment for bootstrapping Arch has a misaligned clock or other issues, there may be problems with signatures and package validity. Check and try some of the following if necessary.
 
@@ -29,13 +39,15 @@ pacman -Sy archlinux-keyring
 pacman-key --refresh-keys
 ```
 
-## Configure
+## Alpine
 
-Clone this repo to the machine.
-
-### Configure Arch (as root)
+Boot from the live installation media.
 
 ```
-./configure.sh "will" # Or whatever user name
+apk add dhcpcd
+dhcpcd
+wget https://gh.willhy.com/f/alpine-install.sh
+sh ./alpine-install.sh --disk=/dev/sda --name=will
 ```
 
+Reboot your machine and eject the live media.
