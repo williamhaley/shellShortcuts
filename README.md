@@ -22,7 +22,7 @@ Clobber `.zshrc` with this.
 #
 
 export CONFIGS_DIR=$HOME/configs
-source $CONFIGS_DIR/shell/zshrc
+source $CONFIGS_DIR/zsh/zshrc
 ```
 
 Run this to set up aliases, symlinks, copy config files into place, etc.

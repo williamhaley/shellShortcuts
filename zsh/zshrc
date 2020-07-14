@@ -1,0 +1,12 @@
+. $CONFIGS_DIR/shell/common.bash
+
+# Load Git completion
+zstyle ':completion:*:*:git:*' script $CONFIGS_DIR/zsh/git-completion.zsh
+autoload -Uz compinit && compinit
+
+# Custom script from a random internet user, but I like it
+source ${CONFIGS_DIR}/zsh/zsh-git-prompt.sh
+PROMPT='%m%~%b $(git_super_status) %# '
+
+export EDITOR=vim
+

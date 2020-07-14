@@ -44,7 +44,7 @@ pacman-key --refresh-keys
 Boot from the live installation media.
 
 ```
-apk add dhcpcd
+apk add dhcpcd e2fsprogs cryptsetup
 dhcpcd
 wget https://gh.willhy.com/f/alpine-install.sh
 sh ./alpine-install.sh --disk=/dev/sda --name=will

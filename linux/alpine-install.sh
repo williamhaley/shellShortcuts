@@ -91,14 +91,15 @@ fi
 ##############
 
 dd if=/dev/random of=${disk} bs=2048 count=1
-echo "o\nw\n" | sudo fdisk ${disk}
+echo "o\nw\n" | fdisk ${disk}
 
 # Create boot partition 100M large.
 echo -e "o\nn\np\n1\n\n+100M\nw" | fdisk ${disk}
 sleep 3
 
 # Create swap partition.
-echo -e "o\nn\np\n2\n\n+4G\nw" | fdisk ${disk}
+echo -e "n\np\n2\n\n+4G\nt\n2\n82\nw" | fdisk ${disk}
+mkswap ${swap_part}
 sleep 3
 
 # Create root partition using remaining space.
@@ -108,9 +109,6 @@ sleep 3
 # Make boot partition bootable.
 echo -e "a\n1\nw" | fdisk ${disk}
 sleep 3
-
-# Allocate swap space.
-mkswap ${swap_part}
 
 # Format boot partition.
 mkfs.${root_format} -F ${boot_part}
@@ -126,7 +124,7 @@ mkfs.${root_format} -F /dev/mapper/cryptroot
 mount /dev/mapper/cryptroot /mnt
 
 mkdir /mnt/boot
-mount ${boot_part} /mnt/boot
+mount -t ext4 ${boot_part} /mnt/boot
 
 ######################################
 # 3. Base system install and config  #
