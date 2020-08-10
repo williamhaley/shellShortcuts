@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+degrees=$2
+
+ffmpeg -i "${1} -vf "rotate=${degrees}*PI/180" out.mp4
+
