@@ -8,13 +8,7 @@ Various application config files can be copied manually as needed.
 
 Clone the repo to `$HOME` using the SSH clone URL.
 
-Clone all submodules as well.
-
-```
-git submodule update --init --recursive
-```
-
-Clobber `.zshrc` with this.
+Clobber `.zshrc` with this (replace zsh with bash where needed). On macOS for bash use `.bash_profile`.
 
 ```
 #
