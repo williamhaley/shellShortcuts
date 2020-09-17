@@ -2,6 +2,6 @@
 
 if [ "$(uname)" == "Darwin" ];
 then
-    "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+    "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" $@
 fi
 
