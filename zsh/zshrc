@@ -8,5 +8,8 @@ autoload -Uz compinit && compinit
 source ${CONFIGS_DIR}/zsh/zsh-git-prompt.sh
 PROMPT='%m%~%b $(git_super_status) %# '
 
+# ctrl + k, ctrl + a, etc., have issues in tmux with zsh. Fix it.
+bindkey -e
+
 export EDITOR=vim
 
