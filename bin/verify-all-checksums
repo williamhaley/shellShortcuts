@@ -14,7 +14,7 @@ do
 
 		if [ ! -f "${source_file}" ];
 		then
-			rm "$(basename ${sum_file})"
+			echo "${source_file} does not exist, but checksum found"
 			exit
 		fi
 
@@ -36,3 +36,4 @@ do
 done
 
 } | tee /tmp/verify.log
+
