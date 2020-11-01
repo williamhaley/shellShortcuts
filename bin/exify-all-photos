@@ -4,8 +4,11 @@ import os
 import re
 from datetime import datetime, timedelta
 import subprocess
+import exifread
 
 """
+Requires: 'pip install exifread'
+
 Run this command when in a directory full of photos. The goal is to apply EXIF
 DateTimeOriginal values where images are missing that data. There are a few
 reasons why photos may miss that EXIF. Maybe they're scanned images, or the EXIF
@@ -62,6 +65,10 @@ the photos are still in some sort of order.
 Any errors will kill the entire script.
 
 Directories that don't match the naming conventions will be logged and skipped.
+
+FYI. Photos are synced to Google Photos later with rclone like so.
+
+rclone sync --verbose --progress  --include "*.{jpg,jpeg,JPG,JPEG}" ./ gp:album/Family\ Photos/
 """
 
 # In order of preference/specificity.
@@ -89,18 +96,16 @@ def parse_date(date_string):
 		day = tokens.get('day') or '01'
 		return datetime.strptime('{}-{}-{}'.format(year, month, day), '%Y-%m-%d')
 
-def photo_already_has_date_time_exif(path):
-	command = ['exiftool', '-s', '-s', '{}'.format(absolute_path)]
-	process = subprocess.Popen(command, stdout=subprocess.PIPE)
-	output, error = process.communicate()
-	if error:
-		raise Exception(error)
-	# Encoding used for CMD - https://stackoverflow.com/a/50234204/1459103
-	exif = output.decode('ISO-8859-15').split("\n")
-	return next((x for x in exif if 'DateTimeOriginal' in x), None) is not None
+def exif_information(path):
+	f = open(path, 'rb')
+	tags = exifread.process_file(f)
+	date_time_original = tags.get('EXIF DateTimeOriginal', None)
+	if date_time_original:
+		date_time_original = str(date_time_original)
+	tagged_by_script = 'exify-all-photos' in str(tags.get('Image Make'))
+	return (date_time_original, tagged_by_script)
 
-def set_exif_date_time(path, date):
-	timestamp = date.strftime('%Y-%m-%d %H:%M:%S')
+def set_exif_date_time(path, timestamp):
 	print('{} - setting date to {}'.format(path, timestamp))
 	command = [
 		'exiftool',
@@ -117,7 +122,9 @@ def set_exif_date_time(path, date):
 
 visited_dates = {}
 
-for d in filter(os.path.isdir, os.listdir()):
+# Sort the list to ensure that subsequent runs behave somewhat predictably if we
+# run this again.
+for d in filter(os.path.isdir, sorted(os.listdir())):
 	date = parse_date(d.split(' ', 1)[0])
 	if not date:
 		print('{} is invalid'.format(d))
@@ -128,7 +135,6 @@ for d in filter(os.path.isdir, os.listdir()):
 	# We already tagged some photos using YYYY-MM-DD. Pick up where those dates
 	# left off to help maintain some sort of ordering.
 	if existing_date:
-		print('picking up at: {}'.format(existing_date))
 		date = existing_date
 
 	# Walk will find all files in the subdirectories, but note that we don't
@@ -140,12 +146,30 @@ for d in filter(os.path.isdir, os.listdir()):
 		for file in sorted(files):
 			if file.endswith(('.jpg', '.JPG', '.jpeg', '.JPEG')):
 				absolute_path = os.path.join(root, file)
-				if photo_already_has_date_time_exif(absolute_path):
+				date_time_original, tagged_by_script = exif_information(absolute_path)
+				has_date_time_exif = date_time_original is not None
+
+				# Probably came from a camera. Don't touch the EXIF.
+				if has_date_time_exif and not tagged_by_script:
 					continue
+
+				# If we're here, it either has no EXIF, or if it does, it was
+				# because we tagged it previously. We're safe to tag.
+
 				# Add one second to each photo we tag so that they maintain sort
 				# order in apps that sort by the DateTimeOriginal.
 				date = date + timedelta(seconds=1)
-				set_exif_date_time(absolute_path, date)
+				new_timestamp = date.strftime('%Y-%m-%d %H:%M:%S')
+
+				if not has_date_time_exif:
+					set_exif_date_time(absolute_path, new_timestamp)
+				else:
+					# If we're here, it's a photo we previously tagged. It should
+					# be in a format we know so date parsing is safe here.
+					old_timestamp = datetime.strptime(date_time_original, '%Y:%m:%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+					if old_timestamp != new_timestamp:
+						print('re-tagging {} from {} to {}'.format(absolute_path, date_time_original, new_timestamp))
+						set_exif_date_time(absolute_path, new_timestamp)
 
 	# Keep track of where we left off for this YYYY-MM-DD.
 	visited_dates[key] = date
