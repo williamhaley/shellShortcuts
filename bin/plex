@@ -16,6 +16,6 @@ docker run \
     -e TZ="America/Chicago" \
     -v $HOME/plexconfig:/config \
     -v $HOME/plextranscode:/transcode \
-    -v /mnt/Videos:/data \
+    -v /mnt/g/Videos:/data:ro \
     plexinc/pms-docker
 

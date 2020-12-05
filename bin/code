@@ -2,6 +2,13 @@
 
 if [ "$(uname)" == "Darwin" ];
 then
+    echo "macOS"
     "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" $@
+fi
+
+if [[ "$(uname -a)" =~ .*microsoft.* ]];
+then
+    echo "WSL"
+    "/mnt/c/Users/will/AppData/Local/Programs/Microsoft VS Code/bin/code" $@
 fi
 
