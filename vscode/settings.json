@@ -5,6 +5,7 @@
     // `go.gopath` as needed. Though, for that
     // case, we use the direnv plugin to auto-load
     // the path anyway.
+    "editor.tabSize": 2,
     "editor.fontSize": 14,
     "editor.renderWhitespace": "all",
     "editor.trimAutoWhitespace": true,
