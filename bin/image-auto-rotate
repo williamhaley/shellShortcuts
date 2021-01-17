@@ -41,9 +41,10 @@ then
 	else
 		value=0
 		case ${orientation} in
+			3) value=180 ;;
 			6) value=90 ;;
 			*)
-				echo "Unkown orientation ${orientation} for ${file}"
+				echo "Unknown orientation ${orientation} for ${file}"
 				exit 1
 			;;
 		esac
