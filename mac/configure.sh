@@ -61,41 +61,10 @@ function preferences
 	echo "Start and completely exist Terminal **twice** for settings to take effect"
 }
 
-function dock
-{
-    defaults write com.apple.dock autohide -bool false
-    defaults write com.apple.dock largesize -int 64
-    defaults write com.apple.dock magnification -bool false
-    defaults write com.apple.dock mineffect -string 'scale'
-    defaults write com.apple.Dock orientation -string right
-    defaults write com.apple.dock pinning -string end
-    defaults write com.apple.dock size-immutable -bool true
-    defaults write com.apple.dock tilesize -int 46
-
-    # Make Dock icons of hidden applications translucent
-    defaults write com.apple.dock showhidden -bool true
-
-    # Delete all persistent apps from the dock
-    defaults delete com.apple.dock persistent-apps
-    # Initialize an empty array of persistent apps for the dock
-    defaults write com.apple.dock persistent-apps -array
-
-    # Show indicator lights for open applications in the Dock
-    defaults write com.apple.dock show-process-indicators -bool true
-
-    # Minimize windows into their application’s icon
-    defaults write com.apple.dock minimize-to-application -bool true
-
-    # This is how one could add a persistent app to the dock
-    #defaults write com.apple.dock persistent-apps -array-add \
-    #    "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>/Applications/VLC.app</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
-
-    killall Dock
-}
 
 fonts
 screensaver
 menu
 preferences
-dock
+
 

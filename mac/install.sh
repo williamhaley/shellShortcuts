@@ -13,26 +13,13 @@ brew install \
     awscli \
     qemu \
     ffmpeg \
+    gimp \
+    git-lfs \
     jq \
-    mysql-client \
+    keepassxc \
     tmux \
     rsync \
-    golang
-
-brew cask install \
-    1password \
-    caffeine \
-    firefox \
-    gimp \
-    google-chrome \
-    google-backup-and-sync \
-    slack \
-    vagrant \
-    virtualbox \
+    golang \
     visual-studio-code \
     vlc
-
-# Install the App, not just binaries.
-brew cask install docker
-sudo ln -s /Applications/Docker.app/Contents/Resources/bin/* $(brew --prefix)/bin/
 
