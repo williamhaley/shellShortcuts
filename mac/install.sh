@@ -12,15 +12,18 @@ brew install \
     ack \
     alacritty \
     awscli \
-    qemu \
+    caffeine \
+    dropbox \
     ffmpeg \
     gimp \
     git-lfs \
+    golang \
     jq \
     keepassxc \
-    tmux \
+    qemu \
     rsync \
-    golang \
+    spotify \
+    tmux \
     visual-studio-code \
     vlc
 
